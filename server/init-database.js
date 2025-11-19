@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Load environment variables
-dotenv.config({ path: join(__dirname, 'server', '.env') });
+dotenv.config({ path: join(__dirname, '.env') });
 
 const { Pool } = pg;
 
@@ -41,7 +41,7 @@ async function initializeDatabase() {
     console.log('📋 Users table not found. Initializing database schema...\n');
 
     // Read and execute schema.sql
-    const schemaPath = join(__dirname, 'database', 'schema.sql');
+    const schemaPath = join(__dirname, '..', 'database', 'schema.sql');
     const schema = fs.readFileSync(schemaPath, 'utf8');
 
     console.log('📝 Executing schema.sql...');
