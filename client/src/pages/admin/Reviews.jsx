@@ -8,7 +8,7 @@ const AdminReviews = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingReview, setEditingReview] = useState(null);
   const [formData, setFormData] = useState({
-    customer_name: '',
+    author_name: '',
     rating: 5,
     review_text: '',
     is_featured: false
@@ -41,7 +41,7 @@ const AdminReviews = () => {
   const openAddModal = () => {
     setEditingReview(null);
     setFormData({
-      customer_name: '',
+      author_name: '',
       rating: 5,
       review_text: '',
       is_featured: false
@@ -52,7 +52,7 @@ const AdminReviews = () => {
   const openEditModal = (review) => {
     setEditingReview(review);
     setFormData({
-      customer_name: review.customer_name || '',
+      author_name: review.author_name || '',
       rating: review.rating || 5,
       review_text: review.review_text || '',
       is_featured: review.is_featured || false
@@ -64,7 +64,7 @@ const AdminReviews = () => {
     setShowModal(false);
     setEditingReview(null);
     setFormData({
-      customer_name: '',
+      author_name: '',
       rating: 5,
       review_text: '',
       is_featured: false
@@ -82,7 +82,7 @@ const AdminReviews = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.customer_name || !formData.review_text) {
+    if (!formData.author_name || !formData.review_text) {
       showMessage('Please fill in all required fields (Name and Review)', 'error');
       return;
     }
@@ -90,7 +90,7 @@ const AdminReviews = () => {
     try {
       setSubmitting(true);
       const submitData = {
-        customer_name: formData.customer_name,
+        author_name: formData.author_name,
         rating: parseInt(formData.rating),
         review_text: formData.review_text,
         is_featured: formData.is_featured
@@ -115,7 +115,7 @@ const AdminReviews = () => {
   };
 
   const handleDelete = async (review) => {
-    if (!window.confirm(`Are you sure you want to delete the review by "${review.customer_name}"?\n\nThis action cannot be undone!`)) {
+    if (!window.confirm(`Are you sure you want to delete the review by "${review.author_name}"?\n\nThis action cannot be undone!`)) {
       return;
     }
 
@@ -234,7 +234,7 @@ const AdminReviews = () => {
                 {reviews.map((review, index) => (
                   <tr key={review.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="px-4 py-3">
-                      <div className="font-semibold text-quiz-blue">{review.customer_name}</div>
+                      <div className="font-semibold text-quiz-blue">{review.author_name}</div>
                     </td>
                     <td className="px-4 py-3">
                       {renderStars(review.rating)}
@@ -324,8 +324,8 @@ const AdminReviews = () => {
                 </label>
                 <input
                   type="text"
-                  name="customer_name"
-                  value={formData.customer_name}
+                  name="author_name"
+                  value={formData.author_name}
                   onChange={handleInputChange}
                   className="input w-full"
                   placeholder="e.g., John Smith"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { venuesAPI } from '../../services/api';
-import { Plus, Edit, Trash2, Save, X, MapPin, Phone, Mail } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, MapPin, Phone, Mail, Upload, Image as ImageIcon } from 'lucide-react';
 
 const AdminVenues = () => {
   const [venues, setVenues] = useState([]);
@@ -15,8 +15,10 @@ const AdminVenues = () => {
     phone: '',
     email: '',
     description: '',
-    capacity: ''
+    capacity: '',
+    image: null
   });
+  const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -52,8 +54,10 @@ const AdminVenues = () => {
       phone: '',
       email: '',
       description: '',
-      capacity: ''
+      capacity: '',
+      image: null
     });
+    setImagePreview(null);
     setShowModal(true);
   };
 
@@ -67,8 +71,11 @@ const AdminVenues = () => {
       phone: venue.phone || '',
       email: venue.email || '',
       description: venue.description || '',
-      capacity: venue.capacity || ''
+      capacity: venue.capacity || '',
+      image: null,
+      image_url: venue.image_url || null
     });
+    setImagePreview(venue.image_url ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${venue.image_url}` : null);
     setShowModal(true);
   };
 
@@ -83,13 +90,29 @@ const AdminVenues = () => {
       phone: '',
       email: '',
       description: '',
-      capacity: ''
+      capacity: '',
+      image: null
     });
+    setImagePreview(null);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, image: file }));
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -102,16 +125,24 @@ const AdminVenues = () => {
 
     try {
       setSubmitting(true);
-      const submitData = {
-        name: formData.name,
-        address: formData.address || null,
-        city: formData.city || null,
-        postcode: formData.postcode || null,
-        phone: formData.phone || null,
-        email: formData.email || null,
-        description: formData.description || null,
-        capacity: formData.capacity ? parseInt(formData.capacity) : null
-      };
+
+      // Use FormData for file upload
+      const submitData = new FormData();
+      submitData.append('name', formData.name);
+      submitData.append('address', formData.address || '');
+      submitData.append('city', formData.city || '');
+      submitData.append('postcode', formData.postcode || '');
+      submitData.append('phone', formData.phone || '');
+      submitData.append('email', formData.email || '');
+      submitData.append('description', formData.description || '');
+      submitData.append('capacity', formData.capacity || '');
+
+      // Add image if new file selected, otherwise keep existing image_url
+      if (formData.image) {
+        submitData.append('image', formData.image);
+      } else if (formData.image_url) {
+        submitData.append('image_url', formData.image_url);
+      }
 
       if (editingVenue) {
         await venuesAPI.update(editingVenue.id, submitData);
@@ -405,7 +436,7 @@ const AdminVenues = () => {
               </div>
 
               {/* Capacity */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <label className="label">Capacity</label>
                 <input
                   type="number"
@@ -417,6 +448,51 @@ const AdminVenues = () => {
                   min="0"
                 />
                 <p className="text-xs text-gray-500 mt-1">Optional: Maximum number of people the venue can hold</p>
+              </div>
+
+              {/* Venue Logo/Image */}
+              <div className="mb-6">
+                <label className="label">Venue Logo/Image</label>
+                <div className="space-y-3">
+                  {/* Image Preview */}
+                  {imagePreview && (
+                    <div className="relative w-full h-48 border-2 border-gray-200 rounded overflow-hidden">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagePreview(null);
+                          setFormData(prev => ({ ...prev, image: null, image_url: null }));
+                        }}
+                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Upload Button */}
+                  <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
+                    <div className="text-center">
+                      <Upload className="mx-auto mb-2 text-gray-400" size={32} />
+                      <p className="text-sm text-gray-600">
+                        <span className="text-quiz-blue font-semibold">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF or WebP (max 5MB)</p>
+                    </div>
+                    <input
+                      type="file"
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">Optional: Add a logo or photo of the venue</p>
               </div>
 
               {/* Buttons */}

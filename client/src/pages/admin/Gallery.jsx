@@ -15,6 +15,8 @@ const AdminGallery = () => {
     category: '',
     image: null
   });
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -50,6 +52,8 @@ const AdminGallery = () => {
       category: '',
       image: null
     });
+    setSelectedFiles([]);
+    setImagePreviews([]);
     setImagePreview(null);
     setShowModal(true);
   };
@@ -75,6 +79,8 @@ const AdminGallery = () => {
       category: '',
       image: null
     });
+    setSelectedFiles([]);
+    setImagePreviews([]);
     setImagePreview(null);
   };
 
@@ -84,39 +90,102 @@ const AdminGallery = () => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
+    const files = Array.from(e.target.files);
+
+    if (files.length === 0) return;
+
+    // For editing mode, use single file
+    if (editingImage) {
+      const file = files[0];
       setFormData(prev => ({ ...prev, image: file }));
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
+      return;
     }
+
+    // For bulk upload mode, handle multiple files
+    setSelectedFiles(files);
+
+    // Create previews for all files
+    const previews = [];
+    files.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        previews.push({ file, preview: reader.result, index });
+        if (previews.length === files.length) {
+          // Sort by index to maintain order
+          previews.sort((a, b) => a.index - b.index);
+          setImagePreviews(previews);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeSelectedFile = (index) => {
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!editingImage && !formData.image) {
+    // Validation for editing mode
+    if (editingImage && !formData.image) {
       showMessage('Please select an image to upload', 'error');
+      return;
+    }
+
+    // Validation for bulk upload mode
+    if (!editingImage && selectedFiles.length === 0) {
+      showMessage('Please select at least one image to upload', 'error');
       return;
     }
 
     try {
       setSubmitting(true);
-      const submitData = new FormData();
-      submitData.append('title', formData.title || '');
-      submitData.append('description', formData.description || '');
-      submitData.append('category', formData.category || '');
-      if (formData.image) {
-        submitData.append('image', formData.image);
-      }
 
+      // Handle single image edit
       if (editingImage) {
+        const submitData = new FormData();
+        submitData.append('title', formData.title || '');
+        submitData.append('description', formData.description || '');
+        submitData.append('category', formData.category || '');
+        if (formData.image) {
+          submitData.append('image', formData.image);
+        }
+
         await galleryAPI.update(editingImage.id, submitData);
         showMessage('✅ Image updated successfully!', 'success');
       } else {
-        await galleryAPI.create(submitData);
-        showMessage('✅ Image uploaded successfully!', 'success');
+        // Handle bulk upload
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const file of selectedFiles) {
+          try {
+            const submitData = new FormData();
+            submitData.append('title', formData.title || '');
+            submitData.append('description', formData.description || '');
+            submitData.append('category', formData.category || '');
+            submitData.append('image', file);
+
+            await galleryAPI.upload(submitData);
+            successCount++;
+          } catch (err) {
+            console.error('Error uploading file:', file.name, err);
+            failCount++;
+          }
+        }
+
+        if (failCount === 0) {
+          showMessage(`✅ ${successCount} image${successCount !== 1 ? 's' : ''} uploaded successfully!`, 'success');
+        } else if (successCount === 0) {
+          showMessage(`❌ Failed to upload all ${failCount} image${failCount !== 1 ? 's' : ''}. Please try again.`, 'error');
+        } else {
+          showMessage(`⚠️ ${successCount} image${successCount !== 1 ? 's' : ''} uploaded, ${failCount} failed.`, 'error');
+        }
       }
 
       closeModal();
@@ -188,7 +257,7 @@ const AdminGallery = () => {
       {/* Help Text */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded p-4 mb-6">
         <p className="text-blue-800">
-          <strong>💡 Tip:</strong> Upload photos from your events to showcase your work. Use categories to organize images (e.g., "Quiz Nights", "Special Events", "Team Photos").
+          <strong>💡 Tip:</strong> Upload photos from your events to showcase your work. You can upload multiple images at once! Use categories to organize images (e.g., "Quiz Nights", "Special Events", "Team Photos").
         </p>
       </div>
 
@@ -317,10 +386,11 @@ const AdminGallery = () => {
               {/* Image Upload */}
               <div className="mb-6">
                 <label className="label">
-                  Image {!editingImage && <span className="text-red-500">*</span>}
+                  Image{!editingImage && 's'} {!editingImage && <span className="text-red-500">*</span>}
                 </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  {imagePreview ? (
+                  {/* Single image preview for editing */}
+                  {editingImage && imagePreview ? (
                     <div className="relative">
                       <img src={imagePreview} alt="Preview" className="max-h-64 mx-auto rounded" />
                       <button
@@ -334,11 +404,33 @@ const AdminGallery = () => {
                         <X size={16} />
                       </button>
                     </div>
+                  ) : !editingImage && imagePreviews.length > 0 ? (
+                    /* Multiple image previews for bulk upload */
+                    <div className="grid grid-cols-3 gap-3">
+                      {imagePreviews.map((item, index) => (
+                        <div key={index} className="relative aspect-square">
+                          <img
+                            src={item.preview}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-full object-cover rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeSelectedFile(index)}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div>
                       <ImageIcon size={48} className="mx-auto text-gray-400 mb-2" />
-                      <p className="text-gray-600 mb-2">Click to upload an image</p>
-                      <p className="text-xs text-gray-500">JPG, PNG or GIF (max 5MB)</p>
+                      <p className="text-gray-600 mb-2">
+                        {editingImage ? 'Click to upload an image' : 'Click to upload images (multiple allowed)'}
+                      </p>
+                      <p className="text-xs text-gray-500">JPG, PNG or GIF (max 5MB each)</p>
                     </div>
                   )}
                   <input
@@ -347,18 +439,24 @@ const AdminGallery = () => {
                     onChange={handleImageChange}
                     className="hidden"
                     id="gallery-image-upload"
+                    multiple={!editingImage}
                   />
                   <label
                     htmlFor="gallery-image-upload"
                     className="inline-block mt-3 px-4 py-2 bg-gray-200 rounded cursor-pointer hover:bg-gray-300"
                   >
-                    {imagePreview ? 'Change Image' : 'Choose Image'}
+                    {editingImage ? (imagePreview ? 'Change Image' : 'Choose Image') :
+                     (imagePreviews.length > 0 ? `${imagePreviews.length} Selected - Choose More` : 'Choose Images')}
                   </label>
                 </div>
                 {editingImage ? (
                   <p className="text-xs text-gray-500 mt-1">Leave blank to keep the existing image</p>
                 ) : (
-                  <p className="text-xs text-gray-500 mt-1">Required: Select an image to upload</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {imagePreviews.length > 0
+                      ? `${imagePreviews.length} image${imagePreviews.length !== 1 ? 's' : ''} selected for upload. You can select more or remove unwanted images.`
+                      : 'Select one or more images to upload. You can select multiple files at once.'}
+                  </p>
                 )}
               </div>
 
@@ -420,12 +518,12 @@ const AdminGallery = () => {
                   {submitting ? (
                     <>
                       <span className="animate-spin mr-2">⏳</span>
-                      Saving...
+                      {editingImage ? 'Saving...' : `Uploading ${selectedFiles.length} image${selectedFiles.length !== 1 ? 's' : ''}...`}
                     </>
                   ) : (
                     <>
                       <Save size={20} className="mr-2" />
-                      {editingImage ? 'Update Image' : 'Upload Image'}
+                      {editingImage ? 'Update Image' : `Upload ${selectedFiles.length || 0} Image${selectedFiles.length !== 1 ? 's' : ''}`}
                     </>
                   )}
                 </button>
