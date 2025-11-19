@@ -2,136 +2,272 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Britpop/Mod Theme Styles */
+/* Vintage Britpop/Mod Theme - Oasis/Beatles Aesthetic */
 
 @layer base {
   body {
-    @apply font-sans bg-white text-gray-900;
+    @apply font-sans bg-vintage-cream text-gray-900;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading uppercase tracking-wide;
+    @apply font-heading uppercase tracking-tight;
+    letter-spacing: -0.02em;
   }
 
   h1 {
-    @apply text-4xl md:text-6xl;
+    @apply text-5xl md:text-8xl font-black;
+    text-transform: uppercase;
   }
 
   h2 {
-    @apply text-3xl md:text-5xl;
+    @apply text-4xl md:text-6xl font-black;
   }
 
   h3 {
-    @apply text-2xl md:text-4xl;
+    @apply text-3xl md:text-5xl font-bold;
   }
 }
 
 @layer components {
-  /* Button Styles */
+  /* Button Styles - Mod/Vintage */
   .btn {
-    @apply px-6 py-3 font-heading uppercase tracking-wider transition-all duration-300 border-2;
+    @apply px-8 py-4 font-heading uppercase tracking-wider transition-all duration-200 border-4 font-black text-lg;
+    transform: translateY(0);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.8);
   }
 
   .btn-primary {
-    @apply bg-quiz-blue text-white border-quiz-blue hover:bg-quiz-navy hover:border-quiz-navy;
+    @apply bg-mod-red text-white border-black;
+  }
+
+  .btn-primary:hover {
+    @apply bg-retro-orange;
   }
 
   .btn-secondary {
-    @apply bg-quiz-red text-white border-quiz-red hover:bg-mod-red hover:border-mod-red;
+    @apply bg-retro-yellow text-black border-black;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-retro-orange;
   }
 
   .btn-outline {
-    @apply bg-transparent text-quiz-blue border-quiz-blue hover:bg-quiz-blue hover:text-white;
+    @apply bg-white text-black border-black;
   }
 
-  /* Card Styles */
+  .btn-outline:hover {
+    @apply bg-black text-white;
+  }
+
+  /* Card Styles - Vintage Poster Look */
   .card {
-    @apply bg-white border-2 border-quiz-blue p-6 shadow-britpop transition-all duration-300;
+    @apply bg-white border-4 border-black p-8 shadow-brutal transition-all duration-200;
+    position: relative;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(200, 16, 46, 0.1) 10px,
+      rgba(200, 16, 46, 0.1) 20px
+    );
+    z-index: -1;
+    pointer-events: none;
   }
 
   .card:hover {
-    @apply shadow-lg transform -translate-y-1;
+    transform: translate(-4px, -4px);
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
   }
 
   /* Section Styles */
   .section {
-    @apply py-16 md:py-24;
+    @apply py-20 md:py-32;
+    position: relative;
   }
 
   .section-title {
-    @apply text-center mb-12 text-quiz-blue;
+    @apply text-center mb-16 text-black;
+    position: relative;
+    display: inline-block;
+    width: 100%;
   }
 
-  /* Hero Pattern - Union Jack Stripes */
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 6px;
+    background: repeating-linear-gradient(
+      90deg,
+      #C8102E 0px,
+      #C8102E 20px,
+      transparent 20px,
+      transparent 40px,
+      #003DA5 40px,
+      #003DA5 60px,
+      transparent 60px,
+      transparent 80px
+    );
+    margin: 20px auto 0;
+  }
+
+  /* Hero Pattern - Union Jack Inspired */
   .hero-pattern {
     background: linear-gradient(135deg, #003DA5 0%, #00247D 100%);
     position: relative;
+    overflow: hidden;
   }
 
   .hero-pattern::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
     background-image:
       repeating-linear-gradient(
         45deg,
         transparent,
-        transparent 10px,
-        rgba(200, 16, 46, 0.1) 10px,
-        rgba(200, 16, 46, 0.1) 20px
+        transparent 40px,
+        rgba(200, 16, 46, 0.15) 40px,
+        rgba(200, 16, 46, 0.15) 80px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 40px,
+        rgba(255, 255, 255, 0.05) 40px,
+        rgba(255, 255, 255, 0.05) 80px
       );
+    pointer-events: none;
+    animation: slide 20s linear infinite;
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(50px, 50px);
+    }
+  }
+
+  .hero-pattern::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.3) 100%);
     pointer-events: none;
   }
 
-  /* Mod Border Pattern */
+  /* Mod Border Pattern - Target/Roundel Style */
   .mod-border {
-    @apply border-t-4 border-b-4 border-quiz-red;
-    position: relative;
-  }
-
-  .mod-border::before,
-  .mod-border::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #003DA5;
-  }
-
-  .mod-border::before {
-    top: 0;
-  }
-
-  .mod-border::after {
-    bottom: 0;
+    @apply border-t-8 border-b-8;
+    border-image: repeating-linear-gradient(
+      90deg,
+      #C8102E 0,
+      #C8102E 40px,
+      #FFFFFF 40px,
+      #FFFFFF 80px,
+      #003DA5 80px,
+      #003DA5 120px
+    ) 8;
   }
 
   /* Container */
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
   }
 
-  /* Form Inputs */
+  /* Form Inputs - Retro Style */
   .input {
-    @apply w-full px-4 py-3 border-2 border-gray-300 focus:border-quiz-blue focus:outline-none transition-colors;
+    @apply w-full px-4 py-4 border-4 border-black bg-white focus:border-mod-red focus:outline-none transition-all font-bold;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .input:focus {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
   }
 
   .textarea {
-    @apply w-full px-4 py-3 border-2 border-gray-300 focus:border-quiz-blue focus:outline-none transition-colors resize-none;
+    @apply w-full px-4 py-4 border-4 border-black bg-white focus:border-mod-red focus:outline-none transition-all resize-none font-bold;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .textarea:focus {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
   }
 
   .label {
-    @apply block text-sm font-semibold mb-2 text-gray-700 uppercase tracking-wide;
+    @apply block text-base font-black mb-3 text-black uppercase tracking-wider;
+  }
+
+  /* Retro Badge/Sticker Style */
+  .retro-badge {
+    @apply inline-block px-6 py-2 bg-retro-yellow text-black font-black uppercase text-sm border-4 border-black;
+    transform: rotate(-2deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  /* Vinyl Record Effect */
+  .vinyl-bg {
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 40%, #1a1a1a 45%, #000 100%);
+    position: relative;
+  }
+
+  .vinyl-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-radial-gradient(
+      circle at center,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 2px,
+      rgba(255, 255, 255, 0.03) 4px
+    );
   }
 }
 
 @layer utilities {
   .text-shadow {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  }
+
+  .text-shadow-heavy {
+    text-shadow:
+      3px 3px 0 #000,
+      6px 6px 0 rgba(200, 16, 46, 0.3);
   }
 
   .bg-gradient-britpop {
@@ -139,30 +275,88 @@
   }
 
   .bg-gradient-red {
-    background: linear-gradient(135deg, #D32F2F 0%, #C8102E 100%);
+    background: linear-gradient(135deg, #C8102E 0%, #8B0000 100%);
+  }
+
+  .bg-gradient-mod {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 4px solid rgba(0, 0, 0, 0.8);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  .shadow-brutal {
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+  }
+
+  .shadow-britpop {
+    box-shadow: 6px 6px 0 rgba(200, 16, 46, 0.4), 12px 12px 0 rgba(0, 61, 165, 0.2);
+  }
+
+  /* Checkerboard Pattern - Mod Culture */
+  .checkerboard {
+    background-image:
+      linear-gradient(45deg, #000 25%, transparent 25%),
+      linear-gradient(-45deg, #000 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #000 75%),
+      linear-gradient(-45deg, transparent 75%, #000 75%);
+    background-size: 40px 40px;
+    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+  }
+
+  /* Target/Roundel Pattern */
+  .target-pattern {
+    background:
+      radial-gradient(circle, #003DA5 0%, #003DA5 30%, transparent 30%, transparent 35%, #FFFFFF 35%, #FFFFFF 65%, transparent 65%, transparent 70%, #C8102E 70%, #C8102E 100%);
   }
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Union Jack Colors */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 14px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #003DA5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #003DA5;
-  border-radius: 5px;
+  background: #C8102E;
+  border: 3px solid #003DA5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00247D;
+  background: #FFA500;
+}
+
+/* Vintage Grain Texture Overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* Retro Animation */
+@keyframes pulse-retro {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-retro {
+  animation: pulse-retro 2s ease-in-out infinite;
 }
