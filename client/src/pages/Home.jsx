@@ -13,6 +13,7 @@ const Home = () => {
   const [galleryImages, setGalleryImages] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [heroImageUrl, setHeroImageUrl] = useState('');
+  const [settings, setSettings] = useState({});
   const parallaxRef = useRef(null);
 
   useEffect(() => {
@@ -52,9 +53,13 @@ const Home = () => {
       setGalleryImages(galleryData.slice(0, 6));
       setTeamMembers(Array.isArray(teamRes.data) ? teamRes.data : []);
 
+      // Load settings
+      const settingsData = settingsRes.data || {};
+      setSettings(settingsData);
+
       // Load hero image from settings
-      if (settingsRes.data && settingsRes.data.hero_image_url) {
-        setHeroImageUrl(settingsRes.data.hero_image_url);
+      if (settingsData.hero_image_url) {
+        setHeroImageUrl(settingsData.hero_image_url);
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -87,17 +92,17 @@ const Home = () => {
         {/* Hero Content */}
         <div className="hero-content">
           <h1 className="hero-title">
-            THE QUIZ MASTER GENERAL
+            {settings.hero_title || 'THE QUIZ MASTER GENERAL'}
           </h1>
           <p className="hero-subtitle">
-            North East England's Premier Quiz & Entertainment
+            {settings.hero_subtitle || "North East England's Premier Quiz & Entertainment"}
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
             <Link to="/services" className="btn btn-primary">
-              Our Services
+              {settings.hero_button_1_text || 'Our Services'}
             </Link>
             <Link to="/contact" className="btn btn-secondary">
-              Book Now
+              {settings.hero_button_2_text || 'Book Now'}
             </Link>
           </div>
         </div>
@@ -106,9 +111,9 @@ const Home = () => {
       {/* Services Section */}
       <section className="section">
         <div className="container-custom">
-          <h2 className="section-title">What We Offer</h2>
+          <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
           <p className="section-subtitle">
-            Professional entertainment services that bring energy and excitement to your venue
+            {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
           </p>
           <div className="grid-3">
             {services.map((service) => (
@@ -141,7 +146,7 @@ const Home = () => {
       {upcomingEvents.length > 0 && (
         <section className="section">
           <div className="container-custom">
-            <h2 className="section-title">Upcoming Events</h2>
+            <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
             <div className="grid-3">
               {upcomingEvents.map((event) => (
                 <div key={event.id} className="card">
@@ -182,7 +187,7 @@ const Home = () => {
       {reviews.length > 0 && (
         <section className="section">
           <div className="container-custom">
-            <h2 className="section-title">What Venues Say</h2>
+            <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
             <div className="grid-3">
               {reviews.map((review) => (
                 <div key={review.id} className="review-card">
@@ -211,10 +216,7 @@ const Home = () => {
               <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
                 <Camera className="text-brit-red" size={40} />
               </div>
-              <h2 className="section-title">See Us in Action</h2>
-              <p className="section-subtitle">
-                Check out photos from our quiz nights, race nights, and special events across the North East
-              </p>
+              <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
             </div>
             <div className="gallery-grid">
               {galleryImages.map((image) => (
@@ -254,10 +256,7 @@ const Home = () => {
               <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
                 <Users className="text-brit-gold" size={40} />
               </div>
-              <h2 className="section-title">Meet the Team</h2>
-              <p className="section-subtitle">
-                Our experienced quiz hosts and entertainers are here to make your event unforgettable
-              </p>
+              <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
             </div>
             <div className="team-grid">
               {teamMembers.slice(0, 3).map((member) => (

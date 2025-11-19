@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { settingsAPI, galleryAPI } from '../../services/api';
-import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon } from 'lucide-react';
+import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
@@ -28,7 +28,35 @@ const AdminSettings = () => {
     tagline: '',
 
     // Hero Image
-    hero_image_url: ''
+    hero_image_url: '',
+
+    // Hero Section Content
+    hero_title: '',
+    hero_subtitle: '',
+    hero_button_1_text: '',
+    hero_button_2_text: '',
+
+    // Page Headers
+    services_page_title: '',
+    services_page_subtitle: '',
+    contact_page_title: '',
+    contact_page_subtitle: '',
+    events_page_title: '',
+    events_page_subtitle: '',
+    venues_page_title: '',
+    venues_page_subtitle: '',
+    gallery_page_title: '',
+    gallery_page_subtitle: '',
+    team_page_title: '',
+    team_page_subtitle: '',
+
+    // Homepage Section Titles
+    home_services_title: '',
+    home_services_subtitle: '',
+    home_events_title: '',
+    home_gallery_title: '',
+    home_team_title: '',
+    home_reviews_title: ''
   });
 
   const [heroImage, setHeroImage] = useState(null);
@@ -249,6 +277,328 @@ const AdminSettings = () => {
                 className="input w-full"
                 placeholder="e.g., NE1 1AA"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Hero Section Content */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <Sparkles className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Hero Section Content</h2>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="label">Hero Title</label>
+              <input
+                type="text"
+                name="hero_title"
+                value={settings.hero_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., THE QUIZ MASTER GENERAL"
+              />
+              <p className="text-xs text-gray-500 mt-1">Large title displayed on homepage hero</p>
+            </div>
+
+            <div>
+              <label className="label">Hero Subtitle</label>
+              <input
+                type="text"
+                name="hero_subtitle"
+                value={settings.hero_subtitle}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., North East England's Premier Quiz & Entertainment"
+              />
+              <p className="text-xs text-gray-500 mt-1">Subtitle text below the hero title</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="label">Primary Button Text</label>
+                <input
+                  type="text"
+                  name="hero_button_1_text"
+                  value={settings.hero_button_1_text}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  placeholder="e.g., Our Services"
+                />
+              </div>
+
+              <div>
+                <label className="label">Secondary Button Text</label>
+                <input
+                  type="text"
+                  name="hero_button_2_text"
+                  value={settings.hero_button_2_text}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  placeholder="e.g., Book Now"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Homepage Section Titles */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <Globe className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Homepage Section Titles</h2>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="label">Services Section Title</label>
+              <input
+                type="text"
+                name="home_services_title"
+                value={settings.home_services_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., What We Offer"
+              />
+            </div>
+
+            <div>
+              <label className="label">Services Section Subtitle</label>
+              <input
+                type="text"
+                name="home_services_subtitle"
+                value={settings.home_services_subtitle}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., Professional entertainment services..."
+              />
+            </div>
+
+            <div>
+              <label className="label">Events Section Title</label>
+              <input
+                type="text"
+                name="home_events_title"
+                value={settings.home_events_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., Upcoming Events"
+              />
+            </div>
+
+            <div>
+              <label className="label">Gallery Section Title</label>
+              <input
+                type="text"
+                name="home_gallery_title"
+                value={settings.home_gallery_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., Gallery Highlights"
+              />
+            </div>
+
+            <div>
+              <label className="label">Team Section Title</label>
+              <input
+                type="text"
+                name="home_team_title"
+                value={settings.home_team_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., Meet The Team"
+              />
+            </div>
+
+            <div>
+              <label className="label">Reviews Section Title</label>
+              <input
+                type="text"
+                name="home_reviews_title"
+                value={settings.home_reviews_title}
+                onChange={handleInputChange}
+                className="input w-full"
+                placeholder="e.g., What Our Clients Say"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Page Headers */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <Globe className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Page Headers</h2>
+          </div>
+
+          <div className="space-y-6">
+            <div className="border-b border-gray-300 pb-4">
+              <h3 className="text-lg font-bold mb-4">Services Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="services_page_title"
+                    value={settings.services_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Our Services"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="services_page_subtitle"
+                    value={settings.services_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Professional entertainment for your venue"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-b border-gray-300 pb-4">
+              <h3 className="text-lg font-bold mb-4">Contact Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="contact_page_title"
+                    value={settings.contact_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Get In Touch"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="contact_page_subtitle"
+                    value={settings.contact_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Let's discuss how we can bring entertainment to your venue"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-b border-gray-300 pb-4">
+              <h3 className="text-lg font-bold mb-4">Events Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="events_page_title"
+                    value={settings.events_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Upcoming Events"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="events_page_subtitle"
+                    value={settings.events_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Join us for exciting quiz nights and entertainment"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-b border-gray-300 pb-4">
+              <h3 className="text-lg font-bold mb-4">Venues Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="venues_page_title"
+                    value={settings.venues_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Our Venues"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="venues_page_subtitle"
+                    value={settings.venues_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Find your nearest quiz night location"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-b border-gray-300 pb-4">
+              <h3 className="text-lg font-bold mb-4">Gallery Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="gallery_page_title"
+                    value={settings.gallery_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Photo Gallery"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="gallery_page_subtitle"
+                    value={settings.gallery_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Moments from our events"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold mb-4">Team Page</h3>
+              <div className="space-y-3">
+                <div>
+                  <label className="label">Page Title</label>
+                  <input
+                    type="text"
+                    name="team_page_title"
+                    value={settings.team_page_title}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., Meet The Team"
+                  />
+                </div>
+                <div>
+                  <label className="label">Page Subtitle</label>
+                  <input
+                    type="text"
+                    name="team_page_subtitle"
+                    value={settings.team_page_subtitle}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., The people who make it all happen"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>

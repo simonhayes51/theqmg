@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { contactAPI } from '../services/api';
+import { useState, useEffect } from 'react';
+import { contactAPI, settingsAPI } from '../services/api';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 
 const Contact = () => {
@@ -14,6 +14,20 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
+  const [settings, setSettings] = useState({});
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const response = await settingsAPI.getAll();
+      setSettings(response.data || {});
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    }
+  };
 
   const validateForm = () => {
     const newErrors = {};
@@ -95,8 +109,8 @@ const Contact = () => {
       {/* Hero Section */}
       <section className="bg-gradient-britpop text-white py-16">
         <div className="container-custom">
-          <h1 className="text-4xl md:text-6xl font-heading mb-4">Get In Touch</h1>
-          <p className="text-xl">Let's discuss how we can bring entertainment to your venue</p>
+          <h1 className="text-4xl md:text-6xl font-heading mb-4">{settings.contact_page_title || 'Get In Touch'}</h1>
+          <p className="text-xl">{settings.contact_page_subtitle || "Let's discuss how we can bring entertainment to your venue"}</p>
         </div>
       </section>
 
