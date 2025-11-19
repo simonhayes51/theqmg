@@ -75,44 +75,121 @@ router.get('/:id', async (req, res) => {
 // Create venue (admin only)
 router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req, res) => {
   try {
+    console.log('=== CREATE VENUE REQUEST ===');
+    console.log('Body:', JSON.stringify(req.body, null, 2));
+    console.log('File:', req.file ? req.file.filename : 'No file');
+
     const { name, address, city, postcode, phone, email, website, description, is_active, capacity } = req.body;
 
-    if (!name) {
+    if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'Venue name is required' });
     }
 
     // Use uploaded file or provided URL
-    const image_url = req.file ? `/uploads/images/${req.file.filename}` : req.body.image_url || null;
+    const image_url = req.file ? `/uploads/images/${req.file.filename}` : (req.body.image_url || null);
 
-    // Parse capacity properly - handle empty strings
-    const parsedCapacity = capacity && capacity !== '' ? parseInt(capacity) : null;
+    // Parse capacity - handle empty strings, null, undefined
+    let parsedCapacity = null;
+    if (capacity && capacity !== '' && capacity !== 'null' && capacity !== 'undefined') {
+      const cap = parseInt(capacity, 10);
+      parsedCapacity = isNaN(cap) ? null : cap;
+    }
+
+    // Parse is_active - handle string booleans from FormData
+    let parsedIsActive = true; // default to true
+    if (is_active !== undefined && is_active !== null && is_active !== '') {
+      if (typeof is_active === 'string') {
+        parsedIsActive = is_active.toLowerCase() !== 'false' && is_active !== '0';
+      } else {
+        parsedIsActive = Boolean(is_active);
+      }
+    }
+
+    // Clean up string fields - handle empty strings
+    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+
+    console.log('Parsed values:', {
+      name: cleanString(name),
+      parsedCapacity,
+      parsedIsActive,
+      image_url
+    });
 
     const result = await pool.query(
       `INSERT INTO venues (name, address, city, postcode, phone, email, website, description, image_url, is_active, capacity)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        RETURNING *`,
-      [name, address || null, city || null, postcode || null, phone || null, email || null,
-       website || null, description || null, image_url, is_active !== 'false', parsedCapacity]
+      [
+        cleanString(name),
+        cleanString(address),
+        cleanString(city),
+        cleanString(postcode),
+        cleanString(phone),
+        cleanString(email),
+        cleanString(website),
+        cleanString(description),
+        image_url,
+        parsedIsActive,
+        parsedCapacity
+      ]
     );
 
+    console.log('Venue created successfully:', result.rows[0].id);
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Create venue error:', error);
-    console.error('Error details:', error.message);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('=== CREATE VENUE ERROR ===');
+    console.error('Error:', error);
+    console.error('Message:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('Detail:', error.detail);
+    console.error('Code:', error.code);
+    res.status(500).json({ message: 'Server error', error: error.message, detail: error.detail });
   }
 });
 
 // Update venue (admin only)
 router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (req, res) => {
   try {
+    console.log('=== UPDATE VENUE REQUEST ===');
+    console.log('Venue ID:', req.params.id);
+    console.log('Body:', JSON.stringify(req.body, null, 2));
+    console.log('File:', req.file ? req.file.filename : 'No file');
+
     const { name, address, city, postcode, phone, email, website, description, is_active, capacity } = req.body;
 
-    // Use uploaded file, or keep existing image_url from body (if no new file uploaded)
-    const image_url = req.file ? `/uploads/images/${req.file.filename}` : req.body.image_url || null;
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ message: 'Venue name is required' });
+    }
 
-    // Parse capacity properly - handle empty strings
-    const parsedCapacity = capacity && capacity !== '' ? parseInt(capacity) : null;
+    // Use uploaded file, or keep existing image_url from body (if no new file uploaded)
+    const image_url = req.file ? `/uploads/images/${req.file.filename}` : (req.body.image_url || null);
+
+    // Parse capacity - handle empty strings, null, undefined
+    let parsedCapacity = null;
+    if (capacity && capacity !== '' && capacity !== 'null' && capacity !== 'undefined') {
+      const cap = parseInt(capacity, 10);
+      parsedCapacity = isNaN(cap) ? null : cap;
+    }
+
+    // Parse is_active - handle string booleans from FormData
+    let parsedIsActive = true; // default to true
+    if (is_active !== undefined && is_active !== null && is_active !== '') {
+      if (typeof is_active === 'string') {
+        parsedIsActive = is_active.toLowerCase() !== 'false' && is_active !== '0';
+      } else {
+        parsedIsActive = Boolean(is_active);
+      }
+    }
+
+    // Clean up string fields - handle empty strings
+    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+
+    console.log('Parsed values:', {
+      name: cleanString(name),
+      parsedCapacity,
+      parsedIsActive,
+      image_url
+    });
 
     const result = await pool.query(
       `UPDATE venues
@@ -120,19 +197,36 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
            website = $7, description = $8, image_url = $9, is_active = $10, capacity = $11, updated_at = CURRENT_TIMESTAMP
        WHERE id = $12
        RETURNING *`,
-      [name || null, address || null, city || null, postcode || null, phone || null, email || null,
-       website || null, description || null, image_url, is_active !== 'false', parsedCapacity, req.params.id]
+      [
+        cleanString(name),
+        cleanString(address),
+        cleanString(city),
+        cleanString(postcode),
+        cleanString(phone),
+        cleanString(email),
+        cleanString(website),
+        cleanString(description),
+        image_url,
+        parsedIsActive,
+        parsedCapacity,
+        req.params.id
+      ]
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Venue not found' });
     }
 
+    console.log('Venue updated successfully:', result.rows[0].id);
     res.json(result.rows[0]);
   } catch (error) {
-    console.error('Update venue error:', error);
-    console.error('Error details:', error.message);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('=== UPDATE VENUE ERROR ===');
+    console.error('Error:', error);
+    console.error('Message:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('Detail:', error.detail);
+    console.error('Code:', error.code);
+    res.status(500).json({ message: 'Server error', error: error.message, detail: error.detail });
   }
 });
 
