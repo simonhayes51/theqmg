@@ -41,7 +41,7 @@ async function initializeDatabase() {
     console.log('📋 Users table not found. Initializing database schema...\n');
 
     // Read and execute schema.sql
-    const schemaPath = join(__dirname, '..', 'database', 'schema.sql');
+    const schemaPath = join(__dirname, 'schema.sql');
     const schema = fs.readFileSync(schemaPath, 'utf8');
 
     console.log('📝 Executing schema.sql...');
