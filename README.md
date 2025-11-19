@@ -2,6 +2,20 @@
 
 A modern, full-stack web application for The Quiz Master General quiz provider in North East England. Built with React + Vite frontend, Node.js + Express backend, and PostgreSQL database.
 
+## 🚀 Deploy to Railway (Recommended)
+
+**Quick Deploy:** See [`QUICK-START-RAILWAY.md`](QUICK-START-RAILWAY.md) for 10-minute deployment.
+**Full Guide:** See [`RAILWAY-DEPLOYMENT.md`](RAILWAY-DEPLOYMENT.md) for detailed instructions.
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template)
+
+**Why Railway?**
+- ✅ One-click PostgreSQL database
+- ✅ Automatic HTTPS & SSL certificates
+- ✅ Auto-deploy from GitHub
+- ✅ Built-in monitoring & logs
+- ✅ ~$15-25/month pricing
+
 ## 🎨 Britpop/Mod Theme
 
 The site features a distinctive British mod/indie aesthetic with:
