@@ -17,7 +17,7 @@ export default {
       },
       fontFamily: {
         'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        'heading': ['Impact', 'Arial Black', 'sans-serif'],
+        'heading': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         'glow-red': '0 0 40px rgba(220, 20, 60, 0.5), 0 0 80px rgba(220, 20, 60, 0.3)',
