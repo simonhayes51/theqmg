@@ -42,8 +42,12 @@ export const eventsAPI = {
 export const venuesAPI = {
   getAll: (params) => api.get('/venues', { params }),
   getOne: (id) => api.get(`/venues/${id}`),
-  create: (data) => api.post('/venues', data),
-  update: (id, data) => api.put(`/venues/${id}`, data),
+  create: (data) => api.post('/venues', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  update: (id, data) => api.put(`/venues/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
   delete: (id) => api.delete(`/venues/${id}`),
 };
 
