@@ -2,272 +2,390 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vintage Britpop/Mod Theme - Oasis/Beatles Aesthetic */
+/* Authentic British Indie/Mod Aesthetic - Hand-Crafted, Gritty, Unique */
 
 @layer base {
   body {
-    @apply font-sans bg-vintage-cream text-gray-900;
+    @apply font-sans text-gray-900;
+    background: #F5F3EE;
     background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.08"/></svg>'),
+      repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(0,0,0,0.01) 2px, rgba(0,0,0,0.01) 3px);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading uppercase tracking-tight;
-    letter-spacing: -0.02em;
+    @apply font-heading uppercase;
+    letter-spacing: -0.05em;
+    font-weight: 900;
+    line-height: 0.9;
   }
 
   h1 {
-    @apply text-5xl md:text-8xl font-black;
-    text-transform: uppercase;
+    @apply text-6xl md:text-9xl;
+    transform: rotate(-1deg);
   }
 
   h2 {
-    @apply text-4xl md:text-6xl font-black;
+    @apply text-4xl md:text-7xl;
   }
 
   h3 {
-    @apply text-3xl md:text-5xl font-bold;
+    @apply text-3xl md:text-5xl;
   }
 }
 
 @layer components {
-  /* Button Styles - Mod/Vintage */
+  /* Buttons - Hand-drawn sticker style */
   .btn {
-    @apply px-8 py-4 font-heading uppercase tracking-wider transition-all duration-200 border-4 font-black text-lg;
-    transform: translateY(0);
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+    @apply px-8 py-4 font-heading uppercase tracking-wide transition-all duration-150 border-4 font-black text-lg relative;
+    border-radius: 0;
+    transform: rotate(-0.5deg);
+    box-shadow:
+      5px 5px 0 rgba(0, 0, 0, 1),
+      10px 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: #000;
+    clip-path: polygon(
+      0% 5px,
+      5px 0%,
+      calc(100% - 5px) 0%,
+      100% 5px,
+      100% calc(100% - 5px),
+      calc(100% - 5px) 100%,
+      5px 100%,
+      0% calc(100% - 5px)
+    );
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.05) 2px,
+      rgba(0,0,0,0.05) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
   }
 
   .btn:hover {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+    transform: rotate(0.5deg) translate(-2px, -2px);
+    box-shadow:
+      7px 7px 0 rgba(0, 0, 0, 1),
+      12px 12px 25px rgba(0, 0, 0, 0.4);
   }
 
   .btn:active {
-    transform: translate(4px, 4px);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.8);
+    transform: rotate(-0.5deg) translate(3px, 3px);
+    box-shadow:
+      2px 2px 0 rgba(0, 0, 0, 1),
+      4px 4px 10px rgba(0, 0, 0, 0.2);
   }
 
   .btn-primary {
-    @apply bg-mod-red text-white border-black;
-  }
-
-  .btn-primary:hover {
-    @apply bg-retro-orange;
+    @apply bg-mod-red text-white;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 11px);
   }
 
   .btn-secondary {
-    @apply bg-retro-yellow text-black border-black;
-  }
-
-  .btn-secondary:hover {
-    @apply bg-retro-orange;
+    @apply bg-retro-yellow text-black;
+    background-image:
+      repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,0.08) 8px, rgba(0,0,0,0.08) 9px);
   }
 
   .btn-outline {
-    @apply bg-white text-black border-black;
+    @apply bg-vintage-cream text-black;
+    border-width: 5px;
+    border-style: dashed;
   }
 
   .btn-outline:hover {
     @apply bg-black text-white;
   }
 
-  /* Card Styles - Vintage Poster Look */
+  /* Cards - Torn paper / poster aesthetic */
   .card {
-    @apply bg-white border-4 border-black p-8 shadow-brutal transition-all duration-200;
-    position: relative;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
+    @apply bg-white border-4 border-black p-8 relative;
+    box-shadow:
+      8px 8px 0 rgba(200, 16, 46, 0.3),
+      16px 16px 0 rgba(0, 61, 165, 0.2),
+      24px 24px 40px rgba(0, 0, 0, 0.15);
+    transform: rotate(0.5deg);
+    clip-path: polygon(
+      0% 8px,
+      3px 3px,
+      8px 0%,
+      calc(100% - 12px) 0%,
+      calc(100% - 3px) 2px,
+      100% 10px,
+      100% calc(100% - 6px),
+      calc(100% - 5px) 100%,
+      10px 100%,
+      2px calc(100% - 8px),
+      0% calc(100% - 12px)
+    );
   }
 
   .card::before {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(200, 16, 46, 0.1) 10px,
-      rgba(200, 16, 46, 0.1) 20px
-    );
-    z-index: -1;
+    top: -10px;
+    right: -10px;
+    width: 60px;
+    height: 60px;
+    background: #FFD700;
+    border: 4px solid #000;
+    border-radius: 50%;
+    transform: rotate(15deg);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent 0, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 21px);
     pointer-events: none;
   }
 
   .card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+    transform: rotate(-0.5deg) translate(-8px, -8px);
+    box-shadow:
+      16px 16px 0 rgba(200, 16, 46, 0.4),
+      24px 24px 0 rgba(0, 61, 165, 0.3),
+      32px 32px 50px rgba(0, 0, 0, 0.2);
   }
 
-  /* Section Styles */
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  /* Section Styles - Asymmetric */
   .section {
-    @apply py-20 md:py-32;
-    position: relative;
+    @apply py-24 md:py-40 relative;
+  }
+
+  .section:nth-child(even) {
+    background: linear-gradient(175deg, transparent 0%, rgba(0, 61, 165, 0.03) 50%, transparent 100%);
+  }
+
+  .section:nth-child(odd) {
+    background: linear-gradient(5deg, transparent 0%, rgba(200, 16, 46, 0.03) 50%, transparent 100%);
   }
 
   .section-title {
-    @apply text-center mb-16 text-black;
-    position: relative;
-    display: inline-block;
-    width: 100%;
+    @apply text-center mb-20 text-black relative inline-block w-full;
+    filter: drop-shadow(4px 4px 0 rgba(200, 16, 46, 0.3));
   }
 
-  .section-title::after {
+  .section-title::before {
     content: '';
-    display: block;
-    width: 200px;
-    height: 6px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    bottom: -30px;
+    width: 300px;
+    height: 15px;
     background: repeating-linear-gradient(
       90deg,
       #C8102E 0px,
-      #C8102E 20px,
-      transparent 20px,
-      transparent 40px,
-      #003DA5 40px,
-      #003DA5 60px,
-      transparent 60px,
-      transparent 80px
+      #C8102E 30px,
+      #FFFFFF 30px,
+      #FFFFFF 50px,
+      #003DA5 50px,
+      #003DA5 80px,
+      #FFFFFF 80px,
+      #FFFFFF 100px
     );
-    margin: 20px auto 0;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
   }
 
-  /* Hero Pattern - Union Jack Inspired */
+  .section-title::after {
+    content: '★';
+    position: absolute;
+    right: -40px;
+    top: -20px;
+    font-size: 3rem;
+    color: #FFD700;
+    text-shadow:
+      2px 2px 0 #000,
+      4px 4px 0 rgba(200, 16, 46, 0.5);
+    transform: rotate(15deg);
+    animation: spin-slow 20s linear infinite;
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(15deg); }
+    to { transform: rotate(375deg); }
+  }
+
+  /* Hero - Gig poster aesthetic */
   .hero-pattern {
     background: linear-gradient(135deg, #003DA5 0%, #00247D 100%);
     position: relative;
     overflow: hidden;
+    border-bottom: 12px solid #C8102E;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3);
   }
 
   .hero-pattern::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    right: -50%;
-    bottom: -50%;
+    inset: 0;
     background-image:
       repeating-linear-gradient(
         45deg,
         transparent,
-        transparent 40px,
-        rgba(200, 16, 46, 0.15) 40px,
-        rgba(200, 16, 46, 0.15) 80px
+        transparent 60px,
+        rgba(200, 16, 46, 0.1) 60px,
+        rgba(200, 16, 46, 0.1) 120px
       ),
       repeating-linear-gradient(
         -45deg,
         transparent,
-        transparent 40px,
-        rgba(255, 255, 255, 0.05) 40px,
-        rgba(255, 255, 255, 0.05) 80px
+        transparent 60px,
+        rgba(255, 255, 255, 0.05) 60px,
+        rgba(255, 255, 255, 0.05) 120px
       );
-    pointer-events: none;
-    animation: slide 20s linear infinite;
+    animation: slide-diagonal 30s linear infinite;
   }
 
-  @keyframes slide {
-    0% {
-      transform: translate(0, 0);
-    }
-    100% {
-      transform: translate(50px, 50px);
-    }
+  @keyframes slide-diagonal {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(120px, 120px); }
   }
 
   .hero-pattern::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(circle, transparent 20%, rgba(0, 0, 0, 0.3) 100%);
-    pointer-events: none;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, transparent 20%, rgba(0, 0, 0, 0.4) 100%);
+    mix-blend-mode: multiply;
   }
 
-  /* Mod Border Pattern - Target/Roundel Style */
-  .mod-border {
-    @apply border-t-8 border-b-8;
-    border-image: repeating-linear-gradient(
-      90deg,
-      #C8102E 0,
-      #C8102E 40px,
-      #FFFFFF 40px,
-      #FFFFFF 80px,
-      #003DA5 80px,
-      #003DA5 120px
-    ) 8;
-  }
-
-  /* Container */
+  /* Container - Asymmetric padding */
   .container-custom {
-    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
+    @apply max-w-7xl mx-auto px-8 sm:px-12 lg:px-16;
   }
 
-  /* Form Inputs - Retro Style */
-  .input {
-    @apply w-full px-4 py-4 border-4 border-black bg-white focus:border-mod-red focus:outline-none transition-all font-bold;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  /* Form Inputs - Hand-drawn boxes */
+  .input, .textarea {
+    @apply w-full px-5 py-4 border-4 border-black bg-white font-bold transition-all;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+    clip-path: polygon(
+      0% 3px,
+      3px 0%,
+      calc(100% - 3px) 0%,
+      100% 3px,
+      100% calc(100% - 3px),
+      calc(100% - 3px) 100%,
+      3px 100%,
+      0% calc(100% - 3px)
+    );
   }
 
-  .input:focus {
+  .input:focus, .textarea:focus {
+    @apply border-mod-red outline-none;
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 6px 6px 0 rgba(200, 16, 46, 0.4);
   }
 
   .textarea {
-    @apply w-full px-4 py-4 border-4 border-black bg-white focus:border-mod-red focus:outline-none transition-all resize-none font-bold;
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .textarea:focus {
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
+    @apply resize-none;
   }
 
   .label {
-    @apply block text-base font-black mb-3 text-black uppercase tracking-wider;
+    @apply block text-lg font-black mb-3 text-black uppercase tracking-wide;
+    text-shadow: 2px 2px 0 rgba(255, 215, 0, 0.3);
   }
 
-  /* Retro Badge/Sticker Style */
+  /* Retro sticker/stamp */
   .retro-badge {
-    @apply inline-block px-6 py-2 bg-retro-yellow text-black font-black uppercase text-sm border-4 border-black;
-    transform: rotate(-2deg);
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);
+    @apply inline-block px-6 py-3 bg-retro-yellow text-black font-black uppercase text-sm border-4 border-black relative;
+    transform: rotate(-3deg);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8);
+    clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
   }
 
-  /* Vinyl Record Effect */
-  .vinyl-bg {
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000 40%, #1a1a1a 45%, #000 100%);
+  .retro-badge::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 2px dashed rgba(0, 0, 0, 0.3);
+  }
+
+  /* Polaroid photo frame */
+  .polaroid {
+    @apply bg-white p-3 pb-12 border-2 border-gray-300 relative;
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 10px 25px rgba(0, 0, 0, 0.15),
+      inset 0 0 0 1px rgba(0,0,0,0.05);
+    transform: rotate(-1deg);
+  }
+
+  .polaroid::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    filter: blur(10px);
+  }
+
+  /* Graffiti text effect */
+  .graffiti-text {
+    text-shadow:
+      3px 3px 0 #C8102E,
+      6px 6px 0 #FFD700,
+      9px 9px 15px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* Torn paper edge */
+  .torn-edge {
     position: relative;
   }
 
-  .vinyl-bg::before {
+  .torn-edge::after {
     content: '';
     position: absolute;
-    inset: 0;
-    background: repeating-radial-gradient(
-      circle at center,
-      transparent 0,
-      transparent 2px,
-      rgba(255, 255, 255, 0.03) 2px,
-      rgba(255, 255, 255, 0.03) 4px
-    );
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(135deg, #F5F3EE 10%, transparent 10%) 0 0,
+                linear-gradient(225deg, #F5F3EE 10%, transparent 10%) 0 0,
+                linear-gradient(315deg, #F5F3EE 10%, transparent 10%) 0 0,
+                linear-gradient(45deg, #F5F3EE 10%, transparent 10%) 0 0;
+    background-size: 16px 8px;
+    background-repeat: repeat-x;
   }
 }
 
 @layer utilities {
   .text-shadow {
-    text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+    text-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
   }
 
   .text-shadow-heavy {
     text-shadow:
-      3px 3px 0 #000,
-      6px 6px 0 rgba(200, 16, 46, 0.3);
+      4px 4px 0 #000,
+      8px 8px 0 rgba(200, 16, 46, 0.4),
+      12px 12px 20px rgba(0, 0, 0, 0.3);
   }
 
   .bg-gradient-britpop {
@@ -283,57 +401,62 @@
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    border: 4px solid rgba(0, 0, 0, 0.8);
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border: 5px solid rgba(0, 0, 0, 0.9);
+    box-shadow:
+      6px 6px 0 rgba(0, 0, 0, 0.6),
+      inset 0 0 50px rgba(255, 255, 255, 0.1);
   }
 
   .shadow-brutal {
-    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.9);
   }
 
   .shadow-britpop {
-    box-shadow: 6px 6px 0 rgba(200, 16, 46, 0.4), 12px 12px 0 rgba(0, 61, 165, 0.2);
+    box-shadow:
+      8px 8px 0 rgba(200, 16, 46, 0.5),
+      16px 16px 0 rgba(0, 61, 165, 0.3);
   }
 
-  /* Checkerboard Pattern - Mod Culture */
-  .checkerboard {
-    background-image:
-      linear-gradient(45deg, #000 25%, transparent 25%),
-      linear-gradient(-45deg, #000 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #000 75%),
-      linear-gradient(-45deg, transparent 75%, #000 75%);
-    background-size: 40px 40px;
-    background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+  /* Spray paint drip effect */
+  .spray-paint {
+    position: relative;
   }
 
-  /* Target/Roundel Pattern */
-  .target-pattern {
-    background:
-      radial-gradient(circle, #003DA5 0%, #003DA5 30%, transparent 30%, transparent 35%, #FFFFFF 35%, #FFFFFF 65%, transparent 65%, transparent 70%, #C8102E 70%, #C8102E 100%);
+  .spray-paint::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 20%;
+    width: 3px;
+    height: 15px;
+    background: currentColor;
+    opacity: 0.6;
   }
 }
 
-/* Custom Scrollbar - Union Jack Colors */
+/* Custom Scrollbar - Union Jack themed */
 ::-webkit-scrollbar {
-  width: 14px;
+  width: 16px;
 }
 
 ::-webkit-scrollbar-track {
   background: #003DA5;
+  border: 3px solid #000;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #C8102E;
-  border: 3px solid #003DA5;
+  border: 3px solid #FFF;
+  box-shadow: inset 0 0 0 2px #000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FFA500;
+  background: #FFD700;
 }
 
-/* Vintage Grain Texture Overlay */
+/* Vintage grain overlay */
 body::before {
   content: '';
   position: fixed;
@@ -341,22 +464,58 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="4" /></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.08"/></svg>');
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: overlay;
+  animation: grain 8s steps(10) infinite;
 }
 
-/* Retro Animation */
-@keyframes pulse-retro {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
 }
 
-.animate-pulse-retro {
-  animation: pulse-retro 2s ease-in-out infinite;
+/* Tape/washi tape accent */
+.tape-accent {
+  position: relative;
+}
+
+.tape-accent::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 120px;
+  height: 25px;
+  background: rgba(255, 215, 0, 0.3);
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-left: none;
+  border-right: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Record scratch mark */
+.scratch-mark {
+  background-image: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(0, 0, 0, 0.05) 40%,
+    rgba(0, 0, 0, 0.05) 42%,
+    transparent 42%,
+    transparent 58%,
+    rgba(0, 0, 0, 0.05) 58%,
+    rgba(0, 0, 0, 0.05) 60%,
+    transparent 60%
+  );
+  background-size: 10px 10px;
 }

@@ -14,6 +14,7 @@ const AdminVenues = () => {
     postcode: '',
     phone: '',
     email: '',
+    website: '',
     description: '',
     capacity: '',
     image: null
@@ -53,6 +54,7 @@ const AdminVenues = () => {
       postcode: '',
       phone: '',
       email: '',
+      website: '',
       description: '',
       capacity: '',
       image: null
@@ -70,6 +72,7 @@ const AdminVenues = () => {
       postcode: venue.postcode || '',
       phone: venue.phone || '',
       email: venue.email || '',
+      website: venue.website || '',
       description: venue.description || '',
       capacity: venue.capacity || '',
       image: null,
@@ -89,6 +92,7 @@ const AdminVenues = () => {
       postcode: '',
       phone: '',
       email: '',
+      website: '',
       description: '',
       capacity: '',
       image: null
@@ -134,6 +138,7 @@ const AdminVenues = () => {
       submitData.append('postcode', formData.postcode || '');
       submitData.append('phone', formData.phone || '');
       submitData.append('email', formData.email || '');
+      submitData.append('website', formData.website || '');
       submitData.append('description', formData.description || '');
       submitData.append('capacity', formData.capacity || '');
 
