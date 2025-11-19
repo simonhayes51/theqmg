@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+client/dist/
+client/build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Build artifacts
+build-tmp-napi-v3/
+*.o
+*.a
+*.node
+*.d
+*.mk
+Makefile
+config.gypi
+
+# Uploaded files (optional - uncomment if you don't want to commit uploads)
+# uploads/images/*
+# !uploads/images/.gitkeep

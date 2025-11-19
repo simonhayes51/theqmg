@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Britpop/Mod Theme Styles */
+
+@layer base {
+  body {
+    @apply font-sans bg-white text-gray-900;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading uppercase tracking-wide;
+  }
+
+  h1 {
+    @apply text-4xl md:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-4xl;
+  }
+}
+
+@layer components {
+  /* Button Styles */
+  .btn {
+    @apply px-6 py-3 font-heading uppercase tracking-wider transition-all duration-300 border-2;
+  }
+
+  .btn-primary {
+    @apply bg-quiz-blue text-white border-quiz-blue hover:bg-quiz-navy hover:border-quiz-navy;
+  }
+
+  .btn-secondary {
+    @apply bg-quiz-red text-white border-quiz-red hover:bg-mod-red hover:border-mod-red;
+  }
+
+  .btn-outline {
+    @apply bg-transparent text-quiz-blue border-quiz-blue hover:bg-quiz-blue hover:text-white;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply bg-white border-2 border-quiz-blue p-6 shadow-britpop transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-lg transform -translate-y-1;
+  }
+
+  /* Section Styles */
+  .section {
+    @apply py-16 md:py-24;
+  }
+
+  .section-title {
+    @apply text-center mb-12 text-quiz-blue;
+  }
+
+  /* Hero Pattern - Union Jack Stripes */
+  .hero-pattern {
+    background: linear-gradient(135deg, #003DA5 0%, #00247D 100%);
+    position: relative;
+  }
+
+  .hero-pattern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(200, 16, 46, 0.1) 10px,
+        rgba(200, 16, 46, 0.1) 20px
+      );
+    pointer-events: none;
+  }
+
+  /* Mod Border Pattern */
+  .mod-border {
+    @apply border-t-4 border-b-4 border-quiz-red;
+    position: relative;
+  }
+
+  .mod-border::before,
+  .mod-border::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #003DA5;
+  }
+
+  .mod-border::before {
+    top: 0;
+  }
+
+  .mod-border::after {
+    bottom: 0;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Form Inputs */
+  .input {
+    @apply w-full px-4 py-3 border-2 border-gray-300 focus:border-quiz-blue focus:outline-none transition-colors;
+  }
+
+  .textarea {
+    @apply w-full px-4 py-3 border-2 border-gray-300 focus:border-quiz-blue focus:outline-none transition-colors resize-none;
+  }
+
+  .label {
+    @apply block text-sm font-semibold mb-2 text-gray-700 uppercase tracking-wide;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .bg-gradient-britpop {
+    background: linear-gradient(135deg, #003DA5 0%, #00247D 100%);
+  }
+
+  .bg-gradient-red {
+    background: linear-gradient(135deg, #D32F2F 0%, #C8102E 100%);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #003DA5;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00247D;
+}

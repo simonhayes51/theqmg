@@ -1,0 +1,2 @@
+const AdminTeam = () => <div className="container-custom py-12"><h1 className="text-4xl font-heading text-quiz-blue mb-8">MANAGE TEAM</h1><p>Admin team page - to be implemented</p></div>;
+export default AdminTeam;
