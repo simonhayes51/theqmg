@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, eventsAPI } from '../services/api';
 import { Calendar, MapPin, Star } from 'lucide-react';
 
+// Get API URL from environment
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+
 const Home = () => {
   const [services, setServices] = useState([]);
   const [reviews, setReviews] = useState([]);
@@ -19,11 +22,22 @@ const Home = () => {
         reviewsAPI.getAll(),
         eventsAPI.getAll({ upcoming: true, limit: 3 }),
       ]);
-      setServices(servicesRes.data);
-      setReviews(reviewsRes.data.filter(r => r.is_featured).slice(0, 3));
-      setUpcomingEvents(eventsRes.data);
+
+      // Safely handle services data
+      setServices(Array.isArray(servicesRes.data) ? servicesRes.data : []);
+
+      // Safely handle reviews data
+      const reviewsData = Array.isArray(reviewsRes.data) ? reviewsRes.data : [];
+      setReviews(reviewsData.filter(r => r.is_featured).slice(0, 3));
+
+      // Safely handle events data
+      setUpcomingEvents(Array.isArray(eventsRes.data) ? eventsRes.data : []);
     } catch (error) {
       console.error('Error loading data:', error);
+      // Set empty arrays on error to prevent crashes
+      setServices([]);
+      setReviews([]);
+      setUpcomingEvents([]);
     }
   };
 
@@ -95,7 +109,7 @@ const Home = () => {
                 <div key={event.id} className="card">
                   {event.image_url && (
                     <img
-                      src={`http://localhost:5000${event.image_url}`}
+                      src={`${API_BASE_URL}${event.image_url}`}
                       alt={event.title}
                       className="w-full h-48 object-cover mb-4 -mt-6 -mx-6"
                     />
