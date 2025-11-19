@@ -63,7 +63,18 @@ git push -u origin main
 
 **Environment Variables** (click "Variables" tab):
 
-Add these variables:
+**Option 1: Using DATABASE_URL (Recommended - Simpler)**
+
+```
+NODE_ENV=production
+PORT=5000
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+DB_SSL=false
+JWT_SECRET=your_super_secret_jwt_key_here_change_this
+CLIENT_URL=https://your-frontend-url.up.railway.app
+```
+
+**Option 2: Using Individual Database Variables**
 
 ```
 NODE_ENV=production
@@ -79,6 +90,7 @@ CLIENT_URL=https://your-frontend-url.up.railway.app
 
 **Important:**
 - Railway auto-fills `${{Postgres.XXX}}` variables if you add the PostgreSQL service
+- DATABASE_URL is the simplest approach - Railway provides this automatically
 - Generate a secure JWT_SECRET: `openssl rand -base64 32`
 - CLIENT_URL will be set after deploying frontend (Step 6)
 
@@ -194,6 +206,18 @@ cd ../server && npm install
 ## 📊 Environment Variables Summary
 
 ### Backend Service
+
+**Recommended (DATABASE_URL):**
+```
+NODE_ENV=production
+PORT=5000
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+DB_SSL=false
+JWT_SECRET=<generate-secure-key>
+CLIENT_URL=<your-frontend-url>
+```
+
+**Alternative (Individual Variables):**
 ```
 NODE_ENV=production
 PORT=5000

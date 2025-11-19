@@ -31,9 +31,13 @@ git push -u origin main
 
 ```
 NODE_ENV=production
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+DB_SSL=false
 JWT_SECRET=change_this_to_random_string_abc123xyz789
 CLIENT_URL=https://your-frontend.up.railway.app
 ```
+
+**Note:** Railway auto-fills `${{Postgres.DATABASE_URL}}` when you add PostgreSQL.
 
 6. Click **"Deploy"**
 7. Copy your backend URL (e.g., `https://xxx.up.railway.app`)
