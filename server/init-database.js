@@ -1,5 +1,6 @@
 import pg from 'pg';
 import fs from 'fs';
+import bcrypt from 'bcrypt';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import dotenv from 'dotenv';
@@ -10,12 +11,47 @@ const __dirname = dirname(__filename);
 // Load environment variables
 dotenv.config({ path: join(__dirname, '.env') });
 
-const { Pool } = pg;
+const { Pool} = pg;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
 });
+
+// Correct password hash for 'admin123'
+const CORRECT_ADMIN_HASH = '$2b$10$j9zzybsutQlbU09r8.xKl.hnsaqQu/Jlo5wozJV0ahK4.SYyC9l8e';
+
+async function ensureAdminPassword() {
+  try {
+    console.log('🔐 Checking admin password...');
+
+    // Get current admin user
+    const result = await pool.query('SELECT password_hash FROM users WHERE username = $1', ['admin']);
+
+    if (result.rows.length === 0) {
+      console.log('⚠️  Admin user not found, skipping password check');
+      return;
+    }
+
+    const currentHash = result.rows[0].password_hash;
+
+    // Check if password is correct
+    const isCorrect = await bcrypt.compare('admin123', currentHash);
+
+    if (isCorrect) {
+      console.log('✅ Admin password is correct\n');
+    } else {
+      console.log('⚠️  Admin password hash is incorrect, fixing...');
+      await pool.query(
+        'UPDATE users SET password_hash = $1 WHERE username = $2',
+        [CORRECT_ADMIN_HASH, 'admin']
+      );
+      console.log('✅ Admin password updated to correct hash\n');
+    }
+  } catch (error) {
+    console.error('❌ Error checking admin password:', error.message);
+  }
+}
 
 async function initializeDatabase() {
   try {
@@ -35,6 +71,9 @@ async function initializeDatabase() {
     if (tableExists) {
       console.log('✅ Database already initialized (users table exists)');
       console.log('✅ Skipping schema initialization\n');
+
+      // Still check admin password even if DB exists
+      await ensureAdminPassword();
       return;
     }
 
@@ -62,6 +101,9 @@ async function initializeDatabase() {
     console.log('   Username: admin');
     console.log('   Password: admin123');
     console.log('   ⚠️  Change these credentials after first login!\n');
+
+    // Ensure admin password is correct (in case of previous bad hash)
+    await ensureAdminPassword();
 
   } catch (error) {
     console.error('❌ Database initialization error:', error.message);

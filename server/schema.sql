@@ -137,7 +137,7 @@ CREATE INDEX IF NOT EXISTS idx_gallery_category ON gallery_images(category);
 -- Insert default admin user (password: 'admin123' - CHANGE THIS!)
 -- Password hash for 'admin123'
 INSERT INTO users (username, email, password_hash, role)
-VALUES ('admin', 'admin@thequizmastergeneral.com', '$2b$10$rKjPZWvXPZ0QRrqZx7EO7O.GxFYZxJhEkC5yYxVxEqMVxQxYxVxQx', 'admin')
+VALUES ('admin', 'admin@thequizmastergeneral.com', '$2b$10$j9zzybsutQlbU09r8.xKl.hnsaqQu/Jlo5wozJV0ahK4.SYyC9l8e', 'admin')
 ON CONFLICT (username) DO NOTHING;
 
 -- Insert sample site settings
