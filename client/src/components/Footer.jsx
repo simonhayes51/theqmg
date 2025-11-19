@@ -1,51 +1,145 @@
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin } from 'lucide-react';
+import { settingsAPI } from '../services/api';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [settings, setSettings] = useState({});
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const response = await settingsAPI.getAll();
+      setSettings(response.data || {});
+    } catch (error) {
+      console.error('Error loading footer settings:', error);
+    }
+  };
+
+  // Get values from settings or use defaults
+  const businessName = settings.business_name || 'The Quiz Master General';
+  const tagline = settings.tagline || "North East England's premier quiz and entertainment provider";
+  const businessEmail = settings.business_email || 'info@thequizmastergeneral.com';
+  const businessPhone = settings.business_phone;
+  const coverageArea = settings.business_city || 'Newcastle, Durham, Sunderland & surrounding areas';
 
   return (
-    <footer className="bg-gradient-britpop text-white mod-border">
-      <div className="container-custom py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer>
+      <div className="container-custom">
+        <div className="footer-grid">
           {/* About */}
           <div>
-            <h3 className="text-xl font-heading mb-4">The Quiz Master General</h3>
-            <p className="text-sm text-gray-200">
-              North East England's premier quiz and entertainment provider.
-              Bringing fun, laughter, and competition to venues across the region.
+            <h3 className="text-2xl font-black mb-6 uppercase text-brit-gold">{businessName}</h3>
+            <p className="text-gray-400 text-lg mb-6">
+              {tagline}
             </p>
+
+            {/* Social Media Icons */}
+            {(settings.facebook_url || settings.twitter_url || settings.instagram_url || settings.linkedin_url) && (
+              <div className="flex gap-4 mt-6">
+                {settings.facebook_url && (
+                  <a
+                    href={settings.facebook_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-brit-red/20 border-2 border-brit-red flex items-center justify-center hover:bg-brit-red hover:scale-110 transition-all"
+                    aria-label="Facebook"
+                  >
+                    <Facebook size={20} className="text-white" />
+                  </a>
+                )}
+                {settings.twitter_url && (
+                  <a
+                    href={settings.twitter_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-brit-blue/20 border-2 border-brit-blue flex items-center justify-center hover:bg-brit-blue hover:scale-110 transition-all"
+                    aria-label="Twitter"
+                  >
+                    <Twitter size={20} className="text-white" />
+                  </a>
+                )}
+                {settings.instagram_url && (
+                  <a
+                    href={settings.instagram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-brit-gold/20 border-2 border-brit-gold flex items-center justify-center hover:bg-brit-gold hover:scale-110 transition-all"
+                    aria-label="Instagram"
+                  >
+                    <Instagram size={20} className="text-gray-900" />
+                  </a>
+                )}
+                {settings.linkedin_url && (
+                  <a
+                    href={settings.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-brit-blue/20 border-2 border-brit-blue flex items-center justify-center hover:bg-brit-blue hover:scale-110 transition-all"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin size={20} className="text-white" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-xl font-heading mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link to="/events" className="hover:text-quiz-red transition-colors">Events</Link></li>
-              <li><Link to="/venues" className="hover:text-quiz-red transition-colors">Venues</Link></li>
-              <li><Link to="/services" className="hover:text-quiz-red transition-colors">Services</Link></li>
-              <li><Link to="/team" className="hover:text-quiz-red transition-colors">The Team</Link></li>
-              <li><Link to="/contact" className="hover:text-quiz-red transition-colors">Contact Us</Link></li>
+            <h3 className="footer-section h3">Quick Links</h3>
+            <ul className="space-y-3">
+              <li><Link to="/events" className="footer-link">Events</Link></li>
+              <li><Link to="/venues" className="footer-link">Venues</Link></li>
+              <li><Link to="/services" className="footer-link">Services</Link></li>
+              <li><Link to="/gallery" className="footer-link">Gallery</Link></li>
+              <li><Link to="/team" className="footer-link">The Team</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact Us</Link></li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-xl font-heading mb-4">Get In Touch</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a href="mailto:info@thequizmastergeneral.com" className="hover:text-quiz-red transition-colors">
-                  info@thequizmastergeneral.com
-                </a>
-              </li>
-              <li className="text-gray-200">
-                Serving Newcastle, Durham, Sunderland & surrounding areas
-              </li>
+            <h3 className="footer-section h3">Get In Touch</h3>
+            <ul className="space-y-4">
+              {businessEmail && (
+                <li>
+                  <a
+                    href={`mailto:${businessEmail}`}
+                    className="footer-link flex items-center gap-2"
+                  >
+                    <Mail size={18} className="text-brit-red" />
+                    {businessEmail}
+                  </a>
+                </li>
+              )}
+              {businessPhone && (
+                <li>
+                  <a
+                    href={`tel:${businessPhone}`}
+                    className="footer-link flex items-center gap-2"
+                  >
+                    <span className="text-brit-red text-xl">📞</span>
+                    {businessPhone}
+                  </a>
+                </li>
+              )}
+              {coverageArea && (
+                <li className="footer-link flex items-center gap-2">
+                  <MapPin size={18} className="text-brit-gold" />
+                  <span>Serving {coverageArea}</span>
+                </li>
+              )}
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/20 text-center text-sm">
-          <p>&copy; {currentYear} The Quiz Master General. All rights reserved.</p>
+        <div className="mt-12 pt-8 border-t-2 border-brit-red/30 text-center">
+          <p className="text-gray-400">&copy; {currentYear} {businessName}. All rights reserved.</p>
         </div>
       </div>
     </footer>

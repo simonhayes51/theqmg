@@ -68,24 +68,48 @@ router.put('/:key', authenticateToken, isAdmin, async (req, res) => {
 // Bulk update settings (admin only)
 router.post('/bulk-update', authenticateToken, isAdmin, async (req, res) => {
   try {
+    console.log('=== BULK UPDATE SETTINGS REQUEST ===');
+    console.log('Body:', JSON.stringify(req.body, null, 2));
+
     const { settings } = req.body; // Object with key-value pairs
 
-    const promises = Object.entries(settings).map(([key, value]) =>
-      pool.query(
+    if (!settings || typeof settings !== 'object') {
+      return res.status(400).json({ message: 'Settings object is required' });
+    }
+
+    // Clean up values - convert empty strings to null
+    const cleanValue = (val) => {
+      if (val === null || val === undefined || val === '') return null;
+      if (typeof val === 'string') return val.trim();
+      return String(val);
+    };
+
+    console.log('Settings to update:', Object.keys(settings));
+
+    const promises = Object.entries(settings).map(([key, value]) => {
+      const cleanedValue = cleanValue(value);
+      console.log(`Updating ${key}:`, cleanedValue);
+      return pool.query(
         `INSERT INTO site_settings (setting_key, setting_value, setting_type)
          VALUES ($1, $2, 'text')
          ON CONFLICT (setting_key)
          DO UPDATE SET setting_value = $2, updated_at = CURRENT_TIMESTAMP`,
-        [key, value]
-      )
-    );
+        [key, cleanedValue]
+      );
+    });
 
     await Promise.all(promises);
 
+    console.log('Settings updated successfully');
     res.json({ message: 'Settings updated successfully' });
   } catch (error) {
-    console.error('Bulk update settings error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('=== BULK UPDATE SETTINGS ERROR ===');
+    console.error('Error:', error);
+    console.error('Message:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('Detail:', error.detail);
+    console.error('Code:', error.code);
+    res.status(500).json({ message: 'Server error', error: error.message, detail: error.detail });
   }
 });
 
