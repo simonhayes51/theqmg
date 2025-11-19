@@ -14,22 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Events table
-CREATE TABLE IF NOT EXISTS events (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    event_type VARCHAR(100), -- 'quiz', 'race-night', 'special'
-    venue_id INTEGER REFERENCES venues(id) ON DELETE SET NULL,
-    event_date DATE NOT NULL,
-    event_time TIME,
-    status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'cancelled'
-    image_url VARCHAR(500),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Venues table
+-- Venues table (must be created before events)
 CREATE TABLE IF NOT EXISTS venues (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -41,7 +26,23 @@ CREATE TABLE IF NOT EXISTS venues (
     website VARCHAR(500),
     description TEXT,
     image_url VARCHAR(500),
+    capacity INTEGER,
     is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Events table
+CREATE TABLE IF NOT EXISTS events (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_type VARCHAR(100), -- 'quiz', 'race-night', 'special'
+    venue_id INTEGER REFERENCES venues(id) ON DELETE SET NULL,
+    event_date DATE NOT NULL,
+    event_time TIME,
+    status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'cancelled'
+    image_url VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
