@@ -84,17 +84,22 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     // Use uploaded file or provided URL
     const image_url = req.file ? `/uploads/images/${req.file.filename}` : req.body.image_url || null;
 
+    // Parse capacity properly - handle empty strings
+    const parsedCapacity = capacity && capacity !== '' ? parseInt(capacity) : null;
+
     const result = await pool.query(
       `INSERT INTO venues (name, address, city, postcode, phone, email, website, description, image_url, is_active, capacity)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        RETURNING *`,
-      [name, address, city, postcode, phone, email, website, description, image_url, is_active !== false, capacity || null]
+      [name, address || null, city || null, postcode || null, phone || null, email || null,
+       website || null, description || null, image_url, is_active !== 'false', parsedCapacity]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Create venue error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error details:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -106,13 +111,17 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
     // Use uploaded file, or keep existing image_url from body (if no new file uploaded)
     const image_url = req.file ? `/uploads/images/${req.file.filename}` : req.body.image_url || null;
 
+    // Parse capacity properly - handle empty strings
+    const parsedCapacity = capacity && capacity !== '' ? parseInt(capacity) : null;
+
     const result = await pool.query(
       `UPDATE venues
        SET name = $1, address = $2, city = $3, postcode = $4, phone = $5, email = $6,
            website = $7, description = $8, image_url = $9, is_active = $10, capacity = $11, updated_at = CURRENT_TIMESTAMP
        WHERE id = $12
        RETURNING *`,
-      [name, address, city, postcode, phone, email, website, description, image_url, is_active, capacity || null, req.params.id]
+      [name || null, address || null, city || null, postcode || null, phone || null, email || null,
+       website || null, description || null, image_url, is_active !== 'false', parsedCapacity, req.params.id]
     );
 
     if (result.rows.length === 0) {
@@ -122,7 +131,8 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
     res.json(result.rows[0]);
   } catch (error) {
     console.error('Update venue error:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error details:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 

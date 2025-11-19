@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI } from '../services/api';
+import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
 import { Calendar, MapPin, Star, ArrowRight, Users, Camera } from 'lucide-react';
 
 // Get API URL from environment
@@ -12,6 +12,7 @@ const Home = () => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
+  const [heroImageUrl, setHeroImageUrl] = useState('');
 
   useEffect(() => {
     loadData();
@@ -19,12 +20,13 @@ const Home = () => {
 
   const loadData = async () => {
     try {
-      const [servicesRes, reviewsRes, eventsRes, galleryRes, teamRes] = await Promise.all([
+      const [servicesRes, reviewsRes, eventsRes, galleryRes, teamRes, settingsRes] = await Promise.all([
         servicesAPI.getAll(),
         reviewsAPI.getAll(),
         eventsAPI.getAll({ upcoming: true, limit: 3 }),
         galleryAPI.getAll(),
         teamAPI.getAll(),
+        settingsAPI.getAll(),
       ]);
 
       // Safely handle services data
@@ -43,6 +45,11 @@ const Home = () => {
 
       // Safely handle team data
       setTeamMembers(Array.isArray(teamRes.data) ? teamRes.data : []);
+
+      // Load hero image from settings
+      if (settingsRes.data && settingsRes.data.hero_image_url) {
+        setHeroImageUrl(settingsRes.data.hero_image_url);
+      }
     } catch (error) {
       console.error('Error loading data:', error);
       // Set empty arrays on error to prevent crashes
@@ -57,7 +64,15 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="hero-pattern text-white py-24 md:py-32 relative">
+      <section
+        className="hero-pattern text-white py-24 md:py-32 relative"
+        style={heroImageUrl ? {
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${API_BASE_URL}${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        } : {}}
+      >
         <div className="container-custom relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-7xl font-heading mb-6 text-shadow">

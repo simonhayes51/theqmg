@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { settingsAPI } from '../../services/api';
-import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { settingsAPI, galleryAPI } from '../../services/api';
+import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon } from 'lucide-react';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({
@@ -23,9 +25,14 @@ const AdminSettings = () => {
 
     // About
     about_text: '',
-    tagline: ''
+    tagline: '',
+
+    // Hero Image
+    hero_image_url: ''
   });
 
+  const [heroImage, setHeroImage] = useState(null);
+  const [heroImagePreview, setHeroImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -49,6 +56,11 @@ const AdminSettings = () => {
 
       // Merge with default values
       setSettings(prev => ({ ...prev, ...settingsObj }));
+
+      // Set hero image preview if it exists
+      if (settingsObj.hero_image_url) {
+        setHeroImagePreview(`${API_BASE_URL}${settingsObj.hero_image_url}`);
+      }
     } catch (error) {
       console.error('Error loading settings:', error);
       showMessage('Failed to load settings. Please refresh the page.', 'error');
@@ -67,13 +79,40 @@ const AdminSettings = () => {
     setSettings(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleHeroImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setHeroImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       setSubmitting(true);
+
+      // Upload hero image first if one was selected
+      if (heroImage) {
+        const formData = new FormData();
+        formData.append('image', heroImage);
+        formData.append('title', 'Hero Image');
+        formData.append('category', 'hero');
+
+        const uploadRes = await galleryAPI.upload(formData);
+        if (uploadRes.data && uploadRes.data.image_url) {
+          settings.hero_image_url = uploadRes.data.image_url;
+        }
+      }
+
       await settingsAPI.bulkUpdate(settings);
       showMessage('✅ Settings saved successfully!', 'success');
+      setHeroImage(null); // Clear the uploaded file
     } catch (error) {
       console.error('Error saving settings:', error);
       showMessage('❌ Failed to save settings. Please try again.', 'error');
@@ -210,6 +249,63 @@ const AdminSettings = () => {
                 className="input w-full"
                 placeholder="e.g., NE1 1AA"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Hero Image */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <ImageIcon className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Hero Image</h2>
+          </div>
+
+          <div>
+            <label className="label">Homepage Hero Background Image</label>
+            <div className="space-y-3">
+              {/* Image Preview */}
+              {heroImagePreview && (
+                <div className="relative w-full h-64 border-2 border-gray-200 rounded overflow-hidden">
+                  <img
+                    src={heroImagePreview}
+                    alt="Hero Preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHeroImagePreview(null);
+                      setHeroImage(null);
+                      setSettings(prev => ({ ...prev, hero_image_url: '' }));
+                    }}
+                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              )}
+
+              {/* Upload Button */}
+              <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
+                <div className="text-center">
+                  <Upload className="mx-auto mb-2 text-gray-400" size={32} />
+                  <p className="text-sm text-gray-600">
+                    <span className="text-quiz-blue font-semibold">Click to upload</span> hero image
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF or WebP (recommended: 1920x1080px)</p>
+                </div>
+                <input
+                  type="file"
+                  onChange={handleHeroImageChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </label>
+            </div>
+            <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
+              <p className="text-sm text-blue-800">
+                <strong>💡 Tip:</strong> Upload a vibrant, eye-catching image for your homepage hero section. For best results, use an image that's at least 1920px wide.
+              </p>
             </div>
           </div>
         </div>
