@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { servicesAPI } from '../services/api';
+import { servicesAPI, settingsAPI } from '../services/api';
 import { Sparkles, Check } from 'lucide-react';
 
 const Services = () => {
   const [services, setServices] = useState([]);
+  const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,8 +17,12 @@ const Services = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await servicesAPI.getAll();
-      setServices(Array.isArray(response.data) ? response.data : []);
+      const [servicesRes, settingsRes] = await Promise.all([
+        servicesAPI.getAll(),
+        settingsAPI.getAll()
+      ]);
+      setServices(Array.isArray(servicesRes.data) ? servicesRes.data : []);
+      setSettings(settingsRes.data || {});
     } catch (error) {
       console.error('Error loading services:', error);
       setError('Failed to load services. Please try again later.');
@@ -72,8 +77,8 @@ const Services = () => {
       {/* Hero Section */}
       <section className="bg-gradient-britpop text-white py-16">
         <div className="container-custom">
-          <h1 className="text-4xl md:text-6xl font-heading mb-4">Our Services</h1>
-          <p className="text-xl">Professional entertainment for your venue</p>
+          <h1 className="text-4xl md:text-6xl font-heading mb-4">{settings.services_page_title || 'Our Services'}</h1>
+          <p className="text-xl">{settings.services_page_subtitle || 'Professional entertainment for your venue'}</p>
         </div>
       </section>
 
