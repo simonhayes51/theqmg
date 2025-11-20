@@ -11,7 +11,7 @@ const poolConfig = process.env.DATABASE_URL
       ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
       max: 20,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 10000, // Increased to 10s for Railway
     }
   : {
       host: process.env.DB_HOST || 'localhost',
@@ -21,7 +21,7 @@ const poolConfig = process.env.DATABASE_URL
       password: process.env.DB_PASSWORD,
       max: 20,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 10000, // Increased to 10s for Railway
     };
 
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -53,7 +53,8 @@ pool.on('error', (err) => {
   console.error('❌ Database connection error:');
   console.error(err);
   console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  process.exit(-1);
+  // Don't exit immediately - let the app handle retries
+  console.log('⚠️  Database connection will be retried automatically');
 });
 
 // Test initial connection
