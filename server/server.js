@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 // Import routes
 import authRoutes from './routes/auth.js';
@@ -77,6 +78,13 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, '../uploads/images');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+  console.log('✓ Created uploads directory:', uploadsDir);
+}
+
 // Start server
 app.listen(PORT, () => {
   console.log(`\n🎯 Quiz Master General API Server`);
@@ -84,6 +92,7 @@ app.listen(PORT, () => {
   console.log(`✓ Server running on port ${PORT}`);
   console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+  console.log(`✓ Uploads directory: ${uploadsDir}`);
   console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 });
 
