@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { eventsAPI, venuesAPI } from '../../services/api';
-import { Plus, Edit, Trash2, Calendar, MapPin, X, Save, Image as ImageIcon } from 'lucide-react';
+import { eventsAPI, venuesAPI, recurringEventsAPI } from '../../services/api';
+import { Plus, Edit, Trash2, Calendar, MapPin, X, Save, Image as ImageIcon, Repeat } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
@@ -19,7 +19,16 @@ const AdminEvents = () => {
     venue_id: '',
     status: 'scheduled',
     image: null,
-    image_url: ''
+    image_url: '',
+    // Recurring event fields
+    is_recurring: false,
+    recurrence_pattern: 'weekly',
+    day_of_week: 1,
+    week_of_month: 1,
+    day_of_month: 1,
+    end_date: '',
+    weeks_ahead: 8,
+    is_active: true
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -62,7 +71,16 @@ const AdminEvents = () => {
       venue_id: '',
       status: 'scheduled',
       image: null,
-      image_url: ''
+      image_url: '',
+      // Recurring event fields
+      is_recurring: false,
+      recurrence_pattern: 'weekly',
+      day_of_week: 1,
+      week_of_month: 1,
+      day_of_month: 1,
+      end_date: '',
+      weeks_ahead: 8,
+      is_active: true
     });
     setImagePreview(null);
     setShowModal(true);
@@ -97,7 +115,16 @@ const AdminEvents = () => {
       venue_id: '',
       status: 'scheduled',
       image: null,
-      image_url: ''
+      image_url: '',
+      // Recurring event fields
+      is_recurring: false,
+      recurrence_pattern: 'weekly',
+      day_of_week: 1,
+      week_of_month: 1,
+      day_of_month: 1,
+      end_date: '',
+      weeks_ahead: 8,
+      is_active: true
     });
     setImagePreview(null);
   };
@@ -120,43 +147,90 @@ const AdminEvents = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.event_date) {
+    if (!formData.title || (!formData.is_recurring && !formData.event_date)) {
       showMessage('Please fill in all required fields (Title and Date)', 'error');
       return;
     }
 
     try {
       setSubmitting(true);
-      const submitData = new FormData();
-      submitData.append('title', formData.title);
-      submitData.append('description', formData.description);
-      submitData.append('event_type', formData.event_type);
-      submitData.append('event_date', formData.event_date);
-      submitData.append('event_time', formData.event_time || '');
-      submitData.append('status', formData.status);
-      if (formData.venue_id) {
-        submitData.append('venue_id', formData.venue_id);
-      }
-      if (formData.image) {
-        submitData.append('image', formData.image);
-      } else if (editingEvent && formData.image_url) {
-        // When editing without new image, send existing image_url
-        submitData.append('image_url', formData.image_url);
-      }
 
-      if (editingEvent) {
-        await eventsAPI.update(editingEvent.id, submitData);
-        showMessage('✅ Event updated successfully!', 'success');
+      // Handle recurring events
+      if (formData.is_recurring && !editingEvent) {
+        // Create recurring event template
+        const recurringData = {
+          title: formData.title,
+          description: formData.description || '',
+          event_type: formData.event_type,
+          venue_id: formData.venue_id ? parseInt(formData.venue_id) : null,
+          event_time: formData.event_time || '',
+          recurrence_pattern: formData.recurrence_pattern,
+          start_date: formData.event_date,
+          end_date: formData.end_date || null,
+          weeks_ahead: parseInt(formData.weeks_ahead) || 8,
+          is_active: formData.is_active
+        };
+
+        // Add pattern-specific fields
+        if (formData.recurrence_pattern === 'weekly' || formData.recurrence_pattern === 'biweekly') {
+          recurringData.day_of_week = parseInt(formData.day_of_week);
+        } else if (formData.recurrence_pattern === 'monthly') {
+          if (formData.day_of_month) {
+            recurringData.day_of_month = parseInt(formData.day_of_month);
+          } else {
+            recurringData.week_of_month = parseInt(formData.week_of_month);
+            recurringData.day_of_week = parseInt(formData.day_of_week);
+          }
+        }
+
+        console.log('Creating recurring event:', recurringData);
+        const response = await recurringEventsAPI.create(recurringData);
+        console.log('Recurring event created:', response.data);
+
+        // Generate initial events from template
+        await recurringEventsAPI.generate(response.data.id);
+
+        showMessage('✅ Recurring event created and initial events generated!', 'success');
+      }
+      // Handle single events
+      else if (!formData.is_recurring) {
+        const submitData = new FormData();
+        submitData.append('title', formData.title);
+        submitData.append('description', formData.description);
+        submitData.append('event_type', formData.event_type);
+        submitData.append('event_date', formData.event_date);
+        submitData.append('event_time', formData.event_time || '');
+        submitData.append('status', formData.status);
+        if (formData.venue_id) {
+          submitData.append('venue_id', formData.venue_id);
+        }
+        if (formData.image) {
+          submitData.append('image', formData.image);
+        } else if (editingEvent && formData.image_url) {
+          // When editing without new image, send existing image_url
+          submitData.append('image_url', formData.image_url);
+        }
+
+        if (editingEvent) {
+          await eventsAPI.update(editingEvent.id, submitData);
+          showMessage('✅ Event updated successfully!', 'success');
+        } else {
+          await eventsAPI.create(submitData);
+          showMessage('✅ Event created successfully!', 'success');
+        }
       } else {
-        await eventsAPI.create(submitData);
-        showMessage('✅ Event created successfully!', 'success');
+        showMessage('❌ Cannot convert single event to recurring. Create a new recurring event instead.', 'error');
+        setSubmitting(false);
+        return;
       }
 
       closeModal();
       loadData();
     } catch (error) {
       console.error('Error saving event:', error);
-      showMessage('❌ Failed to save event. Please try again.', 'error');
+      console.error('Error response:', error.response?.data);
+      const errorMsg = error.response?.data?.message || error.message || 'Failed to save event';
+      showMessage(`❌ ${errorMsg}. Please try again.`, 'error');
     } finally {
       setSubmitting(false);
     }
@@ -366,7 +440,7 @@ const AdminEvents = () => {
               {/* Date */}
               <div className="mb-4">
                 <label className="label">
-                  Event Date <span className="text-red-500">*</span>
+                  {formData.is_recurring ? 'Start Date' : 'Event Date'} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -376,8 +450,176 @@ const AdminEvents = () => {
                   className="input w-full"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1">When will this event take place?</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {formData.is_recurring ? 'When should the recurring events start?' : 'When will this event take place?'}
+                </p>
               </div>
+
+              {/* Recurring Event Toggle */}
+              {!editingEvent && (
+                <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="is_recurring"
+                      checked={formData.is_recurring}
+                      onChange={(e) => setFormData(prev => ({ ...prev, is_recurring: e.target.checked }))}
+                      className="mr-3 w-5 h-5"
+                    />
+                    <div className="flex items-center">
+                      <Repeat size={20} className="mr-2 text-blue-600" />
+                      <span className="font-semibold text-blue-900">Make this a recurring event</span>
+                    </div>
+                  </label>
+                  <p className="text-xs text-blue-700 mt-2 ml-8">
+                    Check this to automatically generate multiple events based on a schedule
+                  </p>
+                </div>
+              )}
+
+              {/* Recurring Event Options */}
+              {formData.is_recurring && !editingEvent && (
+                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-4">
+                  <h3 className="font-semibold text-gray-900 mb-3">Recurring Schedule</h3>
+
+                  {/* Recurrence Pattern */}
+                  <div>
+                    <label className="label">Recurrence Pattern</label>
+                    <select
+                      name="recurrence_pattern"
+                      value={formData.recurrence_pattern}
+                      onChange={handleInputChange}
+                      className="input w-full"
+                    >
+                      <option value="weekly">Weekly</option>
+                      <option value="biweekly">Bi-weekly (Every 2 weeks)</option>
+                      <option value="monthly">Monthly</option>
+                    </select>
+                  </div>
+
+                  {/* Day of Week (for weekly/biweekly) */}
+                  {(formData.recurrence_pattern === 'weekly' || formData.recurrence_pattern === 'biweekly') && (
+                    <div>
+                      <label className="label">Day of Week</label>
+                      <select
+                        name="day_of_week"
+                        value={formData.day_of_week}
+                        onChange={handleInputChange}
+                        className="input w-full"
+                      >
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="0">Sunday</option>
+                      </select>
+                    </div>
+                  )}
+
+                  {/* Monthly Options */}
+                  {formData.recurrence_pattern === 'monthly' && (
+                    <div>
+                      <label className="label">Monthly Schedule</label>
+                      <div className="space-y-2">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name="monthly_type"
+                            value="day_of_month"
+                            checked={!!formData.day_of_month}
+                            onChange={() => setFormData(prev => ({ ...prev, day_of_month: 1, week_of_month: 0 }))}
+                            className="mr-2"
+                          />
+                          <span>Specific day of month</span>
+                        </label>
+                        {formData.day_of_month > 0 && (
+                          <select
+                            name="day_of_month"
+                            value={formData.day_of_month}
+                            onChange={handleInputChange}
+                            className="input w-full ml-6"
+                          >
+                            {[...Array(31)].map((_, i) => (
+                              <option key={i + 1} value={i + 1}>Day {i + 1}</option>
+                            ))}
+                          </select>
+                        )}
+
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name="monthly_type"
+                            value="week_of_month"
+                            checked={formData.week_of_month > 0}
+                            onChange={() => setFormData(prev => ({ ...prev, week_of_month: 1, day_of_month: 0 }))}
+                            className="mr-2"
+                          />
+                          <span>Specific week and day</span>
+                        </label>
+                        {formData.week_of_month > 0 && (
+                          <div className="ml-6 space-y-2">
+                            <select
+                              name="week_of_month"
+                              value={formData.week_of_month}
+                              onChange={handleInputChange}
+                              className="input w-full"
+                            >
+                              <option value="1">1st week</option>
+                              <option value="2">2nd week</option>
+                              <option value="3">3rd week</option>
+                              <option value="4">4th week</option>
+                            </select>
+                            <select
+                              name="day_of_week"
+                              value={formData.day_of_week}
+                              onChange={handleInputChange}
+                              className="input w-full"
+                            >
+                              <option value="1">Monday</option>
+                              <option value="2">Tuesday</option>
+                              <option value="3">Wednesday</option>
+                              <option value="4">Thursday</option>
+                              <option value="5">Friday</option>
+                              <option value="6">Saturday</option>
+                              <option value="0">Sunday</option>
+                            </select>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* End Date */}
+                  <div>
+                    <label className="label">End Date (Optional)</label>
+                    <input
+                      type="date"
+                      name="end_date"
+                      value={formData.end_date}
+                      onChange={handleInputChange}
+                      className="input w-full"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Leave empty for no end date</p>
+                  </div>
+
+                  {/* Weeks Ahead */}
+                  <div>
+                    <label className="label">Generate Events (weeks ahead)</label>
+                    <input
+                      type="number"
+                      name="weeks_ahead"
+                      value={formData.weeks_ahead}
+                      onChange={handleInputChange}
+                      min="1"
+                      max="52"
+                      className="input w-full"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">How many weeks in advance to generate events</p>
+                  </div>
+                </div>
+              )}
 
               {/* Venue */}
               <div className="mb-4">

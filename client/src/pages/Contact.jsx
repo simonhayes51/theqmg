@@ -41,9 +41,12 @@ const Contact = () => {
   };
 
   const openWhatsApp = () => {
+    // Clean phone number - remove spaces, dashes, parentheses, plus signs
+    const cleanNumber = whatsappSettings.number.replace(/[\s\-\(\)\+]/g, '');
     const message = encodeURIComponent(whatsappSettings.defaultMessage || 'Hi! I\'d like to know more about your quiz nights.');
-    const whatsappUrl = `https://wa.me/${whatsappSettings.number}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`;
+    console.log('Opening WhatsApp with URL:', whatsappUrl); // Debug log
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
   const validateForm = () => {
