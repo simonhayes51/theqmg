@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import WhatsAppWidget from './components/WhatsAppWidget';
 import Home from './pages/Home';
 import Events from './pages/Events';
 import Venues from './pages/Venues';
@@ -54,6 +55,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
+          <WhatsAppWidget />
         </div>
       </Router>
     </AuthProvider>

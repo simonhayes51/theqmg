@@ -17,6 +17,7 @@ import settingsRoutes from './routes/settings.js';
 import contactRoutes from './routes/contact.js';
 import qotdRoutes from './routes/qotd.js';
 import recurringEventsRoutes from './routes/recurringEvents.js';
+import socialMediaRoutes from './routes/socialMedia.js';
 
 dotenv.config();
 
@@ -67,6 +68,7 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/qotd', qotdRoutes);
 app.use('/api/recurring-events', recurringEventsRoutes);
+app.use('/api/social-media', socialMediaRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

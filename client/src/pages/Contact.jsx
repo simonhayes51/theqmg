@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { contactAPI, settingsAPI } from '../services/api';
-import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import { contactAPI, settingsAPI, socialMediaAPI } from '../services/api';
+import { Mail, Phone, MapPin, Send, CheckCircle, MessageCircle } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,9 +15,11 @@ const Contact = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [settings, setSettings] = useState({});
+  const [whatsappSettings, setWhatsappSettings] = useState({ enabled: false });
 
   useEffect(() => {
     loadSettings();
+    loadWhatsAppSettings();
   }, []);
 
   const loadSettings = async () => {
@@ -27,6 +29,21 @@ const Contact = () => {
     } catch (error) {
       console.error('Error loading settings:', error);
     }
+  };
+
+  const loadWhatsAppSettings = async () => {
+    try {
+      const response = await socialMediaAPI.getWhatsAppSettings();
+      setWhatsappSettings(response.data);
+    } catch (error) {
+      console.error('Error loading WhatsApp settings:', error);
+    }
+  };
+
+  const openWhatsApp = () => {
+    const message = encodeURIComponent(whatsappSettings.defaultMessage || 'Hi! I\'d like to know more about your quiz nights.');
+    const whatsappUrl = `https://wa.me/${whatsappSettings.number}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const validateForm = () => {
@@ -159,6 +176,22 @@ const Contact = () => {
                       </p>
                     </div>
                   </div>
+
+                  {/* WhatsApp Button */}
+                  {whatsappSettings.enabled && whatsappSettings.number && (
+                    <div className="pt-6 mt-6 border-t border-gray-200">
+                      <button
+                        onClick={openWhatsApp}
+                        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 rounded-lg flex items-center justify-center gap-3 transition-all hover:scale-105 shadow-lg"
+                      >
+                        <MessageCircle size={24} />
+                        <span>Chat on WhatsApp</span>
+                      </button>
+                      <p className="text-xs text-gray-500 text-center mt-2">
+                        Get instant responses via WhatsApp
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-8 pt-8 border-t border-gray-200">
