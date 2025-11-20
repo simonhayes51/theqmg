@@ -5,6 +5,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
+// Import migration runner
+import runMigrations from './utils/runMigrations.js';
+
 // Import routes
 import authRoutes from './routes/auth.js';
 import eventsRoutes from './routes/events.js';
@@ -17,6 +20,7 @@ import settingsRoutes from './routes/settings.js';
 import contactRoutes from './routes/contact.js';
 import qotdRoutes from './routes/qotd.js';
 import recurringEventsRoutes from './routes/recurringEvents.js';
+import socialMediaRoutes from './routes/socialMedia.js';
 
 dotenv.config();
 
@@ -67,6 +71,7 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/qotd', qotdRoutes);
 app.use('/api/recurring-events', recurringEventsRoutes);
+app.use('/api/social-media', socialMediaRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -89,15 +94,28 @@ if (!fs.existsSync(uploadsDir)) {
   console.log('✓ Created uploads directory:', uploadsDir);
 }
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`\n🎯 Quiz Master General API Server`);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-  console.log(`✓ Server running on port ${PORT}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
-  console.log(`✓ Uploads directory: ${uploadsDir}`);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
-});
+// Run migrations and start server
+async function startServer() {
+  try {
+    // Run database migrations
+    await runMigrations();
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`\n🎯 Quiz Master General API Server`);
+      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      console.log(`✓ Server running on port ${PORT}`);
+      console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+      console.log(`✓ Uploads directory: ${uploadsDir}`);
+      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 export default app;

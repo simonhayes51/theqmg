@@ -134,4 +134,13 @@ export const recurringEventsAPI = {
   generate: (id) => api.post(`/recurring-events/${id}/generate`),
 };
 
+// Social Media API
+export const socialMediaAPI = {
+  getInstagramPosts: () => api.get('/social-media/instagram'),
+  getFacebookPosts: () => api.get('/social-media/facebook'),
+  getWhatsAppSettings: () => api.get('/social-media/whatsapp'),
+  refreshCache: (platform) => api.post(`/social-media/refresh/${platform}`),
+  cleanupCache: () => api.post('/social-media/cleanup'),
+};
+
 export default api;

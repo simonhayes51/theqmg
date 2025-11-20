@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { settingsAPI, galleryAPI } from '../../services/api';
-import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles, MessageCircle, Key, Hash } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
@@ -14,11 +14,22 @@ const AdminSettings = () => {
     business_city: '',
     business_postcode: '',
 
-    // Social Media
+    // Social Media Links
     facebook_url: '',
     twitter_url: '',
     instagram_url: '',
     linkedin_url: '',
+
+    // Social Media API Integration
+    instagram_access_token: '',
+    instagram_user_id: '',
+    instagram_enabled: 'false',
+    facebook_access_token: '',
+    facebook_page_id: '',
+    facebook_enabled: 'false',
+    whatsapp_number: '',
+    whatsapp_enabled: 'false',
+    whatsapp_default_message: '',
 
     // Business Hours
     business_hours: '',
@@ -885,6 +896,222 @@ Sunday: Closed"
             <p className="text-sm text-blue-800">
               <strong>💡 Tip:</strong> Social media links will appear in your website footer and contact sections. Leave blank to hide any social media icons you don't use.
             </p>
+          </div>
+        </div>
+
+        {/* Social Media API Integration */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <Sparkles className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Social Media Integration</h2>
+          </div>
+
+          <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg">
+            <h3 className="font-semibold text-purple-900 mb-2">📸 Display Live Posts & Enable WhatsApp Chat</h3>
+            <p className="text-sm text-gray-700 mb-3">
+              Connect your Instagram and Facebook accounts to display real posts on your homepage. Enable WhatsApp for instant customer messaging.
+            </p>
+            <p className="text-xs text-gray-600">
+              📖 Need help? Check <code className="bg-white px-2 py-1 rounded">SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
+            </p>
+          </div>
+
+          {/* Instagram Integration */}
+          <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+            <div className="flex items-center mb-4">
+              <Instagram className="text-purple-600 mr-2" size={24} />
+              <h3 className="text-xl font-semibold text-purple-900">Instagram Feed</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="flex items-center gap-2 mb-2">
+                  <input
+                    type="checkbox"
+                    name="instagram_enabled"
+                    checked={settings.instagram_enabled === 'true'}
+                    onChange={(e) => setSettings(prev => ({ ...prev, instagram_enabled: e.target.checked ? 'true' : 'false' }))}
+                    className="w-4 h-4 text-purple-600"
+                  />
+                  <span className="font-semibold">Enable Instagram Feed</span>
+                </label>
+                <p className="text-xs text-gray-600 ml-6">Display your Instagram posts on the homepage</p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <Key size={16} />
+                  Instagram Access Token
+                </label>
+                <input
+                  type="text"
+                  name="instagram_access_token"
+                  value={settings.instagram_access_token}
+                  onChange={handleInputChange}
+                  className="input w-full font-mono text-sm"
+                  placeholder="IGQVJxxxxxxxxxxxxxxxxxxxxxxxxx..."
+                  disabled={settings.instagram_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Get from Facebook Developer Console → Instagram Basic Display API
+                </p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <Hash size={16} />
+                  Instagram User ID
+                </label>
+                <input
+                  type="text"
+                  name="instagram_user_id"
+                  value={settings.instagram_user_id}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  placeholder="17841400000000000"
+                  disabled={settings.instagram_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Your numeric Instagram user ID
+                </p>
+              </div>
+
+              <div className="p-3 bg-purple-100 rounded text-xs text-purple-800">
+                <strong>⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
+              </div>
+            </div>
+          </div>
+
+          {/* Facebook Integration */}
+          <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-200">
+            <div className="flex items-center mb-4">
+              <Facebook className="text-blue-600 mr-2" size={24} />
+              <h3 className="text-xl font-semibold text-blue-900">Facebook Feed</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="flex items-center gap-2 mb-2">
+                  <input
+                    type="checkbox"
+                    name="facebook_enabled"
+                    checked={settings.facebook_enabled === 'true'}
+                    onChange={(e) => setSettings(prev => ({ ...prev, facebook_enabled: e.target.checked ? 'true' : 'false' }))}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="font-semibold">Enable Facebook Feed</span>
+                </label>
+                <p className="text-xs text-gray-600 ml-6">Display your Facebook page posts on the homepage</p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <Key size={16} />
+                  Facebook Page Access Token
+                </label>
+                <input
+                  type="text"
+                  name="facebook_access_token"
+                  value={settings.facebook_access_token}
+                  onChange={handleInputChange}
+                  className="input w-full font-mono text-sm"
+                  placeholder="EAAxxxxxxxxxxxxxxxxxxxxxxxxx..."
+                  disabled={settings.facebook_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Get from Facebook Graph API Explorer → Your Page
+                </p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <Hash size={16} />
+                  Facebook Page ID
+                </label>
+                <input
+                  type="text"
+                  name="facebook_page_id"
+                  value={settings.facebook_page_id}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  placeholder="123456789012345"
+                  disabled={settings.facebook_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Your Facebook Page ID (found in Page Settings)
+                </p>
+              </div>
+
+              <div className="p-3 bg-blue-100 rounded text-xs text-blue-800">
+                <strong>💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
+              </div>
+            </div>
+          </div>
+
+          {/* WhatsApp Integration */}
+          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-200">
+            <div className="flex items-center mb-4">
+              <MessageCircle className="text-green-600 mr-2" size={24} />
+              <h3 className="text-xl font-semibold text-green-900">WhatsApp Chat Widget</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="flex items-center gap-2 mb-2">
+                  <input
+                    type="checkbox"
+                    name="whatsapp_enabled"
+                    checked={settings.whatsapp_enabled === 'true'}
+                    onChange={(e) => setSettings(prev => ({ ...prev, whatsapp_enabled: e.target.checked ? 'true' : 'false' }))}
+                    className="w-4 h-4 text-green-600"
+                  />
+                  <span className="font-semibold">Enable WhatsApp Chat Widget</span>
+                </label>
+                <p className="text-xs text-gray-600 ml-6">Show floating WhatsApp button on all pages</p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <Phone size={16} />
+                  WhatsApp Business Number
+                </label>
+                <input
+                  type="text"
+                  name="whatsapp_number"
+                  value={settings.whatsapp_number}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  placeholder="447123456789 (UK: 44 + number without leading 0)"
+                  disabled={settings.whatsapp_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Include country code, no spaces or symbols (e.g., 447xxxxxxxxx for UK)
+                </p>
+              </div>
+
+              <div>
+                <label className="label flex items-center gap-2">
+                  <MessageCircle size={16} />
+                  Default Chat Message
+                </label>
+                <textarea
+                  name="whatsapp_default_message"
+                  value={settings.whatsapp_default_message}
+                  onChange={handleInputChange}
+                  className="input w-full"
+                  rows="2"
+                  placeholder="Hi! I'd like to know more about your quiz nights."
+                  disabled={settings.whatsapp_enabled !== 'true'}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Pre-filled message when customers click to chat
+                </p>
+              </div>
+
+              <div className="p-3 bg-green-100 rounded text-xs text-green-800">
+                <strong>✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
+              </div>
+            </div>
           </div>
         </div>
 
