@@ -56,11 +56,21 @@ const AdminSettings = () => {
     home_events_title: '',
     home_gallery_title: '',
     home_team_title: '',
-    home_reviews_title: ''
+    home_reviews_title: '',
+
+    // Section Background Images
+    services_bg_image: '',
+    events_bg_image: '',
+    gallery_bg_image: '',
+    team_bg_image: '',
+    reviews_bg_image: '',
+    footer_bg_image: ''
   });
 
   const [heroImage, setHeroImage] = useState(null);
   const [heroImagePreview, setHeroImagePreview] = useState(null);
+  const [sectionBgImages, setSectionBgImages] = useState({});
+  const [sectionBgPreviews, setSectionBgPreviews] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -119,6 +129,18 @@ const AdminSettings = () => {
     }
   };
 
+  const handleSectionBgImageChange = (section) => (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSectionBgImages(prev => ({ ...prev, [section]: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSectionBgPreviews(prev => ({ ...prev, [section]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -138,9 +160,26 @@ const AdminSettings = () => {
         }
       }
 
+      // Upload section background images
+      const sectionKeys = ['services', 'events', 'gallery', 'team', 'reviews', 'footer'];
+      for (const section of sectionKeys) {
+        if (sectionBgImages[section]) {
+          const formData = new FormData();
+          formData.append('image', sectionBgImages[section]);
+          formData.append('title', `${section} Background`);
+          formData.append('category', 'background');
+
+          const uploadRes = await galleryAPI.upload(formData);
+          if (uploadRes.data && uploadRes.data.image_url) {
+            settings[`${section}_bg_image`] = uploadRes.data.image_url;
+          }
+        }
+      }
+
       await settingsAPI.bulkUpdate(settings);
       showMessage('✅ Settings saved successfully!', 'success');
-      setHeroImage(null); // Clear the uploaded file
+      setHeroImage(null);
+      setSectionBgImages({});
     } catch (error) {
       console.error('Error saving settings:', error);
       showMessage('❌ Failed to save settings. Please try again.', 'error');
@@ -657,6 +696,74 @@ const AdminSettings = () => {
                 <strong>💡 Tip:</strong> Upload a vibrant, eye-catching image for your homepage hero section. For best results, use an image that's at least 1920px wide.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Section Background Images */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <ImageIcon className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Images</h2>
+          </div>
+          <p className="text-gray-600 mb-6">Upload background images for each section on your homepage</p>
+
+          <div className="space-y-8">
+            {[
+              { key: 'services', label: 'Services Section' },
+              { key: 'events', label: 'Events Section' },
+              { key: 'gallery', label: 'Gallery Section' },
+              { key: 'team', label: 'Team Section' },
+              { key: 'reviews', label: 'Reviews Section' },
+              { key: 'footer', label: 'Footer Section' }
+            ].map(({ key, label }) => (
+              <div key={key} className="border-2 border-gray-200 rounded-lg p-4">
+                <label className="label font-bold">{label}</label>
+
+                {/* Image Preview */}
+                {(sectionBgPreviews[key] || settings[`${key}_bg_image`]) && (
+                  <div className="relative w-full h-48 border-2 border-gray-200 rounded overflow-hidden mb-3">
+                    <img
+                      src={sectionBgPreviews[key] || `${API_BASE_URL}${settings[`${key}_bg_image`]}`}
+                      alt={`${label} Preview`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSectionBgPreviews(prev => ({ ...prev, [key]: null }));
+                        setSectionBgImages(prev => ({ ...prev, [key]: null }));
+                        setSettings(prev => ({ ...prev, [`${key}_bg_image`]: '' }));
+                      }}
+                      className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                )}
+
+                {/* Upload Button */}
+                <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
+                  <div className="text-center">
+                    <Upload className="mx-auto mb-2 text-gray-400" size={24} />
+                    <p className="text-sm text-gray-600">
+                      <span className="text-quiz-blue font-semibold">Upload</span> {label.toLowerCase()} background
+                    </p>
+                  </div>
+                  <input
+                    type="file"
+                    onChange={handleSectionBgImageChange(key)}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
+            <p className="text-sm text-blue-800">
+              <strong>💡 Tip:</strong> Use high-quality images (1920px wide recommended) that complement your content. Images will be used as full-width section backgrounds.
+            </p>
           </div>
         </div>
 
