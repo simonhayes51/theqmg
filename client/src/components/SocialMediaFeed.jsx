@@ -20,10 +20,8 @@ const SocialMediaFeed = () => {
   const loadSocialLinks = async () => {
     try {
       const response = await settingsAPI.getAll();
-      const settings = {};
-      response.data.forEach(setting => {
-        settings[setting.setting_key] = setting.setting_value;
-      });
+      // Response.data is an object { key: value }, not an array
+      const settings = response.data;
       setSocialLinks({
         instagram_url: settings.instagram_url || 'https://instagram.com',
         facebook_url: settings.facebook_url || 'https://facebook.com',
@@ -57,7 +55,7 @@ const SocialMediaFeed = () => {
         if (facebookResponse.data.enabled && facebookResponse.data.posts.length > 0) {
           setPosts(facebookResponse.data.posts.map(post => ({
             id: post.id,
-            image: post.image_url || 'https://via.placeholder.com/300x300/003DA5/FFFFFF?text=Post',
+            image: post.image_url || '/placeholder-post.png',
             caption: post.message,
             platform: 'facebook',
             permalink: post.permalink
@@ -67,19 +65,19 @@ const SocialMediaFeed = () => {
           setPosts([
             {
               id: 1,
-              image: 'https://via.placeholder.com/300x300/DC143C/FFFFFF?text=Quiz+Night',
+              image: '/placeholder-quiz.png',
               caption: 'Another fantastic quiz night! 🎯',
               platform: 'placeholder'
             },
             {
               id: 2,
-              image: 'https://via.placeholder.com/300x300/003DA5/FFFFFF?text=Winners',
+              image: '/placeholder-winners.png',
               caption: 'Congratulations to our winners! 🏆',
               platform: 'placeholder'
             },
             {
               id: 3,
-              image: 'https://via.placeholder.com/300x300/DC143C/FFFFFF?text=Event',
+              image: '/placeholder-event.png',
               caption: 'Join us for the next event! 📅',
               platform: 'placeholder'
             }
@@ -94,7 +92,7 @@ const SocialMediaFeed = () => {
       setPosts([
         {
           id: 1,
-          image: 'https://via.placeholder.com/300x300/DC143C/FFFFFF?text=Quiz+Night',
+          image: '/placeholder-quiz.png',
           caption: 'Another fantastic quiz night! 🎯',
           platform: 'placeholder'
         }
@@ -182,7 +180,7 @@ const SocialMediaFeed = () => {
                         alt={post.caption || 'Social media post'}
                         className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
                         onError={(e) => {
-                          e.target.src = 'https://via.placeholder.com/300x300/003DA5/FFFFFF?text=Post';
+                          e.target.src = '/placeholder-post.png';
                         }}
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">

@@ -164,10 +164,10 @@ const AdminEvents = () => {
           event_type: formData.event_type,
           venue_id: formData.venue_id ? parseInt(formData.venue_id) : null,
           event_time: formData.event_time || '',
-          recurrence_pattern: formData.recurrence_pattern,
+          recurrence_type: formData.recurrence_pattern, // Backend expects recurrence_type
           start_date: formData.event_date,
           end_date: formData.end_date || null,
-          weeks_ahead: parseInt(formData.weeks_ahead) || 8,
+          generate_weeks_ahead: parseInt(formData.weeks_ahead) || 8, // Backend expects generate_weeks_ahead
           is_active: formData.is_active
         };
 
