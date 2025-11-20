@@ -112,8 +112,8 @@ async function startServer() {
     // Run database migrations
     await runMigrations();
 
-    // Start server
-    app.listen(PORT, () => {
+    // Start server - bind to 0.0.0.0 for Railway
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`\n🎯 Quiz Master General API Server`);
       console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
       console.log(`✓ Server running on port ${PORT}`);
