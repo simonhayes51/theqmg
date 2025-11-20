@@ -88,7 +88,9 @@ export const galleryAPI = {
   upload: (data) => api.post('/gallery', data, {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
-  update: (id, data) => api.put(`/gallery/${id}`, data),
+  update: (id, data) => api.put(`/gallery/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
   delete: (id) => api.delete(`/gallery/${id}`),
 };
 
@@ -120,6 +122,16 @@ export const qotdAPI = {
   create: (data) => api.post('/qotd', data),
   update: (id, data) => api.put(`/qotd/${id}`, data),
   delete: (id) => api.delete(`/qotd/${id}`),
+};
+
+// Recurring Events API
+export const recurringEventsAPI = {
+  getAll: () => api.get('/recurring-events'),
+  getOne: (id) => api.get(`/recurring-events/${id}`),
+  create: (data) => api.post('/recurring-events', data),
+  update: (id, data) => api.put(`/recurring-events/${id}`, data),
+  delete: (id) => api.delete(`/recurring-events/${id}`),
+  generate: (id) => api.post(`/recurring-events/${id}/generate`),
 };
 
 export default api;

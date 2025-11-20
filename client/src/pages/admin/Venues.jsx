@@ -17,6 +17,8 @@ const AdminVenues = () => {
     website: '',
     description: '',
     capacity: '',
+    latitude: '',
+    longitude: '',
     image: null
   });
   const [imagePreview, setImagePreview] = useState(null);
@@ -57,6 +59,8 @@ const AdminVenues = () => {
       website: '',
       description: '',
       capacity: '',
+      latitude: '',
+      longitude: '',
       image: null
     });
     setImagePreview(null);
@@ -75,6 +79,8 @@ const AdminVenues = () => {
       website: venue.website || '',
       description: venue.description || '',
       capacity: venue.capacity || '',
+      latitude: venue.latitude || '',
+      longitude: venue.longitude || '',
       image: null,
       image_url: venue.image_url || null
     });
@@ -453,6 +459,40 @@ const AdminVenues = () => {
                   min="0"
                 />
                 <p className="text-xs text-gray-500 mt-1">Optional: Maximum number of people the venue can hold</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Latitude</label>
+                  <input
+                    type="number"
+                    name="latitude"
+                    value={formData.latitude}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., 54.978252"
+                    step="0.000001"
+                    min="-90"
+                    max="90"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">For map display</p>
+                </div>
+
+                <div>
+                  <label className="label">Longitude</label>
+                  <input
+                    type="number"
+                    name="longitude"
+                    value={formData.longitude}
+                    onChange={handleInputChange}
+                    className="input w-full"
+                    placeholder="e.g., -1.61778"
+                    step="0.000001"
+                    min="-180"
+                    max="180"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">For map display</p>
+                </div>
               </div>
 
               {/* Venue Logo/Image */}

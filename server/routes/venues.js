@@ -79,7 +79,7 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     console.log('Body:', JSON.stringify(req.body, null, 2));
     console.log('File:', req.file ? req.file.filename : 'No file');
 
-    const { name, address, city, postcode, phone, email, website, description, is_active, capacity } = req.body;
+    const { name, address, city, postcode, phone, email, website, description, is_active, capacity, latitude, longitude } = req.body;
 
     if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'Venue name is required' });
@@ -93,6 +93,18 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     if (capacity && capacity !== '' && capacity !== 'null' && capacity !== 'undefined') {
       const cap = parseInt(capacity, 10);
       parsedCapacity = isNaN(cap) ? null : cap;
+    }
+
+    // Parse coordinates
+    let parsedLatitude = null;
+    let parsedLongitude = null;
+    if (latitude && latitude !== '' && latitude !== 'null' && latitude !== 'undefined') {
+      const lat = parseFloat(latitude);
+      parsedLatitude = isNaN(lat) ? null : lat;
+    }
+    if (longitude && longitude !== '' && longitude !== 'null' && longitude !== 'undefined') {
+      const lng = parseFloat(longitude);
+      parsedLongitude = isNaN(lng) ? null : lng;
     }
 
     // Parse is_active - handle string booleans from FormData
@@ -120,8 +132,8 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     });
 
     const result = await pool.query(
-      `INSERT INTO venues (name, address, city, postcode, phone, email, website, description, image_url, is_active, capacity)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      `INSERT INTO venues (name, address, city, postcode, phone, email, website, description, image_url, is_active, capacity, latitude, longitude)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        RETURNING *`,
       [
         cleanString(name),
@@ -134,7 +146,9 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
         cleanString(description),
         image_url,
         parsedIsActive,
-        parsedCapacity
+        parsedCapacity,
+        parsedLatitude,
+        parsedLongitude
       ]
     );
 
@@ -159,7 +173,7 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
     console.log('Body:', JSON.stringify(req.body, null, 2));
     console.log('File:', req.file ? req.file.filename : 'No file');
 
-    const { name, address, city, postcode, phone, email, website, description, is_active, capacity } = req.body;
+    const { name, address, city, postcode, phone, email, website, description, is_active, capacity, latitude, longitude } = req.body;
 
     if (!name || name.trim() === '') {
       return res.status(400).json({ message: 'Venue name is required' });
@@ -173,6 +187,18 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
     if (capacity && capacity !== '' && capacity !== 'null' && capacity !== 'undefined') {
       const cap = parseInt(capacity, 10);
       parsedCapacity = isNaN(cap) ? null : cap;
+    }
+
+    // Parse coordinates
+    let parsedLatitude = null;
+    let parsedLongitude = null;
+    if (latitude && latitude !== '' && latitude !== 'null' && latitude !== 'undefined') {
+      const lat = parseFloat(latitude);
+      parsedLatitude = isNaN(lat) ? null : lat;
+    }
+    if (longitude && longitude !== '' && longitude !== 'null' && longitude !== 'undefined') {
+      const lng = parseFloat(longitude);
+      parsedLongitude = isNaN(lng) ? null : lng;
     }
 
     // Parse is_active - handle string booleans from FormData
@@ -202,8 +228,9 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
     const result = await pool.query(
       `UPDATE venues
        SET name = $1, address = $2, city = $3, postcode = $4, phone = $5, email = $6,
-           website = $7, description = $8, image_url = $9, is_active = $10, capacity = $11, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $12
+           website = $7, description = $8, image_url = $9, is_active = $10, capacity = $11,
+           latitude = $12, longitude = $13, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $14
        RETURNING *`,
       [
         cleanString(name),
@@ -217,6 +244,8 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
         image_url,
         parsedIsActive,
         parsedCapacity,
+        parsedLatitude,
+        parsedLongitude,
         req.params.id
       ]
     );

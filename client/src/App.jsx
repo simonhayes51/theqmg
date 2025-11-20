@@ -19,6 +19,7 @@ import AdminTeam from './pages/admin/Team';
 import AdminGallery from './pages/admin/Gallery';
 import AdminSettings from './pages/admin/Settings';
 import AdminContact from './pages/admin/Contact';
+import AdminRecurringEvents from './pages/admin/RecurringEvents';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               {/* Admin Routes */}
               <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
               <Route path="/admin/events" element={<ProtectedRoute><AdminEvents /></ProtectedRoute>} />
+              <Route path="/admin/recurring-events" element={<ProtectedRoute><AdminRecurringEvents /></ProtectedRoute>} />
               <Route path="/admin/venues" element={<ProtectedRoute><AdminVenues /></ProtectedRoute>} />
               <Route path="/admin/services" element={<ProtectedRoute><AdminServices /></ProtectedRoute>} />
               <Route path="/admin/reviews" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />

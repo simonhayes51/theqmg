@@ -4,6 +4,7 @@ import { authenticateToken, isAdmin } from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -138,13 +139,17 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
 });
 
 // Update gallery image metadata (admin only)
-router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (req, res) => {
   try {
     console.log('=== UPDATE GALLERY IMAGE REQUEST ===');
     console.log('Image ID:', req.params.id);
     console.log('Body:', JSON.stringify(req.body, null, 2));
+    console.log('File:', req.file ? req.file.filename : 'No file');
 
     const { title, description, category, event_id, display_order } = req.body;
+
+    // Use uploaded file, or keep existing image_url from body (if no new file uploaded)
+    const image_url = req.file ? `/uploads/images/${req.file.filename}` : (req.body.image_url || null);
 
     // Clean up string fields - handle empty strings and undefined
     const cleanString = (val) => {
@@ -177,8 +182,8 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
 
     const result = await pool.query(
       `UPDATE gallery_images
-       SET title = $1, description = $2, category = $3, event_id = $4, display_order = $5, updated_at = CURRENT_TIMESTAMP
-       WHERE id = $6
+       SET title = $1, description = $2, category = $3, event_id = $4, display_order = $5, image_url = $6, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $7
        RETURNING *`,
       [
         cleanString(title),
@@ -186,6 +191,7 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
         cleanString(category),
         parsedEventId,
         parsedDisplayOrder,
+        image_url,
         req.params.id
       ]
     );
@@ -214,6 +220,21 @@ router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Gallery image not found' });
     }
+
+    // Delete the physical file from disk
+    const deletedImage = result.rows[0];
+    if (deletedImage.image_url) {
+      const filePath = path.join(__dirname, '../../', deletedImage.image_url);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Failed to delete image file:', err);
+          // Don't fail the request if file deletion fails
+        } else {
+          console.log('Image file deleted:', filePath);
+        }
+      });
+    }
+
     res.json({ message: 'Gallery image deleted successfully' });
   } catch (error) {
     console.error('Delete gallery image error:', error);
