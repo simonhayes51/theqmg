@@ -5,6 +5,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
+// Import migration runner
+import runMigrations from './utils/runMigrations.js';
+
 // Import routes
 import authRoutes from './routes/auth.js';
 import eventsRoutes from './routes/events.js';
@@ -91,15 +94,28 @@ if (!fs.existsSync(uploadsDir)) {
   console.log('✓ Created uploads directory:', uploadsDir);
 }
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`\n🎯 Quiz Master General API Server`);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-  console.log(`✓ Server running on port ${PORT}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
-  console.log(`✓ Uploads directory: ${uploadsDir}`);
-  console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
-});
+// Run migrations and start server
+async function startServer() {
+  try {
+    // Run database migrations
+    await runMigrations();
+
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`\n🎯 Quiz Master General API Server`);
+      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      console.log(`✓ Server running on port ${PORT}`);
+      console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+      console.log(`✓ Uploads directory: ${uploadsDir}`);
+      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 export default app;
