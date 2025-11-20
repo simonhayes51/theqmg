@@ -1,0 +1,16 @@
+{
+  "name": "the-quiz-master-general",
+  "version": "1.0.0",
+  "description": "Full-stack quiz master entertainment platform",
+  "scripts": {
+    "init-db": "cd server && npm run init-db",
+    "server": "cd server && npm start",
+    "server:dev": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "client:build": "cd client && npm run build",
+    "install:all": "cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": ["quiz", "entertainment", "trivia"],
+  "author": "",
+  "license": "ISC"
+}
