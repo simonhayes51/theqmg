@@ -15,6 +15,7 @@ import teamRoutes from './routes/team.js';
 import galleryRoutes from './routes/gallery.js';
 import settingsRoutes from './routes/settings.js';
 import contactRoutes from './routes/contact.js';
+import qotdRoutes from './routes/qotd.js';
 
 dotenv.config();
 
@@ -63,6 +64,7 @@ app.use('/api/team', teamRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/qotd', qotdRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

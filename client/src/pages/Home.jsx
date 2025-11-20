@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
 import { Calendar, MapPin, Star, ArrowRight, Users, Camera } from 'lucide-react';
+import QuestionOfTheDay from '../components/QuestionOfTheDay';
 
 // Get API URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -309,6 +310,9 @@ const Home = () => {
           </div>
         </section>
       )}
+
+      {/* Question of the Day */}
+      <QuestionOfTheDay />
 
       {/* CTA Section */}
       <section className="section" style={{

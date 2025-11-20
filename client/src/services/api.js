@@ -109,4 +109,17 @@ export const contactAPI = {
   delete: (id) => api.delete(`/contact/${id}`),
 };
 
+// QOTD API
+export const qotdAPI = {
+  getToday: () => api.get('/qotd/today'),
+  getYesterday: () => api.get('/qotd/yesterday'),
+  submitAnswer: (data) => api.post('/qotd/answer', data),
+  getLeaderboard: () => api.get('/qotd/leaderboard'),
+  // Admin
+  getAll: () => api.get('/qotd'),
+  create: (data) => api.post('/qotd', data),
+  update: (id, data) => api.put(`/qotd/${id}`, data),
+  delete: (id) => api.delete(`/qotd/${id}`),
+};
+
 export default api;
