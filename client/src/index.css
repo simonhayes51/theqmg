@@ -482,7 +482,7 @@ nav.scrolled {
 }
 
 .review-stars {
-  @apply text-yellow-400 text-3xl mb-6;
+  @apply text-yellow-400 text-3xl mb-6 flex gap-1;
   filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
 }
 
@@ -671,11 +671,75 @@ footer {
 /* Responsive */
 @media (max-width: 768px) {
   .section {
-    @apply py-20;
+    @apply py-16 px-4;
   }
 
   .hero-section, .hero-pattern {
     min-height: 85vh;
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    margin-bottom: 2rem;
+  }
+
+  .container-custom {
+    @apply px-4;
+  }
+
+  .card {
+    @apply p-6;
+  }
+
+  .service-card {
+    @apply p-8;
+  }
+
+  .grid-3,
+  .grid-2 {
+    @apply gap-6;
+  }
+
+  .btn {
+    @apply px-6 py-3 text-base;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    @apply mb-12;
+  }
+
+  .section-subtitle {
+    @apply text-lg mb-10;
+  }
+
+  .footer-grid {
+    @apply gap-10;
+  }
+
+  /* Make cards stack on mobile */
+  .team-avatar {
+    @apply w-40 h-40 mb-6;
+  }
+
+  /* Review stars smaller on mobile */
+  .review-stars {
+    @apply text-2xl mb-4;
+  }
+
+  /* Gallery grid tighter on mobile */
+  .gallery-grid {
+    @apply gap-4;
   }
 }
 

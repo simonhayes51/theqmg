@@ -43,9 +43,12 @@ router.get('/', async (req, res) => {
     let query = 'SELECT * FROM gallery_images';
     const params = [];
 
+    // Exclude hero and background images from public gallery
+    query += ` WHERE category NOT IN ('hero', 'background')`;
+
     if (category) {
       params.push(category);
-      query += ` WHERE category = $${params.length}`;
+      query += ` AND category = $${params.length}`;
     }
 
     query += ' ORDER BY display_order ASC, created_at DESC';

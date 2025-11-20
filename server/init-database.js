@@ -53,6 +53,51 @@ async function ensureAdminPassword() {
   }
 }
 
+async function runMigrations() {
+  try {
+    console.log('🔄 Checking for database migrations...\n');
+
+    const migrationsPath = join(__dirname, 'migrations');
+
+    // Check if migrations directory exists
+    if (!fs.existsSync(migrationsPath)) {
+      console.log('ℹ️  No migrations directory found, skipping migrations\n');
+      return;
+    }
+
+    // Get all .sql files in migrations directory
+    const migrationFiles = fs.readdirSync(migrationsPath)
+      .filter(file => file.endsWith('.sql'))
+      .sort();
+
+    if (migrationFiles.length === 0) {
+      console.log('ℹ️  No migration files found, skipping migrations\n');
+      return;
+    }
+
+    console.log(`📋 Found ${migrationFiles.length} migration file(s):`);
+    migrationFiles.forEach(file => console.log(`   - ${file}`));
+    console.log('');
+
+    // Run each migration
+    for (const file of migrationFiles) {
+      const migrationPath = join(migrationsPath, file);
+      console.log(`🚀 Running migration: ${file}`);
+
+      const sql = fs.readFileSync(migrationPath, 'utf8');
+      await pool.query(sql);
+
+      console.log(`   ✅ ${file} completed\n`);
+    }
+
+    console.log('✅ All migrations completed successfully!\n');
+
+  } catch (error) {
+    console.error('❌ Migration error:', error.message);
+    // Don't throw - migrations are optional
+  }
+}
+
 async function initializeDatabase() {
   try {
     console.log('🔍 Checking database initialization status...\n');
@@ -74,6 +119,9 @@ async function initializeDatabase() {
 
       // Still check admin password even if DB exists
       await ensureAdminPassword();
+
+      // Run any new migrations even if DB exists
+      await runMigrations();
       return;
     }
 
@@ -104,6 +152,9 @@ async function initializeDatabase() {
 
     // Ensure admin password is correct (in case of previous bad hash)
     await ensureAdminPassword();
+
+    // Run any migrations
+    await runMigrations();
 
   } catch (error) {
     console.error('❌ Database initialization error:', error.message);
