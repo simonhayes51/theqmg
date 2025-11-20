@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -30,6 +32,51 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Validate JWT_SECRET
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+  console.error('❌ CRITICAL: JWT_SECRET must be set and at least 32 characters long');
+  console.error('   Set it in your .env file for security');
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+}
+
+// Security Headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],  // Allow inline styles for Tailwind
+      scriptSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],  // Allow images from external sources
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "data:"],
+      objectSrc: ["'none'"],
+      mediaSrc: ["'self'"],
+      frameSrc: ["'none'"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,  // Allow embedding
+}));
+
+// Rate limiting for authentication endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts per window
+  message: { message: 'Too many login attempts. Please try again in 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Rate limiting for general API endpoints
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // 100 requests per window
+  message: { message: 'Too many requests. Please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // CORS Configuration
 const allowedOrigins = [
   'http://localhost:5173',
@@ -58,6 +105,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+// Apply rate limiting
+app.use('/api/auth/login', authLimiter);  // Strict limit for login
+app.use('/api/auth/change-password', authLimiter);  // Strict limit for password changes
+app.use('/api/contact', apiLimiter);  // Prevent contact form spam
+app.use('/api/qotd/answer', apiLimiter);  // Prevent answer spam
 
 // API Routes
 app.use('/api/auth', authRoutes);
