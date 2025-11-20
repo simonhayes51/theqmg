@@ -126,7 +126,13 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     );
 
     console.log('Gallery image uploaded successfully:', result.rows[0].id);
-    res.status(201).json(result.rows[0]);
+
+    // Return the complete image data
+    const uploadedImage = result.rows[0];
+    res.status(201).json({
+      ...uploadedImage,
+      message: 'Image uploaded successfully'
+    });
   } catch (error) {
     console.error('=== UPLOAD GALLERY IMAGE ERROR ===');
     console.error('Error:', error);
@@ -134,7 +140,20 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     console.error('Stack:', error.stack);
     console.error('Detail:', error.detail);
     console.error('Code:', error.code);
-    res.status(500).json({ message: 'Server error', error: error.message, detail: error.detail });
+
+    // Delete the uploaded file if database insert failed
+    if (req.file) {
+      const filePath = path.join(__dirname, '../../uploads/images', req.file.filename);
+      fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) console.error('Error deleting file after failed upload:', unlinkErr);
+      });
+    }
+
+    res.status(500).json({
+      message: 'Failed to save image to database',
+      error: error.message,
+      detail: error.detail
+    });
   }
 });
 

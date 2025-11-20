@@ -172,10 +172,13 @@ const AdminGallery = () => {
             submitData.append('category', formData.category || '');
             submitData.append('image', file);
 
-            await galleryAPI.upload(submitData);
+            console.log('Uploading file:', file.name);
+            const response = await galleryAPI.upload(submitData);
+            console.log('Upload response:', response.data);
             successCount++;
           } catch (err) {
             console.error('Error uploading file:', file.name, err);
+            console.error('Error response:', err.response?.data);
             failCount++;
           }
         }

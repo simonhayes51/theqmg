@@ -160,14 +160,21 @@ const AdminSettings = () => {
 
       // Upload hero image first if one was selected
       if (heroImage) {
+        console.log('Uploading hero image...');
         const formData = new FormData();
         formData.append('image', heroImage);
         formData.append('title', 'Hero Image');
         formData.append('category', 'hero');
+        formData.append('description', 'Site hero/banner image');
 
         const uploadRes = await galleryAPI.upload(formData);
+        console.log('Hero image upload response:', uploadRes.data);
         if (uploadRes.data && uploadRes.data.image_url) {
           settings.hero_image_url = uploadRes.data.image_url;
+          console.log('Hero image URL set:', settings.hero_image_url);
+        } else {
+          console.error('Hero image upload succeeded but no image_url in response');
+          throw new Error('Hero image upload failed - no image URL returned');
         }
       }
 
@@ -187,13 +194,21 @@ const AdminSettings = () => {
         }
       }
 
-      await settingsAPI.bulkUpdate(settings);
+      console.log('Saving settings to backend:', Object.keys(settings).length, 'settings');
+      const saveResponse = await settingsAPI.bulkUpdate(settings);
+      console.log('Settings save response:', saveResponse.data);
+
       showMessage('✅ Settings saved successfully!', 'success');
       setHeroImage(null);
       setSectionBgImages({});
+
+      // Reload settings to get fresh data
+      await loadSettings();
     } catch (error) {
       console.error('Error saving settings:', error);
-      showMessage('❌ Failed to save settings. Please try again.', 'error');
+      console.error('Error response:', error.response?.data);
+      const errorMessage = error.response?.data?.message || error.message || 'Failed to save settings';
+      showMessage(`❌ ${errorMessage}. Please try again.`, 'error');
     } finally {
       setSubmitting(false);
     }

@@ -27,9 +27,12 @@ const WhatsAppWidget = () => {
   };
 
   const openWhatsApp = () => {
+    // Clean phone number - remove spaces, dashes, parentheses, plus signs
+    const cleanNumber = settings.number.replace(/[\s\-\(\)\+]/g, '');
     const message = encodeURIComponent(settings.defaultMessage);
-    const whatsappUrl = `https://wa.me/${settings.number}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`;
+    console.log('Opening WhatsApp with URL:', whatsappUrl); // Debug log
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
     setIsOpen(false);
   };
 
