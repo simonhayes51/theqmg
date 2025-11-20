@@ -113,7 +113,7 @@ async function startServer() {
     await runMigrations();
 
     // Start server
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`\n🎯 Quiz Master General API Server`);
       console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
       console.log(`✓ Server running on port ${PORT}`);
