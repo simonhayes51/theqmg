@@ -78,6 +78,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Quiz Master General API is running' });
 });
 
+// Serve static files from React build (production)
+const clientBuildPath = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientBuildPath)) {
+  app.use(express.static(clientBuildPath));
+  console.log('✓ Serving frontend from:', clientBuildPath);
+
+  // Catch-all route - serve index.html for client-side routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+}
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
