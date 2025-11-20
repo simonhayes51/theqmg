@@ -15,7 +15,8 @@ const AdminTeam = () => {
     bio: '',
     email: '',
     specialties: [],
-    image: null
+    image: null,
+    image_url: ''
   });
   const [specialtyInput, setSpecialtyInput] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
@@ -52,7 +53,8 @@ const AdminTeam = () => {
       bio: '',
       email: '',
       specialties: [],
-      image: null
+      image: null,
+      image_url: ''
     });
     setSpecialtyInput('');
     setImagePreview(null);
@@ -67,7 +69,8 @@ const AdminTeam = () => {
       bio: member.bio || '',
       email: member.email || '',
       specialties: Array.isArray(member.specialties) ? member.specialties : [],
-      image: null
+      image: null,
+      image_url: member.image_url || ''
     });
     setSpecialtyInput('');
     setImagePreview(member.image_url ? `${API_BASE_URL}${member.image_url}` : null);
@@ -83,7 +86,8 @@ const AdminTeam = () => {
       bio: '',
       email: '',
       specialties: [],
-      image: null
+      image: null,
+      image_url: ''
     });
     setSpecialtyInput('');
     setImagePreview(null);
@@ -145,11 +149,13 @@ const AdminTeam = () => {
       submitData.append('role', formData.role || '');
       submitData.append('bio', formData.bio || '');
       submitData.append('email', formData.email || '');
-      if (formData.specialties.length > 0) {
-        submitData.append('specialties', JSON.stringify(formData.specialties));
-      }
+      // Always send specialties, even if empty array
+      submitData.append('specialties', JSON.stringify(formData.specialties));
       if (formData.image) {
         submitData.append('image', formData.image);
+      } else if (editingMember && formData.image_url) {
+        // When editing without new image, send existing image_url
+        submitData.append('image_url', formData.image_url);
       }
 
       if (editingMember) {

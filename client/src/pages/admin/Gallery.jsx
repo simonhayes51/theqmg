@@ -13,7 +13,8 @@ const AdminGallery = () => {
     title: '',
     description: '',
     category: '',
-    image: null
+    image: null,
+    image_url: ''
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -50,7 +51,8 @@ const AdminGallery = () => {
       title: '',
       description: '',
       category: '',
-      image: null
+      image: null,
+      image_url: ''
     });
     setSelectedFiles([]);
     setImagePreviews([]);
@@ -64,7 +66,8 @@ const AdminGallery = () => {
       title: image.title || '',
       description: image.description || '',
       category: image.category || '',
-      image: null
+      image: null,
+      image_url: image.image_url || ''
     });
     setImagePreview(image.image_url ? `${API_BASE_URL}${image.image_url}` : null);
     setShowModal(true);
@@ -77,7 +80,8 @@ const AdminGallery = () => {
       title: '',
       description: '',
       category: '',
-      image: null
+      image: null,
+      image_url: ''
     });
     setSelectedFiles([]);
     setImagePreviews([]);
@@ -131,12 +135,6 @@ const AdminGallery = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation for editing mode
-    if (editingImage && !formData.image) {
-      showMessage('Please select an image to upload', 'error');
-      return;
-    }
-
     // Validation for bulk upload mode
     if (!editingImage && selectedFiles.length === 0) {
       showMessage('Please select at least one image to upload', 'error');
@@ -154,6 +152,9 @@ const AdminGallery = () => {
         submitData.append('category', formData.category || '');
         if (formData.image) {
           submitData.append('image', formData.image);
+        } else if (formData.image_url) {
+          // When editing without new image, send existing image_url
+          submitData.append('image_url', formData.image_url);
         }
 
         await galleryAPI.update(editingImage.id, submitData);
