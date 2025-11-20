@@ -77,8 +77,12 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
     const { title, description, category, event_id, display_order } = req.body;
     const image_url = `/uploads/images/${req.file.filename}`;
 
-    // Clean up string fields - handle empty strings
-    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+    // Clean up string fields - handle empty strings and undefined
+    const cleanString = (val) => {
+      if (val === null || val === undefined || val === '') return null;
+      if (typeof val === 'string' && val.trim() === '') return null;
+      return typeof val === 'string' ? val.trim() : String(val);
+    };
 
     // Parse event_id - handle empty strings
     let parsedEventId = null;
@@ -139,8 +143,12 @@ router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
 
     const { title, description, category, event_id, display_order } = req.body;
 
-    // Clean up string fields - handle empty strings
-    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+    // Clean up string fields - handle empty strings and undefined
+    const cleanString = (val) => {
+      if (val === null || val === undefined || val === '') return null;
+      if (typeof val === 'string' && val.trim() === '') return null;
+      return typeof val === 'string' ? val.trim() : String(val);
+    };
 
     // Parse event_id - handle empty strings
     let parsedEventId = null;

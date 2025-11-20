@@ -105,8 +105,12 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
       }
     }
 
-    // Clean up string fields - handle empty strings
-    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+    // Clean up string fields - handle empty strings and undefined
+    const cleanString = (val) => {
+      if (val === null || val === undefined || val === '') return null;
+      if (typeof val === 'string' && val.trim() === '') return null;
+      return typeof val === 'string' ? val.trim() : String(val);
+    };
 
     console.log('Parsed values:', {
       name: cleanString(name),
@@ -181,8 +185,12 @@ router.put('/:id', authenticateToken, isAdmin, upload.single('image'), async (re
       }
     }
 
-    // Clean up string fields - handle empty strings
-    const cleanString = (val) => (val && val.trim() !== '' ? val.trim() : null);
+    // Clean up string fields - handle empty strings and undefined
+    const cleanString = (val) => {
+      if (val === null || val === undefined || val === '') return null;
+      if (typeof val === 'string' && val.trim() === '') return null;
+      return typeof val === 'string' ? val.trim() : String(val);
+    };
 
     console.log('Parsed values:', {
       name: cleanString(name),
