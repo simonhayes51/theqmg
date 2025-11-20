@@ -120,11 +120,11 @@ const Home = () => {
               <div key={service.id} className="service-card">
                 <div className="service-icon">{service.icon}</div>
                 <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
-                <p className="text-gray-300 mb-6 text-lg">{service.description}</p>
+                <p className="mb-6 text-lg">{service.description}</p>
                 {service.features && service.features.length > 0 && (
                   <ul className="space-y-3 text-left">
                     {service.features.map((feature, idx) => (
-                      <li key={idx} className="text-gray-400 flex items-start">
+                      <li key={idx} className="flex items-start">
                         <span className="text-brit-gold mr-3 text-xl">✓</span>
                         <span>{feature}</span>
                       </li>
@@ -160,17 +160,17 @@ const Home = () => {
                     </div>
                   )}
                   <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
-                  <div className="flex items-center text-gray-400 mb-3">
-                    <Calendar size={18} className="mr-3" />
+                  <div className="flex items-center text-gray-200 mb-3">
+                    <Calendar size={18} className="mr-3 text-brit-gold" />
                     <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
                   </div>
                   {event.venue_name && (
-                    <div className="flex items-center text-gray-400 mb-6">
-                      <MapPin size={18} className="mr-3" />
+                    <div className="flex items-center text-gray-200 mb-6">
+                      <MapPin size={18} className="mr-3 text-brit-gold" />
                       <span className="text-lg">{event.venue_name}</span>
                     </div>
                   )}
-                  <p className="text-gray-300 text-lg leading-relaxed">{event.description}</p>
+                  <p className="text-lg leading-relaxed">{event.description}</p>
                 </div>
               ))}
             </div>
@@ -199,7 +199,7 @@ const Home = () => {
                   <p className="review-text">"{review.review_text}"</p>
                   <div>
                     <p className="review-author">{review.author_name}</p>
-                    <p className="text-gray-500 text-base">{review.venue_name}</p>
+                    <p className="text-gray-300 text-base">{review.venue_name}</p>
                   </div>
                 </div>
               ))}
@@ -278,7 +278,7 @@ const Home = () => {
                   </h3>
                   <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
                   {member.bio && (
-                    <p className="text-gray-400 text-lg leading-relaxed">{member.bio}</p>
+                    <p className="text-gray-200 text-lg leading-relaxed">{member.bio}</p>
                   )}
                 </div>
               ))}

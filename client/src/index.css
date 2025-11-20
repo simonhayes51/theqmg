@@ -187,7 +187,7 @@ nav.scrolled {
 }
 
 .section-subtitle {
-  @apply text-center text-gray-400 mb-16 text-xl md:text-2xl max-w-3xl mx-auto;
+  @apply text-center text-gray-200 mb-16 text-xl md:text-2xl max-w-3xl mx-auto;
   font-weight: 500;
 }
 
@@ -201,6 +201,15 @@ nav.scrolled {
   border: 1px solid rgba(239, 68, 68, 0.1);
   position: relative;
   overflow: hidden;
+  color: #ffffff;
+}
+
+.card h3 {
+  color: #FFB700;
+}
+
+.card p {
+  color: #e5e7eb;
 }
 
 .card::before {
@@ -419,11 +428,21 @@ nav.scrolled {
 /* Services Grid */
 .service-card {
   @apply text-center p-12 rounded-3xl transition-all duration-500;
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 2px solid rgba(220, 20, 60, 0.3);
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 2px solid rgba(220, 20, 60, 0.4);
   box-shadow:
-    0 0 40px rgba(220, 20, 60, 0.1),
-    0 10px 40px rgba(0, 0, 0, 0.4);
+    0 0 40px rgba(220, 20, 60, 0.15),
+    0 10px 40px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+}
+
+.service-card h3 {
+  color: #FFB700;
+}
+
+.service-card p,
+.service-card li {
+  color: #e5e7eb;
 }
 
 .service-card:hover {
@@ -465,7 +484,7 @@ nav.scrolled {
 }
 
 .review-text {
-  @apply text-gray-300 italic mb-8 text-xl;
+  @apply text-gray-100 italic mb-8 text-xl;
   line-height: 1.8;
 }
 
