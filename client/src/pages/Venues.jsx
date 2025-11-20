@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { venuesAPI } from '../services/api';
 import { MapPin, Phone, Mail, Users, Search } from 'lucide-react';
+import VenueMap from '../components/VenueMap';
 
 const Venues = () => {
   const [venues, setVenues] = useState([]);
@@ -98,6 +99,16 @@ const Venues = () => {
                 className="input pl-10 w-full"
               />
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* Map Section */}
+      {venues.length > 0 && (
+        <section className="section bg-white">
+          <div className="container-custom">
+            <h2 className="text-3xl font-heading text-quiz-blue mb-6 text-center">Venue Locations</h2>
+            <VenueMap venues={filteredVenues} height="600px" />
           </div>
         </section>
       )}

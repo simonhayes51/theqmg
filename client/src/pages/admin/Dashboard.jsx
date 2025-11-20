@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Star, Users, Image, Settings, Mail, Briefcase } from 'lucide-react';
+import { Calendar, MapPin, Star, Users, Image, Settings, Mail, Briefcase, RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
   const adminSections = [
     { to: '/admin/events', icon: Calendar, label: 'Events', color: 'bg-blue-500', description: 'Manage events and calendar' },
+    { to: '/admin/recurring-events', icon: RefreshCw, label: 'Recurring Events', color: 'bg-teal-500', description: 'Auto-generate recurring events' },
     { to: '/admin/venues', icon: MapPin, label: 'Venues', color: 'bg-green-500', description: 'Manage venue listings' },
     { to: '/admin/services', icon: Briefcase, label: 'Services', color: 'bg-purple-500', description: 'Edit service offerings' },
     { to: '/admin/reviews', icon: Star, label: 'Reviews', color: 'bg-yellow-500', description: 'Manage testimonials' },
