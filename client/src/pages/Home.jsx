@@ -109,7 +109,10 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="section">
+      <section
+        className="section"
+        style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
+      >
         <div className="container-custom">
           <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
           <p className="section-subtitle">
@@ -144,7 +147,10 @@ const Home = () => {
 
       {/* Upcoming Events */}
       {upcomingEvents.length > 0 && (
-        <section className="section">
+        <section
+          className="section"
+          style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
+        >
           <div className="container-custom">
             <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
             <div className="grid-3">
@@ -185,7 +191,10 @@ const Home = () => {
 
       {/* Testimonials */}
       {reviews.length > 0 && (
-        <section className="section">
+        <section
+          className="section"
+          style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
+        >
           <div className="container-custom">
             <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
             <div className="grid-3">
@@ -210,7 +219,10 @@ const Home = () => {
 
       {/* Photo Gallery Section */}
       {galleryImages.length > 0 && (
-        <section className="section">
+        <section
+          className="section"
+          style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
+        >
           <div className="container-custom">
             <div className="text-center mb-16">
               <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
@@ -250,7 +262,10 @@ const Home = () => {
 
       {/* Meet the Team Section */}
       {teamMembers.length > 0 && (
-        <section className="section">
+        <section
+          className="section"
+          style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
+        >
           <div className="container-custom">
             <div className="text-center mb-16">
               <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">

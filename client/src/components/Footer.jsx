@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin } from 'lucide-react';
 import { settingsAPI } from '../services/api';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [settings, setSettings] = useState({});
@@ -27,8 +29,17 @@ const Footer = () => {
   const businessPhone = settings.business_phone;
   const coverageArea = settings.business_city || 'Newcastle, Durham, Sunderland & surrounding areas';
 
+  const footerStyle = settings.footer_bg_image
+    ? {
+        backgroundImage: `url(${API_BASE_URL}${settings.footer_bg_image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }
+    : {};
+
   return (
-    <footer>
+    <footer style={footerStyle}>
       <div className="container-custom">
         <div className="footer-grid">
           {/* About */}
