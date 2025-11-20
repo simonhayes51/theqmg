@@ -29,12 +29,8 @@ export const authAPI = {
 export const eventsAPI = {
   getAll: (params) => api.get('/events', { params }),
   getOne: (id) => api.get(`/events/${id}`),
-  create: (data) => api.post('/events', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
-  update: (id, data) => api.put(`/events/${id}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  create: (data) => api.post('/events', data),  // Let axios handle FormData automatically
+  update: (id, data) => api.put(`/events/${id}`, data),  // Let axios handle FormData automatically
   delete: (id) => api.delete(`/events/${id}`),
 };
 
@@ -42,12 +38,8 @@ export const eventsAPI = {
 export const venuesAPI = {
   getAll: (params) => api.get('/venues', { params }),
   getOne: (id) => api.get(`/venues/${id}`),
-  create: (data) => api.post('/venues', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
-  update: (id, data) => api.put(`/venues/${id}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  create: (data) => api.post('/venues', data),  // Let axios handle FormData automatically
+  update: (id, data) => api.put(`/venues/${id}`, data),  // Let axios handle FormData automatically
   delete: (id) => api.delete(`/venues/${id}`),
 };
 
@@ -73,24 +65,16 @@ export const reviewsAPI = {
 export const teamAPI = {
   getAll: () => api.get('/team'),
   getOne: (id) => api.get(`/team/${id}`),
-  create: (data) => api.post('/team', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
-  update: (id, data) => api.put(`/team/${id}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  create: (data) => api.post('/team', data),  // Let axios handle FormData automatically
+  update: (id, data) => api.put(`/team/${id}`, data),  // Let axios handle FormData automatically
   delete: (id) => api.delete(`/team/${id}`),
 };
 
 // Gallery API
 export const galleryAPI = {
   getAll: (params) => api.get('/gallery', { params }),
-  upload: (data) => api.post('/gallery', data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
-  update: (id, data) => api.put(`/gallery/${id}`, data, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  }),
+  upload: (data) => api.post('/gallery', data),  // Let axios handle FormData automatically
+  update: (id, data) => api.put(`/gallery/${id}`, data),  // Let axios handle FormData automatically
   delete: (id) => api.delete(`/gallery/${id}`),
 };
 
