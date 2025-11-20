@@ -13,9 +13,13 @@ const AdminEvents = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    event_type: 'quiz',
     event_date: '',
+    event_time: '',
     venue_id: '',
-    image: null
+    status: 'scheduled',
+    image: null,
+    image_url: ''
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -52,9 +56,13 @@ const AdminEvents = () => {
     setFormData({
       title: '',
       description: '',
+      event_type: 'quiz',
       event_date: '',
+      event_time: '',
       venue_id: '',
-      image: null
+      status: 'scheduled',
+      image: null,
+      image_url: ''
     });
     setImagePreview(null);
     setShowModal(true);
@@ -65,9 +73,13 @@ const AdminEvents = () => {
     setFormData({
       title: event.title || '',
       description: event.description || '',
+      event_type: event.event_type || 'quiz',
       event_date: event.event_date ? event.event_date.split('T')[0] : '',
+      event_time: event.event_time || '',
       venue_id: event.venue_id || '',
-      image: null
+      status: event.status || 'scheduled',
+      image: null,
+      image_url: event.image_url || ''
     });
     setImagePreview(event.image_url ? `${API_BASE_URL}${event.image_url}` : null);
     setShowModal(true);
@@ -79,9 +91,13 @@ const AdminEvents = () => {
     setFormData({
       title: '',
       description: '',
+      event_type: 'quiz',
       event_date: '',
+      event_time: '',
       venue_id: '',
-      image: null
+      status: 'scheduled',
+      image: null,
+      image_url: ''
     });
     setImagePreview(null);
   };
@@ -114,12 +130,18 @@ const AdminEvents = () => {
       const submitData = new FormData();
       submitData.append('title', formData.title);
       submitData.append('description', formData.description);
+      submitData.append('event_type', formData.event_type);
       submitData.append('event_date', formData.event_date);
+      submitData.append('event_time', formData.event_time || '');
+      submitData.append('status', formData.status);
       if (formData.venue_id) {
         submitData.append('venue_id', formData.venue_id);
       }
       if (formData.image) {
         submitData.append('image', formData.image);
+      } else if (editingEvent && formData.image_url) {
+        // When editing without new image, send existing image_url
+        submitData.append('image_url', formData.image_url);
       }
 
       if (editingEvent) {
