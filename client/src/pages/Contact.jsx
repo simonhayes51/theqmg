@@ -215,8 +215,8 @@ const Contact = () => {
                   <div className="mb-6 p-4 bg-green-50 border-2 border-green-500 rounded flex items-start">
                     <CheckCircle className="text-green-500 mr-3 flex-shrink-0 mt-0.5" size={24} />
                     <div>
-                      <h3 className="font-semibold text-green-800 mb-1">Message Sent!</h3>
-                      <p className="text-green-700 text-sm">
+                      <h3 className="font-semibold text-green-900 mb-1">Message Sent!</h3>
+                      <p className="text-green-900 text-sm">
                         Thank you for contacting us. We'll get back to you as soon as possible.
                       </p>
                     </div>
@@ -225,7 +225,7 @@ const Contact = () => {
 
                 {error && (
                   <div className="mb-6 p-4 bg-red-50 border-2 border-red-500 rounded">
-                    <p className="text-red-700">{error}</p>
+                    <p className="text-red-900">{error}</p>
                   </div>
                 )}
 

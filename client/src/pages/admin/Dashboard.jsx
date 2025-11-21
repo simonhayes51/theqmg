@@ -53,7 +53,7 @@ const Dashboard = () => {
             </ul>
           </div>
 
-          <div className="card bg-quiz-red text-white">
+          <div className="card bg-red-700 text-white">
             <h3 className="text-2xl font-heading mb-2">Important</h3>
             <ul className="space-y-2 text-sm">
               <li>• Change default admin password!</li>
