@@ -183,6 +183,37 @@ nav.scrolled {
     0 0 40px rgba(0, 0, 0, 0.75);
 }
 
+/* Fix white-on-white text when section has white background */
+.section.bg-white,
+.section.bg-white * {
+  color: #1f2937; /* gray-800 for good contrast on white */
+  text-shadow: none; /* Remove shadows on white backgrounds */
+}
+
+.section.bg-white h2,
+.section.bg-white h3,
+.section.bg-white .section-title {
+  color: #003DA5; /* quiz-blue for headings on white */
+}
+
+.section.bg-white .text-gray-200,
+.section.bg-white .text-gray-300 {
+  color: #4b5563 !important; /* gray-600 - readable on white */
+}
+
+/* Fix light backgrounds (quiz-gray) - ensure dark text */
+.bg-quiz-gray {
+  color: #1f2937; /* gray-800 for good contrast */
+}
+
+.bg-quiz-gray h1,
+.bg-quiz-gray h2,
+.bg-quiz-gray h3,
+.bg-quiz-gray h4,
+.bg-quiz-gray h5 {
+  color: #003DA5; /* quiz-blue for headings */
+}
+
 .section-title {
   @apply text-center mb-20;
   font-size: clamp(3rem, 7vw, 5.5rem);
@@ -219,6 +250,12 @@ nav.scrolled {
   position: relative;
   overflow: hidden;
   color: #ffffff;
+}
+
+/* Fix white-on-white text when card has white background */
+.card.bg-white,
+.card.bg-white *:not(.text-quiz-blue):not(.text-quiz-red):not(.text-gray-500):not(.text-gray-600):not(.text-red-500):not(.text-green-500) {
+  color: #1f2937 !important; /* gray-800 for good contrast */
 }
 
 .card h3 {

@@ -81,6 +81,7 @@ const apiLimiter = rateLimit({
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
+  'https://profound-abundance-production.up.railway.app',
   process.env.CLIENT_URL
 ].filter(Boolean);
 
@@ -88,6 +89,12 @@ app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
+
+    // In production, allow Railway frontend domain
+    if (process.env.NODE_ENV === 'production' && origin && origin.includes('railway.app')) {
+      console.log('✅ CORS allowed for Railway domain:', origin);
+      return callback(null, true);
+    }
 
     // Check if origin is in allowed list
     if (allowedOrigins.some(allowed => origin.startsWith(allowed.replace(/\/$/, '')))) {
