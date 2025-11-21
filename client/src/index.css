@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Bold Modern Design - Dark, Energetic, Fun */
+/*
+  CLEAN MODERN DESIGN
+  Primary: Royal Blue (#003DA5)
+  Accent: Crimson Red (#DC143C)
+  Highlight: Gold (#FFB700)
+  Dark: Gray-950 backgrounds
+*/
 
 @layer base {
   * {
@@ -19,45 +25,42 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: 900;
     letter-spacing: -0.03em;
+    color: #ffffff;
   }
 
   h1 {
-    @apply text-6xl md:text-7xl lg:text-8xl;
+    @apply text-5xl md:text-6xl lg:text-7xl;
     font-weight: 900;
-    line-height: 0.95;
+    line-height: 1.1;
   }
 
   h2 {
-    @apply text-5xl md:text-6xl lg:text-7xl;
+    @apply text-4xl md:text-5xl lg:text-6xl;
     font-weight: 900;
   }
 
   h3 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
+    @apply text-2xl md:text-3xl lg:text-4xl;
     font-weight: 800;
   }
 
   p {
-    @apply text-lg md:text-xl leading-relaxed;
+    @apply text-base md:text-lg leading-relaxed;
+    color: #d1d5db; /* gray-300 */
   }
 }
 
-/* Navigation - Bold & Dark */
+/* Navigation - Clean & Professional */
 nav {
-  @apply bg-gray-900/95 backdrop-blur-md;
-  border-bottom: 3px solid #DC143C;
+  @apply bg-gray-900/98 backdrop-blur-md;
+  border-bottom: 2px solid #003DA5;
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(220, 20, 60, 0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-nav.scrolled {
-  box-shadow: 0 4px 30px rgba(220, 20, 60, 0.3);
-}
-
-/* Hero Section - Full Impact */
+/* Hero Section - Clean & Impactful */
 .hero-section {
   position: relative;
   min-height: 100vh;
@@ -65,24 +68,29 @@ nav.scrolled {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: linear-gradient(135deg, #00247D 0%, #0f172a 50%, #003DA5 100%);
+  background: linear-gradient(135deg, #00247D 0%, #1a1f3a 50%, #003DA5 100%);
 }
 
 .hero-parallax-bg {
   position: absolute;
-  top: -10%;
+  top: 0;
   left: 0;
   width: 100%;
-  height: 120%;
+  height: 100%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   will-change: transform;
-  transition: transform 0.1s ease-out;
 }
 
 .hero-overlay {
-  display: none; /* NO OVERLAY - USER REQUEST */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 36, 125, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+  z-index: 1;
 }
 
 .hero-content {
@@ -91,13 +99,33 @@ nav.scrolled {
   text-align: center;
   color: white;
   padding: 2rem;
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .hero-title {
-  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-size: clamp(2.5rem, 8vw, 6rem);
   font-weight: 900;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #FFB700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 20px rgba(0, 0, 0, 0.8));
+}
+
+.hero-subtitle {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.hero-pattern {
+  display: none; /* Simplified - no pattern needed */
+}
   line-height: 0.9;
   margin-bottom: 2rem;
   background: linear-gradient(135deg, #ffffff 0%, #FFB700 50%, #DC143C 100%);
