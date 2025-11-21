@@ -87,10 +87,10 @@ const Login = () => {
           </form>
 
           <div className="mt-6 p-4 bg-gray-100 rounded text-sm">
-            <p className="font-semibold mb-2">Default Credentials:</p>
-            <p className="text-gray-600">Username: admin</p>
-            <p className="text-gray-600">Password: admin123</p>
-            <p className="text-red-600 mt-2">⚠️ Change these after first login!</p>
+            <p className="font-semibold mb-2 text-gray-900">Default Credentials:</p>
+            <p className="text-gray-800">Username: admin</p>
+            <p className="text-gray-800">Password: admin123</p>
+            <p className="text-red-700 mt-2 font-medium">⚠️ Change these after first login!</p>
           </div>
         </div>
       </div>
