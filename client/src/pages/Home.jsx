@@ -124,7 +124,9 @@ const Home = () => {
 
       {/* Social Proof Section */}
       <ScrollReveal animation="fade-up">
-        <section className="section bg-gray-900">
+        <section className="section" style={{
+          background: 'linear-gradient(135deg, rgba(0, 61, 165, 0.95) 0%, rgba(0, 61, 165, 0.85) 100%)'
+        }}>
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
               <div className="p-8">
@@ -156,8 +158,10 @@ const Home = () => {
       {/* Services Section */}
       <ScrollReveal animation="fade-up">
         <section
-          className="section bg-gradient-to-b from-gray-950 to-gray-900"
-          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
+          className="section"
+          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {
+            background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
+          }}
         >
           <div className="container-custom">
             <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
@@ -206,8 +210,10 @@ const Home = () => {
       {upcomingEvents.length > 0 && (
         <ScrollReveal animation="fade-up">
           <section
-            className="section bg-gray-950"
-            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
+            className="section"
+            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {
+              background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)'
+            }}
           >
             <div className="container-custom">
               <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
@@ -255,8 +261,10 @@ const Home = () => {
       {reviews.length > 0 && (
         <ScrollReveal animation="fade-up">
           <section
-            className="section bg-gradient-to-b from-gray-900 to-gray-950"
-            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
+            className="section"
+            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {
+              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.9) 0%, rgba(0, 61, 165, 0.9) 100%)'
+            }}
           >
             <div className="container-custom">
               <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
@@ -287,8 +295,10 @@ const Home = () => {
       {galleryImages.length > 0 && (
         <ScrollReveal animation="fade-up">
           <section
-            className="section bg-gray-950"
-            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
+            className="section"
+            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {
+              background: 'linear-gradient(135deg, #003DA5 0%, rgba(220, 20, 60, 0.95) 100%)'
+            }}
           >
             <div className="container-custom">
               <div className="text-center mb-16">
@@ -335,8 +345,10 @@ const Home = () => {
       {teamMembers.length > 0 && (
         <ScrollReveal animation="fade-up">
           <section
-            className="section bg-gradient-to-b from-gray-900 to-gray-950"
-            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
+            className="section"
+            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {
+              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.95) 0%, rgba(0, 61, 165, 0.95) 100%)'
+            }}
           >
             <div className="container-custom">
               <div className="text-center mb-16">
