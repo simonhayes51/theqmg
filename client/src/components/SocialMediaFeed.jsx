@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Instagram, Facebook, Twitter, RefreshCw } from 'lucide-react';
 import { socialMediaAPI, settingsAPI } from '../services/api';
+import ScrollReveal from '../hooks/useScrollAnimation';
 
 const SocialMediaFeed = () => {
   const [posts, setPosts] = useState([]);
@@ -102,158 +103,150 @@ const SocialMediaFeed = () => {
     }
   };
 
+  // Don't show loading state, just hide the section
   if (loading) {
-    return (
-      <section className="section bg-white">
-        <div className="container-custom">
-          <div className="text-center">
-            <RefreshCw className="animate-spin mx-auto mb-4" size={48} />
-            <p className="text-gray-600">Loading social media feed...</p>
-          </div>
-        </div>
-      </section>
-    );
+    return null;
+  }
+
+  // Don't show error messages or admin instructions to public users
+  // Only show the section if we have real posts (not placeholder)
+  const hasRealPosts = posts.length > 0 && posts[0]?.platform !== 'placeholder';
+
+  if (!hasRealPosts) {
+    return null;
   }
 
   return (
-    <section className="section bg-white">
+    <section className="section bg-gray-900">
       <div className="container-custom">
-        <div className="text-center mb-12">
-          <h2 className="section-title">Follow Us</h2>
-          <p className="text-gray-600 mb-6">Stay updated with our latest quiz nights and events!</p>
+        <ScrollReveal animation="fade-up">
+          <div className="text-center mb-12">
+            <h2 className="section-title text-brit-gold">Follow Our Journey</h2>
+            <p className="section-subtitle">Stay updated with our latest quiz nights and events!</p>
 
-          {/* Social Media Icons */}
-          <div className="flex justify-center gap-4 mb-8">
-            {socialLinks.instagram_url && (
-              <a
-                href={socialLinks.instagram_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4 rounded-full hover:scale-110 transition-transform"
-                aria-label="Follow us on Instagram"
-              >
-                <Instagram size={24} />
-              </a>
-            )}
-            {socialLinks.facebook_url && (
-              <a
-                href={socialLinks.facebook_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-blue-600 text-white p-4 rounded-full hover:scale-110 transition-transform"
-                aria-label="Follow us on Facebook"
-              >
-                <Facebook size={24} />
-              </a>
-            )}
-            {socialLinks.twitter_url && (
-              <a
-                href={socialLinks.twitter_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-sky-500 text-white p-4 rounded-full hover:scale-110 transition-transform"
-                aria-label="Follow us on Twitter"
-              >
-                <Twitter size={24} />
-              </a>
-            )}
-          </div>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
-            <p className="text-yellow-800">{error}</p>
-          </div>
-        )}
-
-        {/* Social Media Feed Grid */}
-        {posts.length > 0 && (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {posts.map((post) => (
-                <div key={post.id} className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-                  {post.permalink ? (
-                    <a href={post.permalink} target="_blank" rel="noopener noreferrer">
-                      <img
-                        src={post.image}
-                        alt={post.caption || 'Social media post'}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
-                        onError={(e) => {
-                          e.target.src = '/placeholder-post.png';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                        <div className="text-white text-center p-4">
-                          <p className="line-clamp-3">{post.caption || 'View on ' + post.platform}</p>
-                        </div>
-                      </div>
-                    </a>
-                  ) : (
-                    <>
-                      <img
-                        src={post.image}
-                        alt={post.caption || 'Social media post'}
-                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                        <div className="text-white text-center p-4">
-                          <p className="line-clamp-3">{post.caption}</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {posts[0]?.platform === 'instagram' && socialLinks.instagram_url && (
-              <div className="text-center mt-8">
+            {/* Social Media Icons */}
+            <div className="flex justify-center gap-6 mt-8">
+              {socialLinks.instagram_url && (
                 <a
                   href={socialLinks.instagram_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary inline-flex items-center gap-2"
+                  className="group relative"
+                  aria-label="Follow us on Instagram"
                 >
-                  <Instagram size={20} />
-                  View More on Instagram
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center transition-all hover:scale-110" style={{
+                    background: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #F77737 100%)'
+                  }}>
+                    <Instagram size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Instagram
+                  </span>
                 </a>
-              </div>
-            )}
-
-            {posts[0]?.platform === 'facebook' && socialLinks.facebook_url && (
-              <div className="text-center mt-8">
+              )}
+              {socialLinks.facebook_url && (
                 <a
                   href={socialLinks.facebook_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-primary inline-flex items-center gap-2"
+                  className="group relative"
+                  aria-label="Follow us on Facebook"
                 >
-                  <Facebook size={20} />
-                  View More on Facebook
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-blue-600 transition-all hover:scale-110">
+                    <Facebook size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Facebook
+                  </span>
                 </a>
+              )}
+              {socialLinks.twitter_url && (
+                <a
+                  href={socialLinks.twitter_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative"
+                  aria-label="Follow us on Twitter"
+                >
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-sky-500 transition-all hover:scale-110">
+                    <Twitter size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Twitter
+                  </span>
+                </a>
+              )}
+            </div>
+          </div>
+        </ScrollReveal>
+
+        {/* Social Media Feed Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+          {posts.slice(0, 6).map((post, index) => (
+            <ScrollReveal key={post.id} animation="fade-up" delay={index * 100}>
+              <div className="group relative overflow-hidden rounded-2xl border-2 border-brit-gold/20 hover:border-brit-gold/50 transition-all">
+                {post.permalink ? (
+                  <a href={post.permalink} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={post.image}
+                      alt={post.caption || 'Social media post'}
+                      className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                      onError={(e) => {
+                        e.target.src = '/placeholder-post.png';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <p className="text-white text-sm line-clamp-4">{post.caption || 'View on ' + post.platform}</p>
+                    </div>
+                  </a>
+                ) : (
+                  <>
+                    <img
+                      src={post.image}
+                      alt={post.caption || 'Social media post'}
+                      className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <p className="text-white text-sm line-clamp-4">{post.caption}</p>
+                    </div>
+                  </>
+                )}
               </div>
-            )}
-          </>
+            </ScrollReveal>
+          ))}
+        </div>
+
+        {/* View More Button */}
+        {posts[0]?.platform === 'instagram' && socialLinks.instagram_url && (
+          <ScrollReveal animation="scale-up">
+            <div className="text-center mt-12">
+              <a
+                href={socialLinks.instagram_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
+              >
+                <Instagram size={20} />
+                View More on Instagram
+              </a>
+            </div>
+          </ScrollReveal>
         )}
 
-        {/* Admin Setup Instructions */}
-        {posts[0]?.platform === 'placeholder' && (
-          <div className="mt-8 p-6 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold mb-3 text-lg">📝 Admin: Configure Social Media</h3>
-            <p className="text-gray-700 mb-4">
-              To display real posts from Instagram or Facebook, configure your API credentials in the admin settings:
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-gray-600">
-              <li>Go to Admin → Settings</li>
-              <li>Scroll to "Social Media Integration"</li>
-              <li>Add your Instagram Access Token and User ID (or Facebook credentials)</li>
-              <li>Enable the feed and save</li>
-            </ol>
-            <p className="text-sm text-gray-500 mt-4">
-              Need help? Check the documentation for step-by-step setup instructions.
-            </p>
-          </div>
+        {posts[0]?.platform === 'facebook' && socialLinks.facebook_url && (
+          <ScrollReveal animation="scale-up">
+            <div className="text-center mt-12">
+              <a
+                href={socialLinks.facebook_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
+              >
+                <Facebook size={20} />
+                View More on Facebook
+              </a>
+            </div>
+          </ScrollReveal>
         )}
       </div>
     </section>
