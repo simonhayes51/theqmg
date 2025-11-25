@@ -77,14 +77,31 @@ const QuestionOfTheDay = () => {
 
   if (loading) {
     return (
-      <div className="qotd-container animate-pulse">
-        <div className="h-64 bg-gray-800 rounded-2xl"></div>
-      </div>
+      <section className="section bg-gray-900">
+        <div className="container-custom">
+          <div className="animate-pulse">
+            <div className="h-64 bg-gray-800 rounded-2xl"></div>
+          </div>
+        </div>
+      </section>
     );
   }
 
   if (!todayQuestion && !yesterdayQuestion) {
-    return null; // Don't show QOTD if no questions available
+    // Show placeholder when no questions available
+    return (
+      <section className="section bg-gray-900">
+        <div className="container-custom">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
+              <Trophy className="text-brit-gold" size={40} />
+            </div>
+            <h2 className="section-title">Question of the Day</h2>
+            <p className="section-subtitle">Check back soon for today's trivia question!</p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
