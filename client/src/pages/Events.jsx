@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { eventsAPI } from '../services/api';
-import { Calendar, MapPin, Clock, Users, Search, Filter, Zap } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, Search, Filter, Zap, ChevronLeft, ChevronRight, Grid, List } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
 // Get API URL from environment
@@ -14,6 +14,9 @@ const Events = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortBy, setSortBy] = useState('date');
+  const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     loadEvents();
@@ -37,6 +40,14 @@ const Events = () => {
   // Filter and sort events
   const filteredEvents = events
     .filter(event => {
+      // Date filter for calendar view
+      if (viewMode === 'calendar' && selectedDate) {
+        const eventDate = new Date(event.event_date);
+        if (eventDate.toDateString() !== selectedDate.toDateString()) {
+          return false;
+        }
+      }
+
       // Search filter
       const matchesSearch = !searchTerm ||
         event.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -99,6 +110,42 @@ const Events = () => {
     return diffDays >= 0 && diffDays <= 7;
   };
 
+  // Calendar helper functions
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    return { daysInMonth, startingDayOfWeek, year, month };
+  };
+
+  const getEventsForDate = (date) => {
+    return events.filter(event => {
+      const eventDate = new Date(event.event_date);
+      return eventDate.toDateString() === date.toDateString();
+    });
+  };
+
+  const hasEventsOnDate = (date) => {
+    return getEventsForDate(date).length > 0;
+  };
+
+  const isSameDay = (date1, date2) => {
+    if (!date1 || !date2) return false;
+    return date1.toDateString() === date2.toDateString();
+  };
+
+  const changeMonth = (offset) => {
+    setCurrentMonth(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() + offset);
+      return newDate;
+    });
+  };
+
   // Loading skeleton
   if (loading) {
     return (
@@ -157,10 +204,44 @@ const Events = () => {
         </section>
       </ScrollReveal>
 
-      {/* Search and Filters */}
-      <section className="bg-gray-900 border-b-2 border-brit-gold/30 py-6">
+      {/* View Toggle */}
+      <section className="bg-gray-900 border-b-2 border-brit-gold/30 py-4">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={() => {
+                setViewMode('list');
+                setSelectedDate(null);
+              }}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                viewMode === 'list'
+                  ? 'bg-brit-gold text-gray-900'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              <List size={20} />
+              List View
+            </button>
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+                viewMode === 'calendar'
+                  ? 'bg-brit-gold text-gray-900'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              <Grid size={20} />
+              Calendar View
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Search and Filters */}
+      {viewMode === 'list' && (
+        <section className="bg-gray-900 border-b-2 border-brit-gold/30 py-6">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-3.5 text-gray-400" size={20} />
@@ -200,8 +281,114 @@ const Events = () => {
           </div>
         </div>
       </section>
+      )}
 
-      {/* Events Grid */}
+      {/* Calendar View */}
+      {viewMode === 'calendar' && (
+        <section className="bg-gray-900 py-6">
+          <div className="container-custom">
+            <div className="max-w-5xl mx-auto">
+              {/* Month Navigation */}
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  onClick={() => changeMonth(-1)}
+                  className="btn btn-outline flex items-center gap-2"
+                >
+                  <ChevronLeft size={20} />
+                  Previous
+                </button>
+                <h2 className="text-3xl font-black text-brit-gold uppercase">
+                  {currentMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+                </h2>
+                <button
+                  onClick={() => changeMonth(1)}
+                  className="btn btn-outline flex items-center gap-2"
+                >
+                  Next
+                  <ChevronRight size={20} />
+                </button>
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="bg-gray-800 rounded-2xl p-6 border-2 border-brit-gold/20">
+                {/* Weekday Headers */}
+                <div className="grid grid-cols-7 gap-2 mb-4">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    <div key={day} className="text-center font-bold text-brit-gold py-2">
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Calendar Days */}
+                <div className="grid grid-cols-7 gap-2">
+                  {(() => {
+                    const { daysInMonth, startingDayOfWeek, year, month } = getDaysInMonth(currentMonth);
+                    const days = [];
+
+                    // Empty cells for days before the first of the month
+                    for (let i = 0; i < startingDayOfWeek; i++) {
+                      days.push(
+                        <div key={`empty-${i}`} className="aspect-square"></div>
+                      );
+                    }
+
+                    // Days of the month
+                    for (let day = 1; day <= daysInMonth; day++) {
+                      const date = new Date(year, month, day);
+                      const hasEvents = hasEventsOnDate(date);
+                      const isSelected = isSameDay(date, selectedDate);
+                      const isToday = isSameDay(date, new Date());
+                      const eventsCount = getEventsForDate(date).length;
+
+                      days.push(
+                        <button
+                          key={day}
+                          onClick={() => setSelectedDate(date)}
+                          className={`aspect-square rounded-lg p-2 text-center transition-all relative ${
+                            isSelected
+                              ? 'bg-brit-gold text-gray-900 font-bold scale-105 shadow-lg'
+                              : hasEvents
+                              ? 'bg-brit-blue/30 hover:bg-brit-blue/50 text-gray-200 font-semibold border-2 border-brit-gold/40'
+                              : 'bg-gray-700/50 hover:bg-gray-700 text-gray-400'
+                          } ${isToday && !isSelected ? 'ring-2 ring-brit-red' : ''}`}
+                        >
+                          <div className="text-lg">{day}</div>
+                          {hasEvents && (
+                            <div className={`text-xs mt-1 ${isSelected ? 'text-gray-900' : 'text-brit-gold'}`}>
+                              {eventsCount} event{eventsCount > 1 ? 's' : ''}
+                            </div>
+                          )}
+                        </button>
+                      );
+                    }
+
+                    return days;
+                  })()}
+                </div>
+              </div>
+
+              {/* Legend */}
+              <div className="flex flex-wrap gap-6 mt-6 justify-center text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded bg-brit-blue/30 border-2 border-brit-gold/40"></div>
+                  <span className="text-gray-300">Has Events</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded bg-brit-gold"></div>
+                  <span className="text-gray-300">Selected</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded bg-gray-700/50 ring-2 ring-brit-red"></div>
+                  <span className="text-gray-300">Today</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Events Grid/List */}
       <section className="section bg-gray-950">
         <div className="container-custom">
           {filteredEvents.length === 0 ? (
@@ -210,11 +397,20 @@ const Events = () => {
                 <div className="text-6xl mb-4">📅</div>
                 <h3 className="text-2xl font-heading mb-2 text-brit-gold">No Events Found</h3>
                 <p className="text-gray-300 mb-6 text-lg">
-                  {searchTerm || filterStatus !== 'all'
+                  {viewMode === 'calendar' && selectedDate
+                    ? `No events scheduled for ${selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}`
+                    : searchTerm || filterStatus !== 'all'
                     ? 'Try adjusting your search or filters'
                     : 'Check back soon for upcoming events!'}
                 </p>
-                {(searchTerm || filterStatus !== 'all') && (
+                {viewMode === 'calendar' && selectedDate ? (
+                  <button
+                    onClick={() => setSelectedDate(null)}
+                    className="btn btn-outline"
+                  >
+                    Clear Date Selection
+                  </button>
+                ) : (searchTerm || filterStatus !== 'all') && (
                   <button
                     onClick={() => {
                       setSearchTerm('');
@@ -230,9 +426,26 @@ const Events = () => {
           ) : (
             <>
               <div className="text-center mb-8">
-                <p className="text-gray-300 text-lg">
-                  Showing {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
-                </p>
+                {viewMode === 'calendar' && selectedDate ? (
+                  <>
+                    <h3 className="text-2xl font-heading mb-2 text-brit-gold">
+                      Events on {selectedDate.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                    </h3>
+                    <p className="text-gray-300 text-lg mb-4">
+                      {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'} scheduled
+                    </p>
+                    <button
+                      onClick={() => setSelectedDate(null)}
+                      className="btn btn-outline text-sm"
+                    >
+                      Clear Selection & View All Events
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-gray-300 text-lg">
+                    Showing {filteredEvents.length} {filteredEvents.length === 1 ? 'event' : 'events'}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

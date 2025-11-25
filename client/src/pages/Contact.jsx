@@ -147,7 +147,7 @@ const Contact = () => {
             {/* Contact Information */}
             <ScrollReveal animation="fade-up" delay={0}>
               <div className="lg:col-span-1">
-                <div className="service-card sticky top-24">
+                <div className="service-card">
                   <h2 className="text-2xl font-heading mb-6 text-brit-gold">Contact Information</h2>
 
                   <div className="space-y-6">

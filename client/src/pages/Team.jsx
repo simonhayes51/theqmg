@@ -101,70 +101,74 @@ const Team = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {team.map((member, index) => (
                 <ScrollReveal key={member.id} animation="fade-up" delay={index * 100}>
-                  <div className="service-card text-center h-full flex flex-col">
-                    {/* Profile Image */}
-                    {member.image_url ? (
-                      <img
-                        src={`${API_BASE_URL}${member.image_url}`}
-                        alt={member.name}
-                        className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-brit-gold"
-                      />
-                    ) : (
-                      <div className="w-32 h-32 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-heading border-4 border-brit-gold" style={{
-                        background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)'
-                      }}>
-                        {member.name?.charAt(0) || '?'}
-                      </div>
-                    )}
-
-                    {/* Name */}
-                    <h3 className="text-3xl font-black mb-2 uppercase" style={{color: '#f0f0f0'}}>
-                      {member.name}
-                    </h3>
-
-                    {/* Role */}
-                    {member.role && (
-                      <p className="text-brit-gold font-semibold mb-3 uppercase tracking-wide text-sm">
-                        {member.role}
-                      </p>
-                    )}
-
-                    {/* Bio */}
-                    {member.bio && (
-                      <p className="text-gray-300 text-base mb-4 px-2">
-                        {member.bio}
-                      </p>
-                    )}
-
-                    {/* Specialties */}
-                    {member.specialties && member.specialties.length > 0 && (
-                      <div className="mt-4 pt-4 border-t border-gray-700">
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          {member.specialties.map((specialty, idx) => (
-                            <span
-                              key={idx}
-                              className="px-3 py-1 bg-gray-800 text-brit-gold text-xs font-semibold rounded-full border border-brit-gold/30"
-                            >
-                              {specialty}
-                            </span>
-                          ))}
+                  <Link
+                    to={`/team/${member.id}`}
+                    className="block h-full transform hover:scale-105 transition-transform duration-300"
+                  >
+                    <div className="service-card text-center h-full flex flex-col cursor-pointer hover:border-brit-gold/50">
+                      {/* Profile Image */}
+                      {member.image_url ? (
+                        <img
+                          src={`${API_BASE_URL}${member.image_url}`}
+                          alt={member.name}
+                          className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-brit-gold"
+                        />
+                      ) : (
+                        <div className="w-32 h-32 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-4xl font-heading border-4 border-brit-gold" style={{
+                          background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)'
+                        }}>
+                          {member.name?.charAt(0) || '?'}
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {/* Contact */}
-                    {member.email && (
+                      {/* Name */}
+                      <h3 className="text-3xl font-black mb-2 uppercase" style={{color: '#f0f0f0'}}>
+                        {member.name}
+                      </h3>
+
+                      {/* Role */}
+                      {member.role && (
+                        <p className="text-brit-gold font-semibold mb-3 uppercase tracking-wide text-sm">
+                          {member.role}
+                        </p>
+                      )}
+
+                      {/* Bio Preview */}
+                      {member.bio && (
+                        <p className="text-gray-300 text-base mb-4 px-2 line-clamp-3">
+                          {member.bio}
+                        </p>
+                      )}
+
+                      {/* Specialties */}
+                      {member.specialties && member.specialties.length > 0 && (
+                        <div className="mt-4 pt-4 border-t border-gray-700">
+                          <div className="flex flex-wrap gap-2 justify-center">
+                            {member.specialties.slice(0, 3).map((specialty, idx) => (
+                              <span
+                                key={idx}
+                                className="px-3 py-1 bg-gray-800 text-brit-gold text-xs font-semibold rounded-full border border-brit-gold/30"
+                              >
+                                {specialty}
+                              </span>
+                            ))}
+                            {member.specialties.length > 3 && (
+                              <span className="px-3 py-1 bg-gray-800 text-brit-gold text-xs font-semibold rounded-full border border-brit-gold/30">
+                                +{member.specialties.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* View Profile Hint */}
                       <div className="mt-auto pt-4">
-                        <a
-                          href={`mailto:${member.email}`}
-                          className="inline-flex items-center text-brit-gold hover:text-brit-red text-sm transition-colors"
-                        >
-                          <Mail size={16} className="mr-1" />
-                          Contact
-                        </a>
+                        <span className="inline-flex items-center text-brit-gold hover:text-brit-red text-sm transition-colors font-semibold">
+                          View Full Profile →
+                        </span>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  </Link>
                 </ScrollReveal>
               ))}
             </div>
