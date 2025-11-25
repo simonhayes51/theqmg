@@ -805,6 +805,57 @@ footer {
   }
 }
 
+/* Animations */
+@keyframes scale-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  @apply absolute left-1/2 -translate-x-1/2 bg-brit-gold text-gray-900 px-6 py-3 rounded-b-lg font-bold uppercase tracking-wide;
+  top: -100px;
+  z-index: 9999;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Lazy load blur-up effect */
+.lazy-image {
+  filter: blur(20px);
+  transition: filter 0.3s;
+}
+
+.lazy-image.loaded {
+  filter: blur(0);
+}
+
 /* Accessibility */
 .sr-only {
   position: absolute;

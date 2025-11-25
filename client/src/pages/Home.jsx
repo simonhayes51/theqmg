@@ -1,10 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
-import { Calendar, MapPin, Star, ArrowRight, Users, Camera } from 'lucide-react';
+import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap } from 'lucide-react';
 import QuestionOfTheDay from '../components/QuestionOfTheDay';
 import SocialMediaFeed from '../components/SocialMediaFeed';
 import ItemCarousel from '../components/ItemCarousel';
+import FloatingCTA from '../components/FloatingCTA';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ScrollReveal from '../hooks/useScrollAnimation';
 
 // Get API URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -76,6 +79,14 @@ const Home = () => {
 
   return (
     <div>
+      {/* Skip to Content Link for Accessibility */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
+      {/* Floating CTA Button */}
+      <FloatingCTA />
+    <div id="main-content">
       {/* PARALLAX HERO SECTION */}
       <section className="hero-section">
         {/* Parallax Background Image */}
@@ -111,206 +122,268 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section
-        className="section bg-gradient-to-b from-gray-950 to-gray-900"
-        style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
-      >
-        <div className="container-custom">
-          <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
-          <p className="section-subtitle">
-            {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
-          </p>
-          <ItemCarousel>
-            {services.map((service) => (
-              <div key={service.id} className="service-card h-full">
-                <div className="service-icon">{service.icon}</div>
-                <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
-                <p className="mb-6 text-lg">{service.description}</p>
-                {service.features && service.features.length > 0 && (
-                  <ul className="space-y-3 text-left">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <span className="text-brit-gold mr-3 text-xl">✓</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+      {/* Social Proof Section */}
+      <ScrollReveal animation="fade-up">
+        <section className="section bg-gray-900">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+              <div className="p-8">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-4">
+                  <Award className="text-brit-gold" size={48} />
+                </div>
+                <h3 className="text-5xl font-black text-brit-gold mb-2">500+</h3>
+                <p className="text-xl text-gray-300">Events Hosted</p>
               </div>
-            ))}
-          </ItemCarousel>
-          <div className="text-center mt-16">
-            <Link to="/services" className="btn btn-primary">
-              Learn More About Our Services
-            </Link>
+              <div className="p-8">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-4">
+                  <Users className="text-brit-red" size={48} />
+                </div>
+                <h3 className="text-5xl font-black text-brit-red mb-2">50+</h3>
+                <p className="text-xl text-gray-300">Partner Venues</p>
+              </div>
+              <div className="p-8">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-blue/20 rounded-full mb-4">
+                  <TrendingUp className="text-brit-blue" size={48} />
+                </div>
+                <h3 className="text-5xl font-black text-brit-blue mb-2">10+</h3>
+                <p className="text-xl text-gray-300">Years Experience</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ScrollReveal>
 
-      {/* Upcoming Events */}
-      {upcomingEvents.length > 0 && (
+      {/* Services Section */}
+      <ScrollReveal animation="fade-up">
         <section
-          className="section bg-gray-950"
-          style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
+          className="section bg-gradient-to-b from-gray-950 to-gray-900"
+          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
         >
           <div className="container-custom">
-            <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
-            <ItemCarousel>
-              {upcomingEvents.map((event) => (
-                <div key={event.id} className="card h-full">
-                  {event.image_url && (
-                    <div className="w-full h-64 -mt-8 -mx-8 mb-6 overflow-hidden rounded-t-3xl">
-                      <img
-                        src={`${API_BASE_URL}${event.image_url}`}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
+            <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
+            <p className="section-subtitle">
+              {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
+            </p>
+            {services.length === 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => (
+                  <LoadingSkeleton key={i} type="service" />
+                ))}
+              </div>
+            ) : (
+              <ItemCarousel>
+                {services.map((service, idx) => (
+                  <ScrollReveal key={service.id} animation="fade-up" delay={idx * 100}>
+                    <div className="service-card h-full">
+                      <div className="service-icon">{service.icon}</div>
+                      <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
+                      <p className="mb-6 text-lg">{service.description}</p>
+                      {service.features && service.features.length > 0 && (
+                        <ul className="space-y-3 text-left">
+                          {service.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="text-brit-gold mr-3 text-xl">✓</span>
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
-                  )}
-                  <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
-                  <div className="flex items-center text-gray-300 mb-3">
-                    <Calendar size={18} className="mr-3 text-brit-gold" />
-                    <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
-                  </div>
-                  {event.venue_name && (
-                    <div className="flex items-center text-gray-300 mb-6">
-                      <MapPin size={18} className="mr-3 text-brit-gold" />
-                      <span className="text-lg">{event.venue_name}</span>
-                    </div>
-                  )}
-                  <p className="text-lg leading-relaxed">{event.description}</p>
-                </div>
-              ))}
-            </ItemCarousel>
+                  </ScrollReveal>
+                ))}
+              </ItemCarousel>
+            )}
             <div className="text-center mt-16">
-              <Link to="/events" className="btn btn-secondary">
-                View All Events
+              <Link to="/services" className="btn btn-primary">
+                Learn More About Our Services
               </Link>
             </div>
           </div>
         </section>
+      </ScrollReveal>
+
+      {/* Upcoming Events */}
+      {upcomingEvents.length > 0 && (
+        <ScrollReveal animation="fade-up">
+          <section
+            className="section bg-gray-950"
+            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
+          >
+            <div className="container-custom">
+              <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
+              <ItemCarousel>
+                {upcomingEvents.map((event, idx) => (
+                  <ScrollReveal key={event.id} animation="fade-up" delay={idx * 100}>
+                    <div className="card h-full">
+                      {event.image_url && (
+                        <div className="w-full h-64 -mt-8 -mx-8 mb-6 overflow-hidden rounded-t-3xl">
+                          <img
+                            src={`${API_BASE_URL}${event.image_url}`}
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      )}
+                      <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
+                      <div className="flex items-center text-gray-300 mb-3">
+                        <Calendar size={18} className="mr-3 text-brit-gold" />
+                        <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
+                      </div>
+                      {event.venue_name && (
+                        <div className="flex items-center text-gray-300 mb-6">
+                          <MapPin size={18} className="mr-3 text-brit-gold" />
+                          <span className="text-lg">{event.venue_name}</span>
+                        </div>
+                      )}
+                      <p className="text-lg leading-relaxed">{event.description}</p>
+                    </div>
+                  </ScrollReveal>
+                ))}
+              </ItemCarousel>
+              <div className="text-center mt-16">
+                <Link to="/events" className="btn btn-secondary">
+                  View All Events
+                </Link>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
       )}
 
       {/* Testimonials */}
       {reviews.length > 0 && (
-        <section
-          className="section bg-gradient-to-b from-gray-900 to-gray-950"
-          style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
-        >
-          <div className="container-custom">
-            <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
-            <ItemCarousel>
-              {reviews.map((review) => (
-                <div key={review.id} className="review-card h-full">
-                  <div className="review-stars">
-                    {[...Array(review.rating || 5)].map((_, i) => (
-                      <Star key={i} size={24} fill="currentColor" />
-                    ))}
-                  </div>
-                  <p className="review-text">"{review.review_text}"</p>
-                  <div>
-                    <p className="review-author">{review.author_name}</p>
-                    <p className="text-gray-300 text-base">{review.venue_name}</p>
-                  </div>
-                </div>
-              ))}
-            </ItemCarousel>
-          </div>
-        </section>
+        <ScrollReveal animation="fade-up">
+          <section
+            className="section bg-gradient-to-b from-gray-900 to-gray-950"
+            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
+          >
+            <div className="container-custom">
+              <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
+              <ItemCarousel>
+                {reviews.map((review, idx) => (
+                  <ScrollReveal key={review.id} animation="fade-up" delay={idx * 100}>
+                    <div className="review-card h-full">
+                      <div className="review-stars">
+                        {[...Array(review.rating || 5)].map((_, i) => (
+                          <Star key={i} size={24} fill="currentColor" />
+                        ))}
+                      </div>
+                      <p className="review-text">"{review.review_text}"</p>
+                      <div>
+                        <p className="review-author">{review.author_name}</p>
+                        <p className="text-gray-300 text-base">{review.venue_name}</p>
+                      </div>
+                    </div>
+                  </ScrollReveal>
+                ))}
+              </ItemCarousel>
+            </div>
+          </section>
+        </ScrollReveal>
       )}
 
       {/* Photo Gallery Section */}
       {galleryImages.length > 0 && (
-        <section
-          className="section bg-gray-950"
-          style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
-        >
-          <div className="container-custom">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
-                <Camera className="text-brit-red" size={40} />
-              </div>
-              <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
-            </div>
-            <ItemCarousel>
-              {galleryImages.map((image) => (
-                <div key={image.id} className="gallery-item">
-                  <img
-                    src={`${API_BASE_URL}${image.image_url}`}
-                    alt={image.title || 'Event photo'}
-                  />
-                  {image.title && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-                      <div className="p-6 text-white">
-                        <p className="font-black text-xl uppercase">{image.title}</p>
-                        {image.category && (
-                          <p className="text-brit-gold mt-1">{image.category}</p>
-                        )}
-                      </div>
-                    </div>
-                  )}
+        <ScrollReveal animation="fade-up">
+          <section
+            className="section bg-gray-950"
+            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
+          >
+            <div className="container-custom">
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
+                  <Camera className="text-brit-red" size={40} />
                 </div>
-              ))}
-            </ItemCarousel>
-            <div className="text-center mt-16">
-              <Link to="/gallery" className="btn btn-primary inline-flex items-center">
-                View Full Gallery
-                <ArrowRight size={24} className="ml-3" />
-              </Link>
+                <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
+              </div>
+              <ItemCarousel>
+                {galleryImages.map((image, idx) => (
+                  <ScrollReveal key={image.id} animation="scale-up" delay={idx * 100}>
+                    <div className="gallery-item">
+                      <img
+                        src={`${API_BASE_URL}${image.image_url}`}
+                        alt={image.title || 'Event photo'}
+                        loading="lazy"
+                      />
+                      {image.title && (
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
+                          <div className="p-6 text-white">
+                            <p className="font-black text-xl uppercase">{image.title}</p>
+                            {image.category && (
+                              <p className="text-brit-gold mt-1">{image.category}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </ScrollReveal>
+                ))}
+              </ItemCarousel>
+              <div className="text-center mt-16">
+                <Link to="/gallery" className="btn btn-primary inline-flex items-center">
+                  View Full Gallery
+                  <ArrowRight size={24} className="ml-3" />
+                </Link>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </ScrollReveal>
       )}
 
       {/* Meet the Team Section */}
       {teamMembers.length > 0 && (
-        <section
-          className="section bg-gradient-to-b from-gray-900 to-gray-950"
-          style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
-        >
-          <div className="container-custom">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
-                <Users className="text-brit-gold" size={40} />
-              </div>
-              <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
-            </div>
-            <ItemCarousel>
-              {teamMembers.map((member) => (
-                <div key={member.id} className="team-card">
-                  {member.image_url ? (
-                    <div className="team-avatar">
-                      <img
-                        src={`${API_BASE_URL}${member.image_url}`}
-                        alt={member.name}
-                      />
-                    </div>
-                  ) : (
-                    <div className="team-avatar flex items-center justify-center bg-gray-800">
-                      <Users size={80} className="text-brit-red" />
-                    </div>
-                  )}
-                  <h3 className="text-3xl font-black mb-2 text-white uppercase">
-                    {member.name}
-                  </h3>
-                  <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
-                  {member.bio && (
-                    <p className="text-gray-300 text-lg leading-relaxed">{member.bio}</p>
-                  )}
+        <ScrollReveal animation="fade-up">
+          <section
+            className="section bg-gradient-to-b from-gray-900 to-gray-950"
+            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
+          >
+            <div className="container-custom">
+              <div className="text-center mb-16">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
+                  <Users className="text-brit-gold" size={40} />
                 </div>
-              ))}
-            </ItemCarousel>
-            {teamMembers.length > 3 && (
-              <div className="text-center mt-16">
-                <Link to="/team" className="btn btn-secondary inline-flex items-center">
-                  Meet the Full Team
-                  <ArrowRight size={24} className="ml-3" />
-                </Link>
+                <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
               </div>
-            )}
-          </div>
-        </section>
+              <ItemCarousel>
+                {teamMembers.map((member, idx) => (
+                  <ScrollReveal key={member.id} animation="fade-up" delay={idx * 100}>
+                    <div className="team-card">
+                      {member.image_url ? (
+                        <div className="team-avatar">
+                          <img
+                            src={`${API_BASE_URL}${member.image_url}`}
+                            alt={member.name}
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div className="team-avatar flex items-center justify-center bg-gray-800">
+                          <Users size={80} className="text-brit-red" />
+                        </div>
+                      )}
+                      <h3 className="text-3xl font-black mb-2 text-white uppercase">
+                        {member.name}
+                      </h3>
+                      <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
+                      {member.bio && (
+                        <p className="text-gray-300 text-lg leading-relaxed">{member.bio}</p>
+                      )}
+                    </div>
+                  </ScrollReveal>
+                ))}
+              </ItemCarousel>
+              {teamMembers.length > 3 && (
+                <div className="text-center mt-16">
+                  <Link to="/team" className="btn btn-secondary inline-flex items-center">
+                    Meet the Full Team
+                    <ArrowRight size={24} className="ml-3" />
+                  </Link>
+                </div>
+              )}
+            </div>
+          </section>
+        </ScrollReveal>
       )}
 
       {/* Question of the Day */}
@@ -320,19 +393,25 @@ const Home = () => {
       <SocialMediaFeed />
 
       {/* CTA Section */}
-      <section className="section" style={{
-        background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
-      }}>
-        <div className="container-custom text-center">
-          <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase">Ready to Book?</h2>
-          <p className="text-2xl md:text-3xl mb-12 max-w-3xl mx-auto text-brit-gold font-bold">
-            Get in touch today to discuss your quiz night, race night, or special event requirements.
-          </p>
-          <Link to="/contact" className="btn btn-secondary text-xl">
-            Contact Us Now
-          </Link>
-        </div>
-      </section>
+      <ScrollReveal animation="scale-up">
+        <section className="section" style={{
+          background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
+        }}>
+          <div className="container-custom text-center">
+            <div className="inline-flex items-center justify-center p-4 bg-white/20 rounded-full mb-6">
+              <Zap className="text-white" size={48} />
+            </div>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase">Ready to Book?</h2>
+            <p className="text-2xl md:text-3xl mb-12 max-w-3xl mx-auto text-brit-gold font-bold">
+              Get in touch today to discuss your quiz night, race night, or special event requirements.
+            </p>
+            <Link to="/contact" className="btn btn-secondary text-xl hover:scale-105 transform transition-transform">
+              Contact Us Now
+            </Link>
+          </div>
+        </section>
+      </ScrollReveal>
+    </div>
     </div>
   );
 };
