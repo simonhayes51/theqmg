@@ -8,6 +8,7 @@ import Events from './pages/Events';
 import Venues from './pages/Venues';
 import Services from './pages/Services';
 import Team from './pages/Team';
+import TeamMember from './pages/TeamMember';
 import Gallery from './pages/Gallery';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
@@ -37,6 +38,7 @@ function App() {
               <Route path="/venues" element={<Venues />} />
               <Route path="/services" element={<Services />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/team/:id" element={<TeamMember />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
