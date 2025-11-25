@@ -16,7 +16,8 @@
   }
 
   body {
-    @apply bg-gray-950 text-gray-100 font-sans antialiased;
+    @apply bg-gray-950 font-sans antialiased;
+    color: #f5f5f5; /* Much lighter for better readability */
     margin: 0;
     padding: 0;
     overflow-x: hidden;
@@ -46,13 +47,14 @@
 
   p {
     @apply text-base md:text-lg leading-relaxed;
-    color: #d1d5db; /* gray-300 */
+    color: #e8e8e8; /* Much lighter gray for better contrast */
   }
 }
 
 /* Navigation - Clean & Professional */
 nav {
-  @apply bg-gray-900/98 backdrop-blur-md;
+  background: rgba(17, 24, 39, 0.98); /* gray-900 with 98% opacity */
+  @apply backdrop-blur-md;
   border-bottom: 2px solid #003DA5;
   position: sticky;
   top: 0;
@@ -126,16 +128,6 @@ nav {
 .hero-pattern {
   display: none; /* Simplified - no pattern needed */
 }
-  line-height: 0.9;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, #ffffff 0%, #FFB700 50%, #DC143C 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  /* Strong text shadow for readability over any background */
-  filter: drop-shadow(0 4px 30px rgba(0, 0, 0, 0.9)) drop-shadow(0 2px 10px rgba(0, 0, 0, 1));
-  animation: fadeInUp 0.8s ease-out;
-}
 
 .hero-subtitle {
   font-size: clamp(1.5rem, 4vw, 2.5rem);
@@ -192,13 +184,13 @@ nav {
   background-attachment: fixed; /* Parallax effect */
 }
 
-/* Default backgrounds when no image */
+/* Default backgrounds when no image - Better contrast */
 .section:nth-child(even):not([style*="background-image"]) {
-  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+  background: linear-gradient(180deg, #0a0f1f 0%, #1a1a2e 100%);
 }
 
 .section:nth-child(odd):not([style*="background-image"]) {
-  background: #0f172a;
+  background: #0f1419;
 }
 
 /* Text shadow for readability on background images */
@@ -254,8 +246,9 @@ nav {
 }
 
 .section-subtitle {
-  @apply text-center text-gray-300 mb-12 text-lg md:text-xl max-w-3xl mx-auto;
+  @apply text-center mb-12 text-lg md:text-xl max-w-3xl mx-auto;
   font-weight: 400;
+  color: #e8e8e8; /* Much better contrast */
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -280,7 +273,7 @@ nav {
 }
 
 .card p {
-  color: #d1d5db;
+  color: #e8e8e8; /* Lighter for better readability */
 }
 
 .card:hover {
@@ -467,7 +460,7 @@ nav {
 
 .service-card p,
 .service-card li {
-  color: #e5e7eb;
+  color: #f0f0f0; /* Even lighter for better readability */
 }
 
 .service-card:hover {
@@ -692,10 +685,24 @@ footer {
   box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
 }
 
+/* Carousel Mobile Optimizations */
+@media (max-width: 1024px) {
+  /* Make carousel navigation more prominent on tablets and phones */
+  .relative button[aria-label*="section"] {
+    padding: 0.75rem;
+  }
+
+  .relative button[aria-label*="section"] svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .section {
-    @apply py-16 px-4;
+    @apply py-12 px-4;
+    min-height: 80vh; /* Ensure sections take up viewport on mobile */
   }
 
   .hero-section, .hero-pattern {
@@ -726,12 +733,14 @@ footer {
   }
 
   .service-card {
-    @apply p-8;
+    @apply p-6;
   }
 
   .grid-3,
   .grid-2 {
     @apply gap-6;
+    /* Stack vertically on mobile for better readability */
+    @apply grid-cols-1;
   }
 
   .btn {
@@ -740,11 +749,11 @@ footer {
 
   .section-title {
     font-size: clamp(2rem, 7vw, 3.5rem);
-    @apply mb-12;
+    @apply mb-8;
   }
 
   .section-subtitle {
-    @apply text-lg mb-10;
+    @apply text-base mb-8;
   }
 
   .footer-grid {
@@ -763,7 +772,32 @@ footer {
 
   /* Gallery grid tighter on mobile */
   .gallery-grid {
-    @apply gap-4;
+    @apply gap-4 grid-cols-1;
+  }
+
+  /* Carousel controls optimization for mobile */
+  .relative button[aria-label*="section"] {
+    padding: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .relative button[aria-label*="section"] svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Move counter to top-left on mobile to avoid button overlap */
+  .absolute.top-8.right-8 {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Adjust dots for mobile */
+  .absolute.bottom-8 {
+    bottom: 1rem;
   }
 }
 
