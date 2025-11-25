@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Star, Users, Image, Settings, Mail, Briefcase, RefreshCw, Shield, Activity } from 'lucide-react';
+import { Calendar, MapPin, Star, Users, Image, Settings, Mail, Briefcase, RefreshCw, Shield, Activity, Trophy } from 'lucide-react';
 import ScrollReveal from '../../hooks/useScrollAnimation';
 
 const Dashboard = () => {
@@ -11,6 +11,7 @@ const Dashboard = () => {
     { to: '/admin/reviews', icon: Star, label: 'Reviews', description: 'Manage testimonials' },
     { to: '/admin/team', icon: Users, label: 'Team', description: 'Manage team members' },
     { to: '/admin/gallery', icon: Image, label: 'Gallery', description: 'Upload & manage images' },
+    { to: '/admin/questions', icon: Trophy, label: 'Quiz Questions', description: 'Manage daily quiz questions' },
     { to: '/admin/contact', icon: Mail, label: 'Contact', description: 'View contact submissions' },
     { to: '/admin/settings', icon: Settings, label: 'Settings', description: 'Site settings & content' },
   ];

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import WhatsAppWidget from './components/WhatsAppWidget';
@@ -22,12 +23,14 @@ import AdminGallery from './pages/admin/Gallery';
 import AdminSettings from './pages/admin/Settings';
 import AdminContact from './pages/admin/Contact';
 import AdminRecurringEvents from './pages/admin/RecurringEvents';
+import AdminQuestions from './pages/admin/Questions';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">
@@ -54,6 +57,7 @@ function App() {
               <Route path="/admin/gallery" element={<ProtectedRoute><AdminGallery /></ProtectedRoute>} />
               <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
               <Route path="/admin/contact" element={<ProtectedRoute><AdminContact /></ProtectedRoute>} />
+              <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestions /></ProtectedRoute>} />
             </Routes>
           </main>
           <Footer />

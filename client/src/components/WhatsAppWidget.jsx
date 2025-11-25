@@ -47,7 +47,7 @@ const WhatsAppWidget = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce"
+          className="fixed bottom-6 left-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all hover:scale-110 z-50 animate-bounce"
           aria-label="Chat on WhatsApp"
         >
           <MessageCircle size={28} />
@@ -56,7 +56,7 @@ const WhatsAppWidget = () => {
 
       {/* WhatsApp Chat Popup */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-200">
+        <div className="fixed bottom-6 left-6 w-80 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-200">
           {/* Header */}
           <div className="bg-green-500 text-white p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
