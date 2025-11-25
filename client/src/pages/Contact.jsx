@@ -145,9 +145,8 @@ const Contact = () => {
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Information */}
-            <ScrollReveal animation="fade-up" delay={0}>
-              <div className="lg:col-span-1">
-                <div className="service-card">
+            <ScrollReveal animation="fade-up" delay={0} className="lg:col-span-1">
+              <div className="service-card">
                   <h2 className="text-2xl font-heading mb-6 text-brit-gold">Contact Information</h2>
 
                   <div className="space-y-6">
@@ -212,13 +211,11 @@ const Contact = () => {
                     </p>
                   </div>
                 </div>
-              </div>
             </ScrollReveal>
 
             {/* Contact Form */}
-            <ScrollReveal animation="fade-up" delay={100}>
-              <div className="lg:col-span-2">
-                <div className="service-card">
+            <ScrollReveal animation="fade-up" delay={100} className="lg:col-span-2">
+              <div className="service-card">
                   <h2 className="text-2xl font-heading mb-6 text-brit-gold">Send Us a Message</h2>
 
                   {success && (
@@ -363,7 +360,6 @@ const Contact = () => {
                     </button>
                   </form>
                 </div>
-              </div>
             </ScrollReveal>
           </div>
         </div>
