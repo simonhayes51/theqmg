@@ -159,8 +159,12 @@ const Home = () => {
       <ScrollReveal animation="fade-up">
         <section
           className="section"
-          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {
-            background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
+          style={{
+            backgroundColor: settings.services_bg_color || '#DC143C',
+            backgroundImage: settings.services_bg_image ? `url(${API_BASE_URL}${settings.services_bg_image})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'overlay'
           }}
         >
           <div className="container-custom">
@@ -211,8 +215,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {
-              background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)'
+            style={{
+              backgroundColor: settings.events_bg_color || '#003DA5',
+              backgroundImage: settings.events_bg_image ? `url(${API_BASE_URL}${settings.events_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -262,8 +270,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {
-              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.9) 0%, rgba(0, 61, 165, 0.9) 100%)'
+            style={{
+              backgroundColor: settings.reviews_bg_color || 'rgba(220, 20, 60, 0.9)',
+              backgroundImage: settings.reviews_bg_image ? `url(${API_BASE_URL}${settings.reviews_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -296,8 +308,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {
-              background: 'linear-gradient(135deg, #003DA5 0%, rgba(220, 20, 60, 0.95) 100%)'
+            style={{
+              backgroundColor: settings.gallery_bg_color || '#003DA5',
+              backgroundImage: settings.gallery_bg_image ? `url(${API_BASE_URL}${settings.gallery_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -346,8 +362,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {
-              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.95) 0%, rgba(0, 61, 165, 0.95) 100%)'
+            style={{
+              backgroundColor: settings.team_bg_color || '#DC143C',
+              backgroundImage: settings.team_bg_image ? `url(${API_BASE_URL}${settings.team_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
