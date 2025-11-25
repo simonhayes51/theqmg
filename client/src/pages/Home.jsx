@@ -4,7 +4,7 @@ import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } 
 import { Calendar, MapPin, Star, ArrowRight, Users, Camera } from 'lucide-react';
 import QuestionOfTheDay from '../components/QuestionOfTheDay';
 import SocialMediaFeed from '../components/SocialMediaFeed';
-import SectionCarousel from '../components/SectionCarousel';
+import ItemCarousel from '../components/ItemCarousel';
 
 // Get API URL from environment
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
@@ -111,210 +111,207 @@ const Home = () => {
         </div>
       </section>
 
-      {/* MAIN CONTENT CAROUSEL - Swipe through sections on mobile! */}
-      <SectionCarousel>
-        {/* Services Section */}
+      {/* Services Section */}
+      <section
+        className="section bg-gradient-to-b from-gray-950 to-gray-900"
+        style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
+      >
+        <div className="container-custom">
+          <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
+          <p className="section-subtitle">
+            {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
+          </p>
+          <ItemCarousel>
+            {services.map((service) => (
+              <div key={service.id} className="service-card h-full">
+                <div className="service-icon">{service.icon}</div>
+                <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
+                <p className="mb-6 text-lg">{service.description}</p>
+                {service.features && service.features.length > 0 && (
+                  <ul className="space-y-3 text-left">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start">
+                        <span className="text-brit-gold mr-3 text-xl">✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </ItemCarousel>
+          <div className="text-center mt-16">
+            <Link to="/services" className="btn btn-primary">
+              Learn More About Our Services
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Upcoming Events */}
+      {upcomingEvents.length > 0 && (
         <section
-          className="section"
-          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {}}
+          className="section bg-gray-950"
+          style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
         >
           <div className="container-custom">
-            <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
-            <p className="section-subtitle">
-              {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
-            </p>
-            <div className="grid-3">
-              {services.map((service) => (
-                <div key={service.id} className="service-card">
-                  <div className="service-icon">{service.icon}</div>
-                  <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
-                  <p className="mb-6 text-lg">{service.description}</p>
-                  {service.features && service.features.length > 0 && (
-                    <ul className="space-y-3 text-left">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start">
-                          <span className="text-brit-gold mr-3 text-xl">✓</span>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+            <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
+            <ItemCarousel>
+              {upcomingEvents.map((event) => (
+                <div key={event.id} className="card h-full">
+                  {event.image_url && (
+                    <div className="w-full h-64 -mt-8 -mx-8 mb-6 overflow-hidden rounded-t-3xl">
+                      <img
+                        src={`${API_BASE_URL}${event.image_url}`}
+                        alt={event.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                   )}
+                  <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
+                  <div className="flex items-center text-gray-300 mb-3">
+                    <Calendar size={18} className="mr-3 text-brit-gold" />
+                    <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
+                  </div>
+                  {event.venue_name && (
+                    <div className="flex items-center text-gray-300 mb-6">
+                      <MapPin size={18} className="mr-3 text-brit-gold" />
+                      <span className="text-lg">{event.venue_name}</span>
+                    </div>
+                  )}
+                  <p className="text-lg leading-relaxed">{event.description}</p>
                 </div>
               ))}
-            </div>
+            </ItemCarousel>
             <div className="text-center mt-16">
-              <Link to="/services" className="btn btn-primary">
-                Learn More About Our Services
+              <Link to="/events" className="btn btn-secondary">
+                View All Events
               </Link>
             </div>
           </div>
         </section>
+      )}
 
-        {/* Upcoming Events */}
-        {upcomingEvents.length > 0 && (
-          <section
-            className="section"
-            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {}}
-          >
-            <div className="container-custom">
-              <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
-              <div className="grid-3">
-                {upcomingEvents.map((event) => (
-                  <div key={event.id} className="card">
-                    {event.image_url && (
-                      <div className="w-full h-64 -mt-10 -mx-10 mb-6 overflow-hidden rounded-t-3xl">
-                        <img
-                          src={`${API_BASE_URL}${event.image_url}`}
-                          alt={event.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
-                    <div className="flex items-center text-gray-200 mb-3">
-                      <Calendar size={18} className="mr-3 text-brit-gold" />
-                      <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
-                    </div>
-                    {event.venue_name && (
-                      <div className="flex items-center text-gray-200 mb-6">
-                        <MapPin size={18} className="mr-3 text-brit-gold" />
-                        <span className="text-lg">{event.venue_name}</span>
-                      </div>
-                    )}
-                    <p className="text-lg leading-relaxed">{event.description}</p>
+      {/* Testimonials */}
+      {reviews.length > 0 && (
+        <section
+          className="section bg-gradient-to-b from-gray-900 to-gray-950"
+          style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
+        >
+          <div className="container-custom">
+            <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
+            <ItemCarousel>
+              {reviews.map((review) => (
+                <div key={review.id} className="review-card h-full">
+                  <div className="review-stars">
+                    {[...Array(review.rating || 5)].map((_, i) => (
+                      <Star key={i} size={24} fill="currentColor" />
+                    ))}
                   </div>
-                ))}
-              </div>
-              <div className="text-center mt-16">
-                <Link to="/events" className="btn btn-secondary">
-                  View All Events
-                </Link>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Testimonials */}
-        {reviews.length > 0 && (
-          <section
-            className="section"
-            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {}}
-          >
-            <div className="container-custom">
-              <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
-              <div className="grid-3">
-                {reviews.map((review) => (
-                  <div key={review.id} className="review-card">
-                    <div className="review-stars">
-                      {[...Array(review.rating || 5)].map((_, i) => (
-                        <Star key={i} size={24} fill="currentColor" />
-                      ))}
-                    </div>
-                    <p className="review-text">"{review.review_text}"</p>
-                    <div>
-                      <p className="review-author">{review.author_name}</p>
-                      <p className="text-gray-300 text-base">{review.venue_name}</p>
-                    </div>
+                  <p className="review-text">"{review.review_text}"</p>
+                  <div>
+                    <p className="review-author">{review.author_name}</p>
+                    <p className="text-gray-300 text-base">{review.venue_name}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Photo Gallery Section */}
-        {galleryImages.length > 0 && (
-          <section
-            className="section"
-            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
-          >
-            <div className="container-custom">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
-                  <Camera className="text-brit-red" size={40} />
                 </div>
-                <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
+              ))}
+            </ItemCarousel>
+          </div>
+        </section>
+      )}
+
+      {/* Photo Gallery Section */}
+      {galleryImages.length > 0 && (
+        <section
+          className="section bg-gray-950"
+          style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {}}
+        >
+          <div className="container-custom">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
+                <Camera className="text-brit-red" size={40} />
               </div>
-              <div className="gallery-grid">
-                {galleryImages.map((image) => (
-                  <div key={image.id} className="gallery-item">
-                    <img
-                      src={`${API_BASE_URL}${image.image_url}`}
-                      alt={image.title || 'Event photo'}
-                    />
-                    {image.title && (
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-                        <div className="p-6 text-white">
-                          <p className="font-black text-xl uppercase">{image.title}</p>
-                          {image.category && (
-                            <p className="text-brit-gold mt-1">{image.category}</p>
-                          )}
-                        </div>
+              <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
+            </div>
+            <ItemCarousel>
+              {galleryImages.map((image) => (
+                <div key={image.id} className="gallery-item">
+                  <img
+                    src={`${API_BASE_URL}${image.image_url}`}
+                    alt={image.title || 'Event photo'}
+                  />
+                  {image.title && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
+                      <div className="p-6 text-white">
+                        <p className="font-black text-xl uppercase">{image.title}</p>
+                        {image.category && (
+                          <p className="text-brit-gold mt-1">{image.category}</p>
+                        )}
                       </div>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </ItemCarousel>
+            <div className="text-center mt-16">
+              <Link to="/gallery" className="btn btn-primary inline-flex items-center">
+                View Full Gallery
+                <ArrowRight size={24} className="ml-3" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Meet the Team Section */}
+      {teamMembers.length > 0 && (
+        <section
+          className="section bg-gradient-to-b from-gray-900 to-gray-950"
+          style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
+        >
+          <div className="container-custom">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
+                <Users className="text-brit-gold" size={40} />
               </div>
+              <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
+            </div>
+            <ItemCarousel>
+              {teamMembers.map((member) => (
+                <div key={member.id} className="team-card">
+                  {member.image_url ? (
+                    <div className="team-avatar">
+                      <img
+                        src={`${API_BASE_URL}${member.image_url}`}
+                        alt={member.name}
+                      />
+                    </div>
+                  ) : (
+                    <div className="team-avatar flex items-center justify-center bg-gray-800">
+                      <Users size={80} className="text-brit-red" />
+                    </div>
+                  )}
+                  <h3 className="text-3xl font-black mb-2 text-white uppercase">
+                    {member.name}
+                  </h3>
+                  <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
+                  {member.bio && (
+                    <p className="text-gray-300 text-lg leading-relaxed">{member.bio}</p>
+                  )}
+                </div>
+              ))}
+            </ItemCarousel>
+            {teamMembers.length > 3 && (
               <div className="text-center mt-16">
-                <Link to="/gallery" className="btn btn-primary inline-flex items-center">
-                  View Full Gallery
+                <Link to="/team" className="btn btn-secondary inline-flex items-center">
+                  Meet the Full Team
                   <ArrowRight size={24} className="ml-3" />
                 </Link>
               </div>
-            </div>
-          </section>
-        )}
-
-        {/* Meet the Team Section */}
-        {teamMembers.length > 0 && (
-          <section
-            className="section"
-            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {}}
-          >
-            <div className="container-custom">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
-                  <Users className="text-brit-gold" size={40} />
-                </div>
-                <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
-              </div>
-              <div className="team-grid">
-                {teamMembers.slice(0, 3).map((member) => (
-                  <div key={member.id} className="team-card">
-                    {member.image_url ? (
-                      <div className="team-avatar">
-                        <img
-                          src={`${API_BASE_URL}${member.image_url}`}
-                          alt={member.name}
-                        />
-                      </div>
-                    ) : (
-                      <div className="team-avatar flex items-center justify-center bg-gray-800">
-                        <Users size={80} className="text-brit-red" />
-                      </div>
-                    )}
-                    <h3 className="text-3xl font-black mb-2 text-white uppercase">
-                      {member.name}
-                    </h3>
-                    <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
-                    {member.bio && (
-                      <p className="text-gray-200 text-lg leading-relaxed">{member.bio}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {teamMembers.length > 3 && (
-                <div className="text-center mt-16">
-                  <Link to="/team" className="btn btn-secondary inline-flex items-center">
-                    Meet the Full Team
-                    <ArrowRight size={24} className="ml-3" />
-                  </Link>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
-      </SectionCarousel>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Question of the Day */}
       <QuestionOfTheDay />

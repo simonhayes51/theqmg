@@ -254,17 +254,13 @@ nav {
 
 /* Cards - Clean & Modern */
 .card {
-  @apply bg-gray-900 rounded-2xl p-8 transition-all duration-300;
+  @apply rounded-2xl p-8 transition-all duration-300;
+  background: rgba(17, 24, 39, 0.8); /* gray-900 with transparency */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(0, 61, 165, 0.2);
+  border: 2px solid rgba(0, 61, 165, 0.3);
   position: relative;
-  color: #ffffff;
-}
-
-/* Fix white-on-white text when card has white background */
-.card.bg-white,
-.card.bg-white *:not(.text-quiz-blue):not(.text-quiz-red):not(.text-gray-500):not(.text-gray-600):not(.text-red-500):not(.text-green-500) {
-  color: #1f2937 !important; /* gray-800 for good contrast */
+  color: #f5f5f5;
+  backdrop-filter: blur(10px);
 }
 
 .card h3 {
@@ -273,13 +269,14 @@ nav {
 }
 
 .card p {
-  color: #e8e8e8; /* Lighter for better readability */
+  color: #f0f0f0; /* Very light for maximum readability */
 }
 
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 61, 165, 0.3);
-  border-color: rgba(0, 61, 165, 0.4);
+  box-shadow: 0 8px 30px rgba(0, 61, 165, 0.5);
+  border-color: rgba(0, 61, 165, 0.6);
+  background: rgba(17, 24, 39, 0.95);
 }
 
 /* Buttons - Clean & Professional */
@@ -445,13 +442,14 @@ nav {
 
 /* Services Grid */
 .service-card {
-  @apply text-center p-12 rounded-3xl transition-all duration-500;
-  background: linear-gradient(135deg, rgba(220, 20, 60, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%);
-  border: 2px solid rgba(220, 20, 60, 0.4);
+  @apply text-center p-10 rounded-3xl transition-all duration-500;
+  background: rgba(17, 24, 39, 0.9); /* Solid dark background */
+  border: 2px solid rgba(255, 183, 0, 0.3);
   box-shadow:
-    0 0 40px rgba(220, 20, 60, 0.15),
+    0 0 40px rgba(255, 183, 0, 0.1),
     0 10px 40px rgba(0, 0, 0, 0.5);
-  color: #ffffff;
+  color: #f5f5f5;
+  backdrop-filter: blur(10px);
 }
 
 .service-card h3 {
@@ -460,16 +458,17 @@ nav {
 
 .service-card p,
 .service-card li {
-  color: #f0f0f0; /* Even lighter for better readability */
+  color: #f0f0f0; /* Very light for maximum readability */
 }
 
 .service-card:hover {
-  transform: translateY(-15px) scale(1.03);
-  background: linear-gradient(135deg, #DC143C 0%, #003DA5 100%);
+  transform: translateY(-10px) scale(1.02);
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.3) 0%, rgba(0, 61, 165, 0.3) 100%),
+              rgba(17, 24, 39, 0.95);
   border-color: #FFB700;
   box-shadow:
-    0 0 60px rgba(220, 20, 60, 0.6),
-    0 20px 60px rgba(220, 20, 60, 0.4);
+    0 0 60px rgba(255, 183, 0, 0.4),
+    0 20px 60px rgba(220, 20, 60, 0.3);
 }
 
 .service-icon {
@@ -481,19 +480,22 @@ nav {
 
 /* Reviews */
 .review-card {
-  @apply bg-gradient-to-br from-gray-900 to-gray-800 p-10 rounded-3xl;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  @apply p-10 rounded-3xl;
+  background: rgba(17, 24, 39, 0.9);
+  border: 2px solid rgba(255, 183, 0, 0.3);
   box-shadow:
     0 10px 40px rgba(0, 0, 0, 0.5),
-    0 0 60px rgba(239, 68, 68, 0.05);
+    0 0 60px rgba(255, 183, 0, 0.1);
   transition: all 0.3s;
+  backdrop-filter: blur(10px);
 }
 
 .review-card:hover {
-  border-color: rgba(239, 68, 68, 0.4);
+  border-color: rgba(255, 183, 0, 0.6);
   box-shadow:
     0 15px 50px rgba(0, 0, 0, 0.6),
-    0 0 80px rgba(239, 68, 68, 0.15);
+    0 0 80px rgba(255, 183, 0, 0.2);
+  background: rgba(17, 24, 39, 0.95);
 }
 
 .review-stars {
@@ -502,12 +504,14 @@ nav {
 }
 
 .review-text {
-  @apply text-gray-100 italic mb-8 text-xl;
+  @apply italic mb-8 text-xl;
+  color: #f0f0f0;
   line-height: 1.8;
 }
 
 .review-author {
-  @apply font-bold text-white text-lg;
+  @apply font-bold text-lg;
+  color: #ffffff;
 }
 
 /* Footer */
