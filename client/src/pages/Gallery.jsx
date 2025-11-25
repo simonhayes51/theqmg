@@ -44,15 +44,15 @@ const Gallery = () => {
   };
 
   const nextImage = () => {
-    const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
-    const nextIndex = (currentIndex + 1) % filteredImages.length;
-    setSelectedImage(filteredImages[nextIndex]);
+    const currentIndex = images.findIndex(img => img.id === selectedImage.id);
+    const nextIndex = (currentIndex + 1) % images.length;
+    setSelectedImage(images[nextIndex]);
   };
 
   const prevImage = () => {
-    const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
-    const prevIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
-    setSelectedImage(filteredImages[prevIndex]);
+    const currentIndex = images.findIndex(img => img.id === selectedImage.id);
+    const prevIndex = (currentIndex - 1 + images.length) % images.length;
+    setSelectedImage(images[prevIndex]);
   };
 
   // Keyboard navigation
@@ -66,7 +66,7 @@ const Gallery = () => {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedImage, filteredImages]);
+  }, [selectedImage, images]);
 
   if (loading) {
     return (
@@ -190,7 +190,7 @@ const Gallery = () => {
           </button>
 
           {/* Navigation Buttons */}
-          {filteredImages.length > 1 && (
+          {images.length > 1 && (
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prevImage(); }}

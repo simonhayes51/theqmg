@@ -131,7 +131,7 @@ const Contact = () => {
       <ScrollReveal animation="fade-down">
         <section className="hero-section" style={{
           background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)',
-          minHeight: '40vh'
+          minHeight: '45vh'
         }}>
           <div className="hero-overlay" />
           <div className="hero-content">
@@ -141,7 +141,7 @@ const Contact = () => {
         </section>
       </ScrollReveal>
 
-      <section className="section bg-gray-950 py-20">
+      <section className="section bg-gray-950">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Information */}

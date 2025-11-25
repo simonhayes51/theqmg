@@ -119,9 +119,10 @@ const SocialMediaFeed = () => {
             <h2 className="section-title text-brit-gold">Follow Our Journey</h2>
             <p className="section-subtitle">Stay updated with our latest quiz nights and events!</p>
 
-            {/* Social Media Icons */}
+            {/* Social Media Icons - Always show them */}
             <div className="flex justify-center gap-6 mt-8">
-              {socialLinks.instagram_url && (
+              {/* Instagram */}
+              {socialLinks.instagram_url ? (
                 <a
                   href={socialLinks.instagram_url}
                   target="_blank"
@@ -138,8 +139,21 @@ const SocialMediaFeed = () => {
                     Instagram
                   </span>
                 </a>
+              ) : (
+                <div className="group relative">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{
+                    background: 'linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #F77737 100%)'
+                  }}>
+                    <Instagram size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Instagram
+                  </span>
+                </div>
               )}
-              {socialLinks.facebook_url && (
+
+              {/* Facebook */}
+              {socialLinks.facebook_url ? (
                 <a
                   href={socialLinks.facebook_url}
                   target="_blank"
@@ -154,8 +168,19 @@ const SocialMediaFeed = () => {
                     Facebook
                   </span>
                 </a>
+              ) : (
+                <div className="group relative">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-blue-600">
+                    <Facebook size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Facebook
+                  </span>
+                </div>
               )}
-              {socialLinks.twitter_url && (
+
+              {/* Twitter */}
+              {socialLinks.twitter_url ? (
                 <a
                   href={socialLinks.twitter_url}
                   target="_blank"
@@ -170,6 +195,15 @@ const SocialMediaFeed = () => {
                     Twitter
                   </span>
                 </a>
+              ) : (
+                <div className="group relative">
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center bg-sky-500">
+                    <Twitter size={28} className="text-white" />
+                  </div>
+                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Twitter
+                  </span>
+                </div>
               )}
             </div>
           </div>
