@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { galleryAPI } from '../services/api';
-import { X, Search, Filter, Zap } from 'lucide-react';
+import { X, Zap } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
 // Get API URL from environment
@@ -11,8 +11,6 @@ const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
@@ -33,20 +31,6 @@ const Gallery = () => {
       setLoading(false);
     }
   };
-
-  // Get unique categories
-  const categories = ['all', ...new Set(images.map(img => img.category).filter(Boolean))];
-
-  // Filter images
-  const filteredImages = images.filter(image => {
-    const matchesSearch = !searchTerm ||
-      image.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      image.description?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesCategory = filterCategory === 'all' || image.category === filterCategory;
-
-    return matchesSearch && matchesCategory;
-  });
 
   // Lightbox handlers
   const openLightbox = (image) => {
@@ -135,81 +119,29 @@ const Gallery = () => {
         </section>
       </ScrollReveal>
 
-      {/* Search and Filters */}
-      {images.length > 0 && (
-        <section className="bg-gray-900 border-b-2 border-brit-gold/30 py-6">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search images..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="input pl-10 w-full bg-gray-800 border-gray-700 text-gray-200 placeholder-gray-500"
-                />
-              </div>
-
-              {/* Category Filter */}
-              <div className="relative">
-                <Filter className="absolute left-3 top-3.5 text-gray-400" size={20} />
-                <select
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                  className="input pl-10 w-full bg-gray-800 border-gray-700 text-gray-200"
-                >
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>
-                      {cat === 'all' ? 'All Categories' : cat.charAt(0).toUpperCase() + cat.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Gallery Grid */}
       <section className="section bg-gray-950">
         <div className="container-custom">
-          {filteredImages.length === 0 ? (
+          {images.length === 0 ? (
             <ScrollReveal animation="fade-up">
               <div className="text-center py-16">
                 <div className="text-6xl mb-4">📸</div>
-                <h3 className="text-2xl font-heading mb-2 text-brit-gold">
-                  {searchTerm || filterCategory !== 'all' ? 'No Matching Images' : 'No Images Yet'}
-                </h3>
+                <h3 className="text-2xl font-heading mb-2 text-brit-gold">No Images Yet</h3>
                 <p className="text-gray-300 mb-6 text-lg">
-                  {searchTerm || filterCategory !== 'all'
-                    ? 'Try adjusting your search or filters'
-                    : 'Check back soon for photos from our events!'}
+                  Check back soon for photos from our events!
                 </p>
-                {(searchTerm || filterCategory !== 'all') && (
-                  <button
-                    onClick={() => {
-                      setSearchTerm('');
-                      setFilterCategory('all');
-                    }}
-                    className="btn btn-outline"
-                  >
-                    Clear Filters
-                  </button>
-                )}
               </div>
             </ScrollReveal>
           ) : (
             <>
               <div className="text-center mb-8">
                 <p className="text-gray-300 text-lg">
-                  Showing {filteredImages.length} {filteredImages.length === 1 ? 'image' : 'images'}
+                  {images.length} {images.length === 1 ? 'image' : 'images'}
                 </p>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {filteredImages.map((image, index) => (
+                {images.map((image, index) => (
                   <ScrollReveal key={image.id} animation="fade-up" delay={index * 50}>
                     <div
                       className="aspect-square relative group cursor-pointer overflow-hidden rounded-lg border-2 border-gray-800 hover:border-brit-gold transition-all duration-300"

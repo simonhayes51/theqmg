@@ -103,18 +103,13 @@ const SocialMediaFeed = () => {
     }
   };
 
-  // Don't show loading state, just hide the section
+  // Don't show loading state
   if (loading) {
     return null;
   }
 
-  // Don't show error messages or admin instructions to public users
-  // Only show the section if we have real posts (not placeholder)
+  // Check if we have real posts (not placeholder)
   const hasRealPosts = posts.length > 0 && posts[0]?.platform !== 'placeholder';
-
-  if (!hasRealPosts) {
-    return null;
-  }
 
   return (
     <section className="section bg-gray-900">
@@ -180,73 +175,77 @@ const SocialMediaFeed = () => {
           </div>
         </ScrollReveal>
 
-        {/* Social Media Feed Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-          {posts.slice(0, 6).map((post, index) => (
-            <ScrollReveal key={post.id} animation="fade-up" delay={index * 100}>
-              <div className="group relative overflow-hidden rounded-2xl border-2 border-brit-gold/20 hover:border-brit-gold/50 transition-all">
-                {post.permalink ? (
-                  <a href={post.permalink} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={post.image}
-                      alt={post.caption || 'Social media post'}
-                      className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
-                      onError={(e) => {
-                        e.target.src = '/placeholder-post.png';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                      <p className="text-white text-sm line-clamp-4">{post.caption || 'View on ' + post.platform}</p>
-                    </div>
+        {/* Social Media Feed Grid - Only show if we have real posts */}
+        {hasRealPosts && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+              {posts.slice(0, 6).map((post, index) => (
+                <ScrollReveal key={post.id} animation="fade-up" delay={index * 100}>
+                  <div className="group relative overflow-hidden rounded-2xl border-2 border-brit-gold/20 hover:border-brit-gold/50 transition-all">
+                    {post.permalink ? (
+                      <a href={post.permalink} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={post.image}
+                          alt={post.caption || 'Social media post'}
+                          className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                          onError={(e) => {
+                            e.target.src = '/placeholder-post.png';
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                          <p className="text-white text-sm line-clamp-4">{post.caption || 'View on ' + post.platform}</p>
+                        </div>
+                      </a>
+                    ) : (
+                      <>
+                        <img
+                          src={post.image}
+                          alt={post.caption || 'Social media post'}
+                          className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                          <p className="text-white text-sm line-clamp-4">{post.caption}</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+
+            {/* View More Button */}
+            {posts[0]?.platform === 'instagram' && socialLinks.instagram_url && (
+              <ScrollReveal animation="scale-up">
+                <div className="text-center mt-12">
+                  <a
+                    href={socialLinks.instagram_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
+                  >
+                    <Instagram size={20} />
+                    View More on Instagram
                   </a>
-                ) : (
-                  <>
-                    <img
-                      src={post.image}
-                      alt={post.caption || 'Social media post'}
-                      className="w-full h-72 object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                      <p className="text-white text-sm line-clamp-4">{post.caption}</p>
-                    </div>
-                  </>
-                )}
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
+                </div>
+              </ScrollReveal>
+            )}
 
-        {/* View More Button */}
-        {posts[0]?.platform === 'instagram' && socialLinks.instagram_url && (
-          <ScrollReveal animation="scale-up">
-            <div className="text-center mt-12">
-              <a
-                href={socialLinks.instagram_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
-              >
-                <Instagram size={20} />
-                View More on Instagram
-              </a>
-            </div>
-          </ScrollReveal>
-        )}
-
-        {posts[0]?.platform === 'facebook' && socialLinks.facebook_url && (
-          <ScrollReveal animation="scale-up">
-            <div className="text-center mt-12">
-              <a
-                href={socialLinks.facebook_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
-              >
-                <Facebook size={20} />
-                View More on Facebook
-              </a>
-            </div>
-          </ScrollReveal>
+            {posts[0]?.platform === 'facebook' && socialLinks.facebook_url && (
+              <ScrollReveal animation="scale-up">
+                <div className="text-center mt-12">
+                  <a
+                    href={socialLinks.facebook_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary inline-flex items-center gap-2 hover:scale-105 transform transition-transform"
+                  >
+                    <Facebook size={20} />
+                    View More on Facebook
+                  </a>
+                </div>
+              </ScrollReveal>
+            )}
+          </>
         )}
       </div>
     </section>
