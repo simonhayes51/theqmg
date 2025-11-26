@@ -75,7 +75,15 @@ const AdminSettings = () => {
     gallery_bg_image: '',
     team_bg_image: '',
     reviews_bg_image: '',
-    footer_bg_image: ''
+    footer_bg_image: '',
+
+    // Section Background Colors
+    social_proof_bg_color: '#003DA5',
+    services_bg_color: '#DC143C',
+    events_bg_color: '#003DA5',
+    reviews_bg_color: '#DC143C',
+    gallery_bg_color: '#003DA5',
+    team_bg_color: '#DC143C'
   });
 
   const [heroImage, setHeroImage] = useState(null);
@@ -725,13 +733,102 @@ const AdminSettings = () => {
           </div>
         </div>
 
+        {/* Section Background Colors */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <Sparkles className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Colors</h2>
+          </div>
+          <p className="text-gray-600 mb-6">Customize the background colors for each homepage section</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="label font-bold">Social Proof Section Color</label>
+              <input
+                type="color"
+                name="social_proof_bg_color"
+                value={settings.social_proof_bg_color || '#003DA5'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">Stats section (500+ Events, etc.)</p>
+            </div>
+
+            <div>
+              <label className="label font-bold">Services Section Color</label>
+              <input
+                type="color"
+                name="services_bg_color"
+                value={settings.services_bg_color || '#DC143C'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">"What We Offer" section</p>
+            </div>
+
+            <div>
+              <label className="label font-bold">Events Section Color</label>
+              <input
+                type="color"
+                name="events_bg_color"
+                value={settings.events_bg_color || '#003DA5'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">"Upcoming Events" section</p>
+            </div>
+
+            <div>
+              <label className="label font-bold">Reviews Section Color</label>
+              <input
+                type="color"
+                name="reviews_bg_color"
+                value={settings.reviews_bg_color || '#DC143C'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">Testimonials section</p>
+            </div>
+
+            <div>
+              <label className="label font-bold">Gallery Section Color</label>
+              <input
+                type="color"
+                name="gallery_bg_color"
+                value={settings.gallery_bg_color || '#003DA5'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">"See Us in Action" photo gallery</p>
+            </div>
+
+            <div>
+              <label className="label font-bold">Team Section Color</label>
+              <input
+                type="color"
+                name="team_bg_color"
+                value={settings.team_bg_color || '#DC143C'}
+                onChange={handleInputChange}
+                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-1">"Meet the Team" section</p>
+            </div>
+          </div>
+
+          <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
+            <p className="text-sm text-blue-800">
+              <strong>💡 Tip:</strong> If you upload a background image for a section, the color will be used as an overlay. Without an image, the solid color will be displayed.
+            </p>
+          </div>
+        </div>
+
         {/* Section Background Images */}
         <div className="card mb-6">
           <div className="flex items-center mb-6">
             <ImageIcon className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Images</h2>
+            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Images (Optional)</h2>
           </div>
-          <p className="text-gray-600 mb-6">Upload background images for each section on your homepage</p>
+          <p className="text-gray-600 mb-6">Upload background images for each section on your homepage (colors will be used as overlay)</p>
 
           <div className="space-y-8">
             {[

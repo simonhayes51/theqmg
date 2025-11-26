@@ -125,7 +125,7 @@ const Home = () => {
       {/* Social Proof Section */}
       <ScrollReveal animation="fade-up">
         <section className="section" style={{
-          background: 'linear-gradient(135deg, rgba(0, 61, 165, 0.95) 0%, rgba(0, 61, 165, 0.85) 100%)'
+          background: settings.social_proof_bg_color || '#003DA5'
         }}>
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
