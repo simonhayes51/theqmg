@@ -1,12 +1,31 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { settingsAPI } from '../services/api';
 import { Menu, X, LogOut } from 'lucide-react';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState('');
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    loadLogo();
+  }, []);
+
+  const loadLogo = async () => {
+    try {
+      const response = await settingsAPI.getAll();
+      if (response.data?.logo_url) {
+        setLogoUrl(`${API_BASE_URL}${response.data.logo_url}`);
+      }
+    } catch (error) {
+      console.error('Error loading logo:', error);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -28,10 +47,22 @@ const Header = () => {
       <div className="container-custom">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="text-2xl md:text-3xl font-black uppercase tracking-tight bg-gradient-to-r from-white via-brit-red to-brit-gold bg-clip-text text-transparent">
-              THE QUIZ MASTER GENERAL
-            </div>
+          <Link to="/" className="flex items-center space-x-3 relative">
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="THE QUIZ MASTER GENERAL"
+                className="h-16 md:h-20 w-auto object-contain relative z-50 transition-all hover:scale-105"
+                style={{
+                  filter: 'drop-shadow(0 4px 12px rgba(220, 20, 60, 0.4))',
+                  marginBottom: '-1.5rem'
+                }}
+              />
+            ) : (
+              <div className="text-2xl md:text-3xl font-black uppercase tracking-tight bg-gradient-to-r from-white via-brit-red to-brit-gold bg-clip-text text-transparent">
+                THE QUIZ MASTER GENERAL
+              </div>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

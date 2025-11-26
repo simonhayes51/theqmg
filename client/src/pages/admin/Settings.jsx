@@ -41,6 +41,9 @@ const AdminSettings = () => {
     // Hero Image
     hero_image_url: '',
 
+    // Logo
+    logo_url: '',
+
     // Hero Section Content
     hero_title: '',
     hero_subtitle: '',
@@ -88,6 +91,8 @@ const AdminSettings = () => {
 
   const [heroImage, setHeroImage] = useState(null);
   const [heroImagePreview, setHeroImagePreview] = useState(null);
+  const [logo, setLogo] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
   const [sectionBgImages, setSectionBgImages] = useState({});
   const [sectionBgPreviews, setSectionBgPreviews] = useState({});
   const [loading, setLoading] = useState(true);
@@ -118,6 +123,11 @@ const AdminSettings = () => {
       if (settingsObj.hero_image_url) {
         setHeroImagePreview(`${API_BASE_URL}${settingsObj.hero_image_url}`);
       }
+
+      // Set logo preview if it exists
+      if (settingsObj.logo_url) {
+        setLogoPreview(`${API_BASE_URL}${settingsObj.logo_url}`);
+      }
     } catch (error) {
       console.error('Error loading settings:', error);
       showMessage('Failed to load settings. Please refresh the page.', 'error');
@@ -143,6 +153,18 @@ const AdminSettings = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setHeroImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setLogo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -186,6 +208,26 @@ const AdminSettings = () => {
         }
       }
 
+      // Upload logo if one was selected
+      if (logo) {
+        console.log('Uploading logo...');
+        const formData = new FormData();
+        formData.append('image', logo);
+        formData.append('title', 'Site Logo');
+        formData.append('category', 'logo');
+        formData.append('description', 'Site header logo');
+
+        const uploadRes = await galleryAPI.upload(formData);
+        console.log('Logo upload response:', uploadRes.data);
+        if (uploadRes.data && uploadRes.data.image_url) {
+          settings.logo_url = uploadRes.data.image_url;
+          console.log('Logo URL set:', settings.logo_url);
+        } else {
+          console.error('Logo upload succeeded but no image_url in response');
+          throw new Error('Logo upload failed - no image URL returned');
+        }
+      }
+
       // Upload section background images
       const sectionKeys = ['services', 'events', 'gallery', 'team', 'reviews', 'footer'];
       for (const section of sectionKeys) {
@@ -208,6 +250,7 @@ const AdminSettings = () => {
 
       showMessage('✅ Settings saved successfully!', 'success');
       setHeroImage(null);
+      setLogo(null);
       setSectionBgImages({});
 
       // Reload settings to get fresh data
@@ -672,6 +715,63 @@ const AdminSettings = () => {
                   />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Logo */}
+        <div className="card mb-6">
+          <div className="flex items-center mb-6">
+            <ImageIcon className="text-quiz-blue mr-3" size={28} />
+            <h2 className="text-2xl font-heading text-quiz-blue">Site Logo</h2>
+          </div>
+
+          <div>
+            <label className="label">Header Logo</label>
+            <div className="space-y-3">
+              {/* Logo Preview */}
+              {logoPreview && (
+                <div className="relative w-full max-w-md border-2 border-gray-200 rounded overflow-hidden bg-gray-900 p-4">
+                  <img
+                    src={logoPreview}
+                    alt="Logo Preview"
+                    className="w-full h-auto object-contain max-h-32"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLogoPreview(null);
+                      setLogo(null);
+                      setSettings(prev => ({ ...prev, logo_url: '' }));
+                    }}
+                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
+                  >
+                    Remove Logo
+                  </button>
+                </div>
+              )}
+
+              {/* Upload Button */}
+              <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
+                <div className="text-center">
+                  <Upload className="mx-auto mb-2 text-gray-400" size={32} />
+                  <p className="text-sm text-gray-600">
+                    <span className="text-quiz-blue font-semibold">Click to upload</span> site logo
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">PNG or SVG recommended (transparent background)</p>
+                </div>
+                <input
+                  type="file"
+                  onChange={handleLogoChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+              </label>
+            </div>
+            <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
+              <p className="text-sm text-blue-800">
+                <strong>💡 Tip:</strong> Upload a logo with a transparent background (PNG or SVG). The logo will appear in the header and overlap slightly into the page content for a modern look. Recommended height: 80-120px.
+              </p>
             </div>
           </div>
         </div>
