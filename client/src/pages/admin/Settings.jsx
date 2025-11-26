@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { settingsAPI, galleryAPI } from '../../services/api';
-import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles, MessageCircle, Key, Hash } from 'lucide-react';
+import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles, MessageCircle, Key, Hash, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
@@ -99,6 +99,10 @@ const AdminSettings = () => {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
 
+  // Section ordering - default order
+  const defaultSectionOrder = ['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day'];
+  const [sectionOrder, setSectionOrder] = useState(defaultSectionOrder);
+
   useEffect(() => {
     loadSettings();
   }, []);
@@ -118,6 +122,16 @@ const AdminSettings = () => {
 
       // Merge with default values
       setSettings(prev => ({ ...prev, ...settingsObj }));
+
+      // Load section order
+      if (settingsObj.section_order) {
+        try {
+          const parsedOrder = JSON.parse(settingsObj.section_order);
+          setSectionOrder(Array.isArray(parsedOrder) ? parsedOrder : defaultSectionOrder);
+        } catch (e) {
+          setSectionOrder(defaultSectionOrder);
+        }
+      }
 
       // Set hero image preview if it exists
       if (settingsObj.hero_image_url) {
@@ -244,6 +258,9 @@ const AdminSettings = () => {
         }
       }
 
+      // Save section order
+      settings.section_order = JSON.stringify(sectionOrder);
+
       console.log('Saving settings to backend:', Object.keys(settings).length, 'settings');
       const saveResponse = await settingsAPI.bulkUpdate(settings);
       console.log('Settings save response:', saveResponse.data);
@@ -263,6 +280,36 @@ const AdminSettings = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Section ordering functions
+  const moveSectionUp = (index) => {
+    if (index === 0) return;
+    const newOrder = [...sectionOrder];
+    [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
+    setSectionOrder(newOrder);
+  };
+
+  const moveSectionDown = (index) => {
+    if (index === sectionOrder.length - 1) return;
+    const newOrder = [...sectionOrder];
+    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+    setSectionOrder(newOrder);
+  };
+
+  const getSectionLabel = (key) => {
+    const labels = {
+      'social_proof': 'Stats/Social Proof Section',
+      'about': 'About Me Section',
+      'services': 'Services Section',
+      'events': 'Upcoming Events Section',
+      'reviews': 'Reviews Section',
+      'gallery': 'Photo Gallery Section',
+      'team': 'Meet the Team Section',
+      'social_media': 'Social Media Feed',
+      'question_of_day': 'Question of the Day'
+    };
+    return labels[key] || key;
   };
 
   if (loading) {
@@ -918,6 +965,62 @@ const AdminSettings = () => {
           <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
             <p className="text-sm text-gray-900 font-medium">
               <strong className="text-brit-blue">💡 Tip:</strong> If you upload a background image for a section, the color will be used as an overlay. Without an image, the solid color will be displayed.
+            </p>
+          </div>
+        </div>
+
+        {/* Section Ordering */}
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <GripVertical className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Homepage Section Order</h2>
+          </div>
+          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Control the order in which sections appear on your homepage. Hero section is always first, and CTA is always last.</p>
+
+          <div className="space-y-3">
+            {sectionOrder.map((sectionKey, index) => (
+              <div key={sectionKey} className="flex items-center gap-3 p-4 bg-gray-50 border-2 border-gray-200 rounded-lg hover:border-brit-blue/50 transition-colors">
+                <div className="flex flex-col gap-1">
+                  <button
+                    type="button"
+                    onClick={() => moveSectionUp(index)}
+                    disabled={index === 0}
+                    className={`p-1 rounded transition-colors ${
+                      index === 0
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-gray-600 hover:text-brit-blue hover:bg-white'
+                    }`}
+                    title="Move up"
+                  >
+                    <ArrowUp size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveSectionDown(index)}
+                    disabled={index === sectionOrder.length - 1}
+                    className={`p-1 rounded transition-colors ${
+                      index === sectionOrder.length - 1
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-gray-600 hover:text-brit-blue hover:bg-white'
+                    }`}
+                    title="Move down"
+                  >
+                    <ArrowDown size={20} />
+                  </button>
+                </div>
+                <div className="flex items-center gap-3 flex-1">
+                  <span className="flex items-center justify-center w-8 h-8 bg-brit-blue text-white rounded-full font-bold text-sm">
+                    {index + 1}
+                  </span>
+                  <span className="font-semibold text-gray-900">{getSectionLabel(sectionKey)}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+            <p className="text-sm text-gray-900 font-medium">
+              <strong className="text-brit-blue">💡 Tip:</strong> Click the arrow buttons to reorder sections. The order will be saved when you click "Save All Settings" at the bottom of the page.
             </p>
           </div>
         </div>
