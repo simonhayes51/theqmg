@@ -9,9 +9,11 @@ const AdminReviews = () => {
   const [editingReview, setEditingReview] = useState(null);
   const [formData, setFormData] = useState({
     author_name: '',
+    venue_name: '',
     rating: 5,
     review_text: '',
-    is_featured: false
+    is_featured: false,
+    is_approved: true
   });
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
@@ -42,9 +44,11 @@ const AdminReviews = () => {
     setEditingReview(null);
     setFormData({
       author_name: '',
+      venue_name: '',
       rating: 5,
       review_text: '',
-      is_featured: false
+      is_featured: false,
+      is_approved: true
     });
     setShowModal(true);
   };
@@ -53,9 +57,11 @@ const AdminReviews = () => {
     setEditingReview(review);
     setFormData({
       author_name: review.author_name || '',
+      venue_name: review.venue_name || '',
       rating: review.rating || 5,
       review_text: review.review_text || '',
-      is_featured: review.is_featured || false
+      is_featured: review.is_featured || false,
+      is_approved: review.is_approved !== false
     });
     setShowModal(true);
   };
@@ -65,9 +71,11 @@ const AdminReviews = () => {
     setEditingReview(null);
     setFormData({
       author_name: '',
+      venue_name: '',
       rating: 5,
       review_text: '',
-      is_featured: false
+      is_featured: false,
+      is_approved: true
     });
   };
 
@@ -91,9 +99,11 @@ const AdminReviews = () => {
       setSubmitting(true);
       const submitData = {
         author_name: formData.author_name,
+        venue_name: formData.venue_name || null,
         rating: parseInt(formData.rating),
         review_text: formData.review_text,
-        is_featured: formData.is_featured
+        is_featured: formData.is_featured,
+        is_approved: formData.is_approved !== false
       };
 
       if (editingReview) {

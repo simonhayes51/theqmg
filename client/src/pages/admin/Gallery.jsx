@@ -14,7 +14,8 @@ const AdminGallery = () => {
     description: '',
     category: '',
     image: null,
-    image_url: ''
+    image_url: '',
+    display_order: 0
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -52,7 +53,8 @@ const AdminGallery = () => {
       description: '',
       category: '',
       image: null,
-      image_url: ''
+      image_url: '',
+      display_order: 0
     });
     setSelectedFiles([]);
     setImagePreviews([]);
@@ -67,7 +69,8 @@ const AdminGallery = () => {
       description: image.description || '',
       category: image.category || '',
       image: null,
-      image_url: image.image_url || ''
+      image_url: image.image_url || '',
+      display_order: image.display_order || 0
     });
     setImagePreview(image.image_url ? `${API_BASE_URL}${image.image_url}` : null);
     setShowModal(true);
@@ -81,7 +84,8 @@ const AdminGallery = () => {
       description: '',
       category: '',
       image: null,
-      image_url: ''
+      image_url: '',
+      display_order: 0
     });
     setSelectedFiles([]);
     setImagePreviews([]);
@@ -150,6 +154,7 @@ const AdminGallery = () => {
         submitData.append('title', formData.title || '');
         submitData.append('description', formData.description || '');
         submitData.append('category', formData.category || '');
+        submitData.append('display_order', formData.display_order || editingImage.display_order || 0);
         if (formData.image) {
           submitData.append('image', formData.image);
         } else if (formData.image_url) {
