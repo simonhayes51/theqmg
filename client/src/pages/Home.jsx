@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
-import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap } from 'lucide-react';
+import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap, User } from 'lucide-react';
 import QuestionOfTheDay from '../components/QuestionOfTheDay';
 import SocialMediaFeed from '../components/SocialMediaFeed';
 import ItemCarousel from '../components/ItemCarousel';
@@ -27,6 +27,7 @@ const Home = () => {
     gallery_bg_color: '#003DA5',
     team_bg_color: '#DC143C'
   });
+  const [sectionOrder, setSectionOrder] = useState(['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day']);
   const parallaxRef = useRef(null);
 
   useEffect(() => {
@@ -70,6 +71,18 @@ const Home = () => {
       const settingsData = settingsRes.data || {};
       setSettings(prev => ({ ...prev, ...settingsData }));
 
+      // Load section order
+      if (settingsData.section_order) {
+        try {
+          const parsedOrder = JSON.parse(settingsData.section_order);
+          if (Array.isArray(parsedOrder)) {
+            setSectionOrder(parsedOrder);
+          }
+        } catch (e) {
+          console.error('Error parsing section order:', e);
+        }
+      }
+
       // Load hero image from settings
       if (settingsData.hero_image_url) {
         setHeroImageUrl(settingsData.hero_image_url);
@@ -82,6 +95,72 @@ const Home = () => {
       setGalleryImages([]);
       setTeamMembers([]);
     }
+  };
+
+  // Render section based on key
+  const renderSection = (sectionKey) => {
+    const sections = {
+      'social_proof': (
+        <ScrollReveal animation="fade-up" key="social_proof">
+          <section className="section" style={{
+            backgroundColor: settings.social_proof_bg_color || '#003DA5',
+            backgroundImage: settings.social_proof_bg_image ? `url(${API_BASE_URL}${settings.social_proof_bg_image})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'overlay'
+          }}>
+            <div className="container-custom">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div className="p-8">
+                  <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-4">
+                    <Award className="text-brit-gold" size={48} />
+                  </div>
+                  <h3 className="text-5xl font-black text-brit-gold mb-2">700+</h3>
+                  <p className="text-xl text-gray-300">Events Hosted Annually</p>
+                </div>
+                <div className="p-8">
+                  <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-4">
+                    <Users className="text-brit-red" size={48} />
+                  </div>
+                  <h3 className="text-5xl font-black text-brit-red mb-2">50+</h3>
+                  <p className="text-xl text-gray-300">Hospitality Partner Venues</p>
+                </div>
+                <div className="p-8">
+                  <div className="inline-flex items-center justify-center p-4 bg-brit-blue/20 rounded-full mb-4">
+                    <TrendingUp className="text-brit-blue" size={48} />
+                  </div>
+                  <h3 className="text-5xl font-black text-brit-blue mb-2">20+</h3>
+                  <p className="text-xl text-gray-300">Years Event Management Experience</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+      ),
+      'about': settings.about_text && (
+        <ScrollReveal animation="fade-up" key="about">
+          <section className="section bg-white">
+            <div className="container-custom">
+              <div className="max-w-4xl mx-auto text-center">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
+                  <User className="text-brit-navy" size={40} />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-brit-navy mb-8 uppercase">About Me</h2>
+                <div className="prose prose-lg max-w-none">
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
+                    {settings.about_text}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+      ),
+      'question_of_day': <QuestionOfTheDay key="question_of_day" />,
+      'social_media': <SocialMediaFeed key="social_media" />
+    };
+
+    return sections[sectionKey] || null;
   };
 
   return (
@@ -132,7 +211,11 @@ const Home = () => {
       {/* Social Proof Section */}
       <ScrollReveal animation="fade-up">
         <section className="section" style={{
-          background: settings.social_proof_bg_color || '#003DA5'
+          backgroundColor: settings.social_proof_bg_color || '#003DA5',
+          backgroundImage: settings.social_proof_bg_image ? `url(${API_BASE_URL}${settings.social_proof_bg_image})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'overlay'
         }}>
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -161,6 +244,27 @@ const Home = () => {
           </div>
         </section>
       </ScrollReveal>
+
+      {/* About Me Section */}
+      {settings.about_text && (
+        <ScrollReveal animation="fade-up">
+          <section className="section bg-white">
+            <div className="container-custom">
+              <div className="max-w-4xl mx-auto text-center">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
+                  <User className="text-brit-navy" size={40} />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-brit-navy mb-8 uppercase">About Me</h2>
+                <div className="prose prose-lg max-w-none">
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
+                    {settings.about_text}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+      )}
 
       {/* Services Section */}
       <ScrollReveal animation="fade-up">
