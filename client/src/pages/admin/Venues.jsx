@@ -101,6 +101,8 @@ const AdminVenues = () => {
       website: '',
       description: '',
       capacity: '',
+      latitude: '',
+      longitude: '',
       image: null
     });
     setImagePreview(null);
@@ -147,6 +149,8 @@ const AdminVenues = () => {
       submitData.append('website', formData.website || '');
       submitData.append('description', formData.description || '');
       submitData.append('capacity', formData.capacity || '');
+      submitData.append('latitude', formData.latitude || '');
+      submitData.append('longitude', formData.longitude || '');
 
       // Add image if new file selected, otherwise keep existing image_url
       if (formData.image) {
@@ -461,37 +465,57 @@ const AdminVenues = () => {
                 <p className="text-xs text-gray-500 mt-1">Optional: Maximum number of people the venue can hold</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="label">Latitude</label>
-                  <input
-                    type="number"
-                    name="latitude"
-                    value={formData.latitude}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., 54.978252"
-                    step="0.000001"
-                    min="-90"
-                    max="90"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">For map display</p>
+              {/* Map Coordinates */}
+              <div className="mb-4 bg-blue-50 border border-blue-200 rounded p-4">
+                <div className="flex items-start mb-3">
+                  <MapPin className="text-blue-600 mr-2 mt-1 flex-shrink-0" size={20} />
+                  <div>
+                    <h4 className="font-semibold text-blue-900 mb-1">Map Coordinates (Optional)</h4>
+                    <p className="text-sm text-blue-800 mb-2">
+                      Add coordinates to display this venue on the map. Find coordinates on{' '}
+                      <a
+                        href="https://www.google.com/maps"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline font-semibold hover:text-blue-600"
+                      >
+                        Google Maps
+                      </a>
+                      {' '}(right-click on location → click coordinates to copy)
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="label">Longitude</label>
-                  <input
-                    type="number"
-                    name="longitude"
-                    value={formData.longitude}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., -1.61778"
-                    step="0.000001"
-                    min="-180"
-                    max="180"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">For map display</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="label text-sm">Latitude</label>
+                    <input
+                      type="number"
+                      name="latitude"
+                      value={formData.latitude}
+                      onChange={handleInputChange}
+                      className="input w-full"
+                      placeholder="e.g., 54.978252"
+                      step="0.000001"
+                      min="-90"
+                      max="90"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="label text-sm">Longitude</label>
+                    <input
+                      type="number"
+                      name="longitude"
+                      value={formData.longitude}
+                      onChange={handleInputChange}
+                      className="input w-full"
+                      placeholder="e.g., -1.61778"
+                      step="0.000001"
+                      min="-180"
+                      max="180"
+                    />
+                  </div>
                 </div>
               </div>
 
