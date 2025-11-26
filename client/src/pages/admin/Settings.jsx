@@ -282,7 +282,7 @@ const AdminSettings = () => {
       {/* Header */}
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-4xl font-heading text-quiz-blue">Site Settings</h1>
-        <p className="text-sm md:text-base text-gray-600 mt-2">Manage your business information and social media links</p>
+        <p className="text-sm md:text-base text-gray-800 mt-2 font-medium">Manage your business information and social media links</p>
       </div>
 
       {/* Success/Error Message */}
@@ -755,10 +755,10 @@ const AdminSettings = () => {
               <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
                 <div className="text-center">
                   <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-900 font-medium">
                     <span className="text-quiz-blue font-semibold">Click to upload</span> site logo
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">PNG or SVG recommended (transparent background)</p>
+                  <p className="text-xs text-gray-800 mt-1 font-medium">PNG or SVG recommended (transparent background)</p>
                 </div>
                 <input
                   type="file"
@@ -812,10 +812,10 @@ const AdminSettings = () => {
               <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
                 <div className="text-center">
                   <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-900 font-medium">
                     <span className="text-quiz-blue font-semibold">Click to upload</span> hero image
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF or WebP (recommended: 1920x1080px)</p>
+                  <p className="text-xs text-gray-800 mt-1 font-medium">PNG, JPG, GIF or WebP (recommended: 1920x1080px)</p>
                 </div>
                 <input
                   type="file"
@@ -839,7 +839,7 @@ const AdminSettings = () => {
             <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
             <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Colors</h2>
           </div>
-          <p className="text-gray-600 mb-6">Customize the background colors for each homepage section</p>
+          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Customize the background colors for each homepage section</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -928,7 +928,7 @@ const AdminSettings = () => {
             <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
             <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Images (Optional)</h2>
           </div>
-          <p className="text-gray-600 mb-6">Upload background images for each section on your homepage (colors will be used as overlay)</p>
+          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Upload background images for each section on your homepage (colors will be used as overlay)</p>
 
           <div className="space-y-8">
             {[
@@ -968,7 +968,7 @@ const AdminSettings = () => {
                 <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
                   <div className="text-center">
                     <Upload className="mx-auto mb-2 text-gray-400" size={24} />
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-900 font-medium">
                       <span className="text-quiz-blue font-semibold">Upload</span> {label.toLowerCase()} background
                     </p>
                   </div>
