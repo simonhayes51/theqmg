@@ -139,31 +139,46 @@ const Home = () => {
       ),
       'about': settings.about_text && (
         <ScrollReveal animation="fade-up" key="about">
-          <section className="section bg-white">
+          <section className="section bg-gradient-to-br from-gray-50 to-white py-20 md:py-32">
             <div className="container-custom">
-              <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-12">
-                  <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
-                    <User className="text-brit-navy" size={40} />
+              <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="text-center mb-16">
+                  <div className="inline-flex items-center justify-center p-5 bg-brit-navy/10 rounded-full mb-8">
+                    <User className="text-brit-navy" size={56} />
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-black text-brit-navy uppercase">About Me</h2>
+                  <h2 className="text-5xl md:text-7xl font-black text-brit-navy uppercase mb-4 tracking-tight">About Me</h2>
+                  <div className="w-32 h-2 bg-brit-gold mx-auto rounded-full"></div>
                 </div>
 
-                <div className={`flex flex-col ${settings.about_image ? 'md:flex-row' : ''} gap-8 md:gap-12 items-center`}>
+                {/* Content */}
+                <div className={`flex flex-col ${settings.about_image ? 'lg:flex-row' : ''} gap-12 lg:gap-16 items-start`}>
                   {settings.about_image && (
-                    <div className="w-full md:w-1/2 lg:w-2/5">
-                      <img
-                        src={`${API_BASE_URL}${settings.about_image}`}
-                        alt="About Me"
-                        className="rounded-2xl shadow-2xl w-full h-auto object-cover"
-                      />
+                    <div className="w-full lg:w-2/5 xl:w-1/2">
+                      <div className="relative">
+                        <div className="absolute -inset-4 bg-gradient-to-br from-brit-navy to-brit-red rounded-3xl opacity-20 blur-xl"></div>
+                        <img
+                          src={`${API_BASE_URL}${settings.about_image}`}
+                          alt="About Me"
+                          className="relative rounded-3xl shadow-2xl w-full h-auto object-cover border-4 border-white"
+                        />
+                      </div>
                     </div>
                   )}
-                  <div className={`${settings.about_image ? 'w-full md:w-1/2 lg:w-3/5' : 'max-w-4xl mx-auto text-center'}`}>
-                    <div className="prose prose-lg max-w-none">
-                      <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
-                        {settings.about_text}
-                      </p>
+                  <div className={`${settings.about_image ? 'w-full lg:w-3/5 xl:w-1/2' : 'max-w-5xl mx-auto'}`}>
+                    <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border-t-4 border-brit-gold">
+                      <div className="prose prose-xl max-w-none">
+                        <div className="text-xl md:text-2xl text-gray-800 leading-relaxed space-y-6 whitespace-pre-line font-light">
+                          {settings.about_text}
+                        </div>
+                      </div>
+
+                      {/* Decorative Elements */}
+                      <div className="mt-10 pt-8 border-t-2 border-gray-100 flex items-center justify-center gap-4">
+                        <div className="w-12 h-1 bg-brit-navy rounded"></div>
+                        <Award className="text-brit-gold" size={32} />
+                        <div className="w-12 h-1 bg-brit-red rounded"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
