@@ -141,15 +141,31 @@ const Home = () => {
         <ScrollReveal animation="fade-up" key="about">
           <section className="section bg-white">
             <div className="container-custom">
-              <div className="max-w-4xl mx-auto text-center">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
-                  <User className="text-brit-navy" size={40} />
+              <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-12">
+                  <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
+                    <User className="text-brit-navy" size={40} />
+                  </div>
+                  <h2 className="text-4xl md:text-5xl font-black text-brit-navy uppercase">About Me</h2>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-brit-navy mb-8 uppercase">About Me</h2>
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
-                    {settings.about_text}
-                  </p>
+
+                <div className={`flex flex-col ${settings.about_image ? 'md:flex-row' : ''} gap-8 md:gap-12 items-center`}>
+                  {settings.about_image && (
+                    <div className="w-full md:w-1/2 lg:w-2/5">
+                      <img
+                        src={`${API_BASE_URL}${settings.about_image}`}
+                        alt="About Me"
+                        className="rounded-2xl shadow-2xl w-full h-auto object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className={`${settings.about_image ? 'w-full md:w-1/2 lg:w-3/5' : 'max-w-4xl mx-auto text-center'}`}>
+                    <div className="prose prose-lg max-w-none">
+                      <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
+                        {settings.about_text}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
