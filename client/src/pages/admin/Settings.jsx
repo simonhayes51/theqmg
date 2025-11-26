@@ -768,9 +768,9 @@ const AdminSettings = () => {
                 />
               </label>
             </div>
-            <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
-              <p className="text-sm text-blue-800">
-                <strong>💡 Tip:</strong> Upload a logo with a transparent background (PNG or SVG). The logo will appear in the header and overlap slightly into the page content for a modern look. Recommended height: 80-120px.
+            <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+              <p className="text-sm text-gray-900 font-medium">
+                <strong className="text-brit-blue">💡 Tip:</strong> Upload a logo with a transparent background (PNG or SVG). The logo will appear in the header and overlap slightly into the page content for a modern look. Recommended height: 80-120px.
               </p>
             </div>
           </div>
@@ -825,9 +825,9 @@ const AdminSettings = () => {
                 />
               </label>
             </div>
-            <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
-              <p className="text-sm text-blue-800">
-                <strong>💡 Tip:</strong> Upload a vibrant, eye-catching image for your homepage hero section. For best results, use an image that's at least 1920px wide.
+            <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+              <p className="text-sm text-gray-900 font-medium">
+                <strong className="text-brit-blue">💡 Tip:</strong> Upload a vibrant, eye-catching image for your homepage hero section. For best results, use an image that's at least 1920px wide.
               </p>
             </div>
           </div>
@@ -915,9 +915,9 @@ const AdminSettings = () => {
             </div>
           </div>
 
-          <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
-            <p className="text-sm text-blue-800">
-              <strong>💡 Tip:</strong> If you upload a background image for a section, the color will be used as an overlay. Without an image, the solid color will be displayed.
+          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+            <p className="text-sm text-gray-900 font-medium">
+              <strong className="text-brit-blue">💡 Tip:</strong> If you upload a background image for a section, the color will be used as an overlay. Without an image, the solid color will be displayed.
             </p>
           </div>
         </div>
@@ -983,9 +983,9 @@ const AdminSettings = () => {
             ))}
           </div>
 
-          <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
-            <p className="text-sm text-blue-800">
-              <strong>💡 Tip:</strong> Use high-quality images (1920px wide recommended) that complement your content. Images will be used as full-width section backgrounds.
+          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+            <p className="text-sm text-gray-900 font-medium">
+              <strong className="text-brit-blue">💡 Tip:</strong> Use high-quality images (1920px wide recommended) that complement your content. Images will be used as full-width section backgrounds.
             </p>
           </div>
         </div>
@@ -1104,9 +1104,9 @@ Sunday: Closed"
             </div>
           </div>
 
-          <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded">
-            <p className="text-sm text-blue-800">
-              <strong>💡 Tip:</strong> Social media links will appear in your website footer and contact sections. Leave blank to hide any social media icons you don't use.
+          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
+            <p className="text-sm text-gray-900 font-medium">
+              <strong className="text-brit-blue">💡 Tip:</strong> Social media links will appear in your website footer and contact sections. Leave blank to hide any social media icons you don't use.
             </p>
           </div>
         </div>
@@ -1188,8 +1188,8 @@ Sunday: Closed"
                 </p>
               </div>
 
-              <div className="p-3 bg-purple-100 rounded text-xs text-purple-800">
-                <strong>⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
+              <div className="p-3 bg-purple-50 rounded text-xs font-medium text-gray-900 border border-purple-300">
+                <strong className="text-purple-700">⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
               </div>
             </div>
           </div>
@@ -1254,8 +1254,8 @@ Sunday: Closed"
                 </p>
               </div>
 
-              <div className="p-3 bg-blue-100 rounded text-xs text-blue-800">
-                <strong>💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
+              <div className="p-3 bg-blue-50 rounded text-xs font-medium text-gray-900 border border-blue-300">
+                <strong className="text-brit-blue">💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
               </div>
             </div>
           </div>
@@ -1320,8 +1320,8 @@ Sunday: Closed"
                 </p>
               </div>
 
-              <div className="p-3 bg-green-100 rounded text-xs text-green-800">
-                <strong>✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
+              <div className="p-3 bg-green-50 rounded text-xs font-medium text-gray-900 border border-green-400">
+                <strong className="text-green-700">✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
               </div>
             </div>
           </div>
