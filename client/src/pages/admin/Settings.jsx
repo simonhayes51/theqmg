@@ -278,11 +278,11 @@ const AdminSettings = () => {
   }
 
   return (
-    <div className="container-custom py-12">
+    <div className="container-custom py-6 md:py-12">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-heading text-quiz-blue">Site Settings</h1>
-        <p className="text-gray-600 mt-2">Manage your business information and social media links</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-4xl font-heading text-quiz-blue">Site Settings</h1>
+        <p className="text-sm md:text-base text-gray-600 mt-2">Manage your business information and social media links</p>
       </div>
 
       {/* Success/Error Message */}
@@ -296,10 +296,10 @@ const AdminSettings = () => {
 
       <form onSubmit={handleSubmit}>
         {/* Business Information */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Building2 className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Business Information</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Building2 className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Business Information</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -398,10 +398,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Hero Section Content */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Sparkles className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Hero Section Content</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Hero Section Content</h2>
           </div>
 
           <div className="space-y-4">
@@ -460,10 +460,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Homepage Section Titles */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Globe className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Homepage Section Titles</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Homepage Section Titles</h2>
           </div>
 
           <div className="space-y-6">
@@ -542,10 +542,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Page Headers */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Globe className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Page Headers</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Page Headers</h2>
           </div>
 
           <div className="space-y-6">
@@ -720,10 +720,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Logo */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <ImageIcon className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Site Logo</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Site Logo</h2>
           </div>
 
           <div>
@@ -777,10 +777,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Hero Image */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <ImageIcon className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Hero Image</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Hero Image</h2>
           </div>
 
           <div>
@@ -834,10 +834,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Section Background Colors */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Sparkles className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Colors</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Colors</h2>
           </div>
           <p className="text-gray-600 mb-6">Customize the background colors for each homepage section</p>
 
@@ -923,10 +923,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Section Background Images */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <ImageIcon className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Section Background Images (Optional)</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Images (Optional)</h2>
           </div>
           <p className="text-gray-600 mb-6">Upload background images for each section on your homepage (colors will be used as overlay)</p>
 
@@ -991,10 +991,10 @@ const AdminSettings = () => {
         </div>
 
         {/* Business Hours */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Clock className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Business Hours</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Clock className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Business Hours</h2>
           </div>
 
           <div>
@@ -1015,10 +1015,10 @@ Sunday: Closed"
         </div>
 
         {/* About Section */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Globe className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">About Your Business</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">About Your Business</h2>
           </div>
 
           <div>
@@ -1036,10 +1036,10 @@ Sunday: Closed"
         </div>
 
         {/* Social Media */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Globe className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Social Media Links</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Social Media Links</h2>
           </div>
 
           <div className="space-y-4">
@@ -1112,10 +1112,10 @@ Sunday: Closed"
         </div>
 
         {/* Social Media API Integration */}
-        <div className="card mb-6">
-          <div className="flex items-center mb-6">
-            <Sparkles className="text-quiz-blue mr-3" size={28} />
-            <h2 className="text-2xl font-heading text-quiz-blue">Social Media Integration</h2>
+        <div className="card mb-4 md:mb-6">
+          <div className="flex items-center mb-4 md:mb-6">
+            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
+            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Social Media Integration</h2>
           </div>
 
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg">
