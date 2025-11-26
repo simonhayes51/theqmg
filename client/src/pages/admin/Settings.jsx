@@ -1119,12 +1119,12 @@ Sunday: Closed"
           </div>
 
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg">
-            <h3 className="font-bold text-gray-900 mb-2">📸 Display Live Posts & Enable WhatsApp Chat</h3>
-            <p className="text-sm text-gray-900 mb-3 font-medium">
+            <h3 className="font-bold text-gray-900 mb-2" style={{ color: '#000000' }}>📸 Display Live Posts & Enable WhatsApp Chat</h3>
+            <p className="text-sm text-gray-900 mb-3 font-medium" style={{ color: '#000000' }}>
               Connect your Instagram and Facebook accounts to display real posts on your homepage. Enable WhatsApp for instant customer messaging.
             </p>
-            <p className="text-xs text-gray-800 font-medium">
-              📖 Need help? Check <code className="bg-white px-2 py-1 rounded text-gray-900">SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
+            <p className="text-xs text-gray-800 font-medium" style={{ color: '#000000' }}>
+              📖 Need help? Check <code className="bg-white px-2 py-1 rounded text-gray-900" style={{ color: '#000000' }}>SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
             </p>
           </div>
 
@@ -1132,7 +1132,7 @@ Sunday: Closed"
           <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-300">
             <div className="flex items-center mb-4">
               <Instagram className="text-purple-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900">Instagram Feed</h3>
+              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>Instagram Feed</h3>
             </div>
 
             <div className="space-y-4">
@@ -1145,13 +1145,13 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, instagram_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-purple-600"
                   />
-                  <span className="font-semibold text-gray-900">Enable Instagram Feed</span>
+                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable Instagram Feed</span>
                 </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium">Display your Instagram posts on the homepage</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Display your Instagram posts on the homepage</p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <Key size={16} className="text-purple-600" />
                   Instagram Access Token
                 </label>
@@ -1164,13 +1164,13 @@ Sunday: Closed"
                   placeholder="IGQVJxxxxxxxxxxxxxxxxxxxxxxxxx..."
                   disabled={settings.instagram_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Get from Facebook Developer Console → Instagram Basic Display API
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <Hash size={16} className="text-purple-600" />
                   Instagram User ID
                 </label>
@@ -1183,13 +1183,13 @@ Sunday: Closed"
                   placeholder="17841400000000000"
                   disabled={settings.instagram_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Your numeric Instagram user ID
                 </p>
               </div>
 
-              <div className="p-3 bg-purple-50 rounded text-xs font-medium text-gray-900 border border-purple-300">
-                <strong className="text-purple-700">⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
+              <div className="p-3 bg-purple-50 rounded text-xs font-medium text-gray-900 border border-purple-300" style={{ color: '#000000' }}>
+                <strong className="text-purple-700" style={{ color: '#6b21a8' }}>⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
               </div>
             </div>
           </div>
@@ -1198,7 +1198,7 @@ Sunday: Closed"
           <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-300">
             <div className="flex items-center mb-4">
               <Facebook className="text-blue-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900">Facebook Feed</h3>
+              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>Facebook Feed</h3>
             </div>
 
             <div className="space-y-4">
@@ -1211,13 +1211,13 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, facebook_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-blue-600"
                   />
-                  <span className="font-semibold text-gray-900">Enable Facebook Feed</span>
+                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable Facebook Feed</span>
                 </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium">Display your Facebook page posts on the homepage</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Display your Facebook page posts on the homepage</p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <Key size={16} className="text-blue-600" />
                   Facebook Page Access Token
                 </label>
@@ -1230,13 +1230,13 @@ Sunday: Closed"
                   placeholder="EAAxxxxxxxxxxxxxxxxxxxxxxxxx..."
                   disabled={settings.facebook_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Get from Facebook Graph API Explorer → Your Page
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <Hash size={16} className="text-blue-600" />
                   Facebook Page ID
                 </label>
@@ -1249,13 +1249,13 @@ Sunday: Closed"
                   placeholder="123456789012345"
                   disabled={settings.facebook_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Your Facebook Page ID (found in Page Settings)
                 </p>
               </div>
 
-              <div className="p-3 bg-blue-50 rounded text-xs font-medium text-gray-900 border border-blue-300">
-                <strong className="text-brit-blue">💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
+              <div className="p-3 bg-blue-50 rounded text-xs font-medium text-gray-900 border border-blue-300" style={{ color: '#000000' }}>
+                <strong className="text-brit-blue" style={{ color: '#003DA5' }}>💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
               </div>
             </div>
           </div>
@@ -1264,7 +1264,7 @@ Sunday: Closed"
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-300">
             <div className="flex items-center mb-4">
               <MessageCircle className="text-green-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900">WhatsApp Chat Widget</h3>
+              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>WhatsApp Chat Widget</h3>
             </div>
 
             <div className="space-y-4">
@@ -1277,13 +1277,13 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, whatsapp_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-green-600"
                   />
-                  <span className="font-semibold text-gray-900">Enable WhatsApp Chat Widget</span>
+                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable WhatsApp Chat Widget</span>
                 </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium">Show floating WhatsApp button on all pages</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Show floating WhatsApp button on all pages</p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <Phone size={16} className="text-green-600" />
                   WhatsApp Business Number
                 </label>
@@ -1296,13 +1296,13 @@ Sunday: Closed"
                   placeholder="447123456789 (UK: 44 + number without leading 0)"
                   disabled={settings.whatsapp_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Include country code, no spaces or symbols (e.g., 447xxxxxxxxx for UK)
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
                   <MessageCircle size={16} className="text-green-600" />
                   Default Chat Message
                 </label>
@@ -1315,13 +1315,13 @@ Sunday: Closed"
                   placeholder="Hi! I'd like to know more about your quiz nights."
                   disabled={settings.whatsapp_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-800 mt-1 font-medium">
+                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
                   Pre-filled message when customers click to chat
                 </p>
               </div>
 
-              <div className="p-3 bg-green-50 rounded text-xs font-medium text-gray-900 border border-green-400">
-                <strong className="text-green-700">✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
+              <div className="p-3 bg-green-50 rounded text-xs font-medium text-gray-900 border border-green-400" style={{ color: '#000000' }}>
+                <strong className="text-green-700" style={{ color: '#15803d' }}>✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
               </div>
             </div>
           </div>
