@@ -483,12 +483,34 @@ const AdminVenues = () => {
                       </a>
                       {' '}(right-click on location → click coordinates to copy)
                     </p>
+                    <div className="bg-blue-100 border border-blue-300 rounded p-2 text-xs text-blue-900 mt-2">
+                      <strong>⚠️ IMPORTANT - Order Matters!</strong><br/>
+                      <strong>Latitude FIRST</strong> (around 54-55 for North East England)<br/>
+                      <strong>Longitude SECOND</strong> (around -1 to -2 for North East England)<br/>
+                      Google Maps shows: <code>54.978252, -1.61778</code> = Latitude, Longitude ✓
+                    </div>
                   </div>
                 </div>
 
+                {/* Validation Warning */}
+                {formData.latitude && formData.longitude && (
+                  parseFloat(formData.latitude) < 50 || parseFloat(formData.latitude) > 60 ||
+                  parseFloat(formData.longitude) > 0 || parseFloat(formData.longitude) < -5
+                ) && (
+                  <div className="mb-3 p-3 bg-red-100 border border-red-300 rounded">
+                    <p className="text-sm text-red-800 font-semibold">⚠️ Warning: These coordinates look wrong!</p>
+                    <p className="text-xs text-red-700 mt-1">
+                      North East England venues should have:<br/>
+                      • Latitude between 54-55 (you have: {formData.latitude})<br/>
+                      • Longitude between -1 and -2 (you have: {formData.longitude})<br/>
+                      <strong>Did you swap them by mistake?</strong>
+                    </p>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="label text-sm">Latitude</label>
+                    <label className="label text-sm">Latitude (First Number)</label>
                     <input
                       type="number"
                       name="latitude"
@@ -503,7 +525,7 @@ const AdminVenues = () => {
                   </div>
 
                   <div>
-                    <label className="label text-sm">Longitude</label>
+                    <label className="label text-sm">Longitude (Second Number)</label>
                     <input
                       type="number"
                       name="longitude"
