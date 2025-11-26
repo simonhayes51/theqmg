@@ -142,6 +142,37 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Quiz Master General API is running' });
 });
 
+// Diagnostic endpoint for uploads directory (helps debug Railway volume issues)
+app.get('/api/debug/uploads', (req, res) => {
+  try {
+    const uploadsPath = path.join(__dirname, '../uploads');
+    const imagesPath = path.join(uploadsPath, 'images');
+
+    const diagnostics = {
+      currentWorkingDir: process.cwd(),
+      serverDir: __dirname,
+      uploadsPath: uploadsPath,
+      uploadsPathAbsolute: path.resolve(uploadsPath),
+      imagesPath: imagesPath,
+      imagesPathAbsolute: path.resolve(imagesPath),
+      uploadsExists: fs.existsSync(uploadsPath),
+      imagesExists: fs.existsSync(imagesPath),
+      imageFiles: [],
+      volumeMountedCorrectly: false
+    };
+
+    // List files in images directory if it exists
+    if (fs.existsSync(imagesPath)) {
+      diagnostics.imageFiles = fs.readdirSync(imagesPath).filter(f => f !== '.gitkeep');
+      diagnostics.volumeMountedCorrectly = diagnostics.imageFiles.length > 0;
+    }
+
+    res.json(diagnostics);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Serve static files from React build (production)
 const clientBuildPath = path.join(__dirname, '../client/dist');
 if (fs.existsSync(clientBuildPath)) {
