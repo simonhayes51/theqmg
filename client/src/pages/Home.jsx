@@ -156,174 +156,63 @@ const Home = () => {
           </section>
         </ScrollReveal>
       ),
-      'question_of_day': <QuestionOfTheDay key="question_of_day" />,
-      'social_media': <SocialMediaFeed key="social_media" />
-    };
-
-    return sections[sectionKey] || null;
-  };
-
-  return (
-    <div>
-      {/* Skip to Content Link for Accessibility */}
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
-
-      {/* Floating CTA Button */}
-      <FloatingCTA />
-    <div id="main-content">
-      {/* PARALLAX HERO SECTION */}
-      <section className="hero-section">
-        {/* Parallax Background Image */}
-        {heroImageUrl && (
-          <div
-            ref={parallaxRef}
-            className="hero-parallax-bg"
+      'services': (
+        <ScrollReveal animation="fade-up" key="services">
+          <section
+            className="section"
             style={{
-              backgroundImage: `url(${API_BASE_URL}${heroImageUrl})`,
+              backgroundColor: settings.services_bg_color || '#DC143C',
+              backgroundImage: settings.services_bg_image ? `url(${API_BASE_URL}${settings.services_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
-          />
-        )}
-
-        {/* Dark Overlay */}
-        <div className="hero-overlay" />
-
-        {/* Hero Content */}
-        <div className="hero-content">
-          <h1 className="hero-title">
-            {settings.hero_title || 'THE QUIZ MASTER GENERAL'}
-          </h1>
-          <p className="hero-subtitle">
-            {settings.hero_subtitle || "North East England's Premier Quiz & Entertainment"}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
-            <Link to="/services" className="btn btn-primary">
-              {settings.hero_button_1_text || 'Our Services'}
-            </Link>
-            <Link to="/contact" className="btn btn-secondary">
-              {settings.hero_button_2_text || 'Book Now'}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <ScrollReveal animation="fade-up">
-        <section className="section" style={{
-          backgroundColor: settings.social_proof_bg_color || '#003DA5',
-          backgroundImage: settings.social_proof_bg_image ? `url(${API_BASE_URL}${settings.social_proof_bg_image})` : undefined,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundBlendMode: 'overlay'
-        }}>
-          <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-              <div className="p-8">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-4">
-                  <Award className="text-brit-gold" size={48} />
-                </div>
-                <h3 className="text-5xl font-black text-brit-gold mb-2">700+</h3>
-                <p className="text-xl text-gray-300">Events Hosted Annually</p>
-              </div>
-              <div className="p-8">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-4">
-                  <Users className="text-brit-red" size={48} />
-                </div>
-                <h3 className="text-5xl font-black text-brit-red mb-2">50+</h3>
-                <p className="text-xl text-gray-300">Hospitality Partner Venues</p>
-              </div>
-              <div className="p-8">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-blue/20 rounded-full mb-4">
-                  <TrendingUp className="text-brit-blue" size={48} />
-                </div>
-                <h3 className="text-5xl font-black text-brit-blue mb-2">20+</h3>
-                <p className="text-xl text-gray-300">Years Event Management Experience</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </ScrollReveal>
-
-      {/* About Me Section */}
-      {settings.about_text && (
-        <ScrollReveal animation="fade-up">
-          <section className="section bg-white">
+          >
             <div className="container-custom">
-              <div className="max-w-4xl mx-auto text-center">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
-                  <User className="text-brit-navy" size={40} />
+              <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
+              <p className="section-subtitle">
+                {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue!'}
+              </p>
+              {services.length === 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(3)].map((_, i) => (
+                    <LoadingSkeleton key={i} type="service" />
+                  ))}
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-brit-navy mb-8 uppercase">About Me</h2>
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
-                    {settings.about_text}
-                  </p>
-                </div>
+              ) : (
+                <ItemCarousel>
+                  {services.map((service, idx) => (
+                    <ScrollReveal key={service.id} animation="fade-up" delay={idx * 100}>
+                      <div className="service-card h-full">
+                        <div className="service-icon">{service.icon}</div>
+                        <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
+                        <p className="mb-6 text-lg">{service.description}</p>
+                        {service.features && service.features.length > 0 && (
+                          <ul className="space-y-3 text-left">
+                            {service.features.map((feature, idx) => (
+                              <li key={idx} className="flex items-start">
+                                <span className="text-brit-gold mr-3 text-xl">✓</span>
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    </ScrollReveal>
+                  ))}
+                </ItemCarousel>
+              )}
+              <div className="text-center mt-16">
+                <Link to="/services" className="btn btn-primary">
+                  Learn More About Our Services
+                </Link>
               </div>
             </div>
           </section>
         </ScrollReveal>
-      )}
-
-      {/* Services Section */}
-      <ScrollReveal animation="fade-up">
-        <section
-          className="section"
-          style={{
-            backgroundColor: settings.services_bg_color || '#DC143C',
-            backgroundImage: settings.services_bg_image ? `url(${API_BASE_URL}${settings.services_bg_image})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundBlendMode: 'overlay'
-          }}
-        >
-          <div className="container-custom">
-            <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
-            <p className="section-subtitle">
-              {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue!'}
-            </p>
-            {services.length === 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[...Array(3)].map((_, i) => (
-                  <LoadingSkeleton key={i} type="service" />
-                ))}
-              </div>
-            ) : (
-              <ItemCarousel>
-                {services.map((service, idx) => (
-                  <ScrollReveal key={service.id} animation="fade-up" delay={idx * 100}>
-                    <div className="service-card h-full">
-                      <div className="service-icon">{service.icon}</div>
-                      <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
-                      <p className="mb-6 text-lg">{service.description}</p>
-                      {service.features && service.features.length > 0 && (
-                        <ul className="space-y-3 text-left">
-                          {service.features.map((feature, idx) => (
-                            <li key={idx} className="flex items-start">
-                              <span className="text-brit-gold mr-3 text-xl">✓</span>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </ItemCarousel>
-            )}
-            <div className="text-center mt-16">
-              <Link to="/services" className="btn btn-primary">
-                Learn More About Our Services
-              </Link>
-            </div>
-          </div>
-        </section>
-      </ScrollReveal>
-
-      {/* Upcoming Events */}
-      {upcomingEvents.length > 0 && (
-        <ScrollReveal animation="fade-up">
+      ),
+      'events': upcomingEvents.length > 0 && (
+        <ScrollReveal animation="fade-up" key="events">
           <section
             className="section"
             style={{
@@ -374,11 +263,9 @@ const Home = () => {
             </div>
           </section>
         </ScrollReveal>
-      )}
-
-      {/* Testimonials */}
-      {reviews.length > 0 && (
-        <ScrollReveal animation="fade-up">
+      ),
+      'reviews': reviews.length > 0 && (
+        <ScrollReveal animation="fade-up" key="reviews">
           <section
             className="section"
             style={{
@@ -412,11 +299,9 @@ const Home = () => {
             </div>
           </section>
         </ScrollReveal>
-      )}
-
-      {/* Photo Gallery Section */}
-      {galleryImages.length > 0 && (
-        <ScrollReveal animation="fade-up">
+      ),
+      'gallery': galleryImages.length > 0 && (
+        <ScrollReveal animation="fade-up" key="gallery">
           <section
             className="section"
             style={{
@@ -466,11 +351,9 @@ const Home = () => {
             </div>
           </section>
         </ScrollReveal>
-      )}
-
-      {/* Meet the Team Section */}
-      {teamMembers.length > 0 && (
-        <ScrollReveal animation="fade-up">
+      ),
+      'team': teamMembers.length > 0 && (
+        <ScrollReveal animation="fade-up" key="team">
           <section
             className="section"
             style={{
@@ -527,13 +410,61 @@ const Home = () => {
             </div>
           </section>
         </ScrollReveal>
-      )}
+      ),
+      'question_of_day': <QuestionOfTheDay key="question_of_day" />,
+      'social_media': <SocialMediaFeed key="social_media" />
+    };
 
-      {/* Question of the Day */}
-      <QuestionOfTheDay />
+    return sections[sectionKey] || null;
+  };
 
-      {/* Social Media Feed */}
-      <SocialMediaFeed />
+  return (
+    <div>
+      {/* Skip to Content Link for Accessibility */}
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
+
+      {/* Floating CTA Button */}
+      <FloatingCTA />
+    <div id="main-content">
+      {/* PARALLAX HERO SECTION */}
+      <section className="hero-section">
+        {/* Parallax Background Image */}
+        {heroImageUrl && (
+          <div
+            ref={parallaxRef}
+            className="hero-parallax-bg"
+            style={{
+              backgroundImage: `url(${API_BASE_URL}${heroImageUrl})`,
+            }}
+          />
+        )}
+
+        {/* Dark Overlay */}
+        <div className="hero-overlay" />
+
+        {/* Hero Content */}
+        <div className="hero-content">
+          <h1 className="hero-title">
+            {settings.hero_title || 'THE QUIZ MASTER GENERAL'}
+          </h1>
+          <p className="hero-subtitle">
+            {settings.hero_subtitle || "North East England's Premier Quiz & Entertainment"}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
+            <Link to="/services" className="btn btn-primary">
+              {settings.hero_button_1_text || 'Our Services'}
+            </Link>
+            <Link to="/contact" className="btn btn-secondary">
+              {settings.hero_button_2_text || 'Book Now'}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Dynamic Sections Based on Section Order */}
+      {sectionOrder.map(key => renderSection(key))}
 
       {/* CTA Section */}
       <ScrollReveal animation="scale-up">
