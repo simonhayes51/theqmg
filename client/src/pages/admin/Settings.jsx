@@ -1151,8 +1151,8 @@ Sunday: Closed"
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <Key size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <Key size={16} className="text-purple-600" />
                   Instagram Access Token
                 </label>
                 <input
@@ -1164,14 +1164,14 @@ Sunday: Closed"
                   placeholder="IGQVJxxxxxxxxxxxxxxxxxxxxxxxxx..."
                   disabled={settings.instagram_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Get from Facebook Developer Console → Instagram Basic Display API
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <Hash size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <Hash size={16} className="text-purple-600" />
                   Instagram User ID
                 </label>
                 <input
@@ -1183,7 +1183,7 @@ Sunday: Closed"
                   placeholder="17841400000000000"
                   disabled={settings.instagram_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Your numeric Instagram user ID
                 </p>
               </div>
@@ -1217,8 +1217,8 @@ Sunday: Closed"
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <Key size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <Key size={16} className="text-blue-600" />
                   Facebook Page Access Token
                 </label>
                 <input
@@ -1230,14 +1230,14 @@ Sunday: Closed"
                   placeholder="EAAxxxxxxxxxxxxxxxxxxxxxxxxx..."
                   disabled={settings.facebook_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Get from Facebook Graph API Explorer → Your Page
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <Hash size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <Hash size={16} className="text-blue-600" />
                   Facebook Page ID
                 </label>
                 <input
@@ -1249,7 +1249,7 @@ Sunday: Closed"
                   placeholder="123456789012345"
                   disabled={settings.facebook_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Your Facebook Page ID (found in Page Settings)
                 </p>
               </div>
@@ -1283,8 +1283,8 @@ Sunday: Closed"
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <Phone size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <Phone size={16} className="text-green-600" />
                   WhatsApp Business Number
                 </label>
                 <input
@@ -1296,14 +1296,14 @@ Sunday: Closed"
                   placeholder="447123456789 (UK: 44 + number without leading 0)"
                   disabled={settings.whatsapp_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Include country code, no spaces or symbols (e.g., 447xxxxxxxxx for UK)
                 </p>
               </div>
 
               <div>
-                <label className="label flex items-center gap-2">
-                  <MessageCircle size={16} />
+                <label className="label flex items-center gap-2 text-gray-900 font-semibold">
+                  <MessageCircle size={16} className="text-green-600" />
                   Default Chat Message
                 </label>
                 <textarea
@@ -1315,7 +1315,7 @@ Sunday: Closed"
                   placeholder="Hi! I'd like to know more about your quiz nights."
                   disabled={settings.whatsapp_enabled !== 'true'}
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-800 mt-1 font-medium">
                   Pre-filled message when customers click to chat
                 </p>
               </div>
