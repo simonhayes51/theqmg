@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
-import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap } from 'lucide-react';
+import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap, User } from 'lucide-react';
 import QuestionOfTheDay from '../components/QuestionOfTheDay';
 import SocialMediaFeed from '../components/SocialMediaFeed';
 import ItemCarousel from '../components/ItemCarousel';
@@ -132,7 +132,11 @@ const Home = () => {
       {/* Social Proof Section */}
       <ScrollReveal animation="fade-up">
         <section className="section" style={{
-          background: settings.social_proof_bg_color || '#003DA5'
+          backgroundColor: settings.social_proof_bg_color || '#003DA5',
+          backgroundImage: settings.social_proof_bg_image ? `url(${API_BASE_URL}${settings.social_proof_bg_image})` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'overlay'
         }}>
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -161,6 +165,27 @@ const Home = () => {
           </div>
         </section>
       </ScrollReveal>
+
+      {/* About Me Section */}
+      {settings.about_text && (
+        <ScrollReveal animation="fade-up">
+          <section className="section bg-white">
+            <div className="container-custom">
+              <div className="max-w-4xl mx-auto text-center">
+                <div className="inline-flex items-center justify-center p-4 bg-brit-navy/10 rounded-full mb-6">
+                  <User className="text-brit-navy" size={40} />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-black text-brit-navy mb-8 uppercase">About Me</h2>
+                <div className="prose prose-lg max-w-none">
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-line">
+                    {settings.about_text}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+      )}
 
       {/* Services Section */}
       <ScrollReveal animation="fade-up">

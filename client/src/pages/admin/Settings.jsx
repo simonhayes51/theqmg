@@ -229,7 +229,7 @@ const AdminSettings = () => {
       }
 
       // Upload section background images
-      const sectionKeys = ['services', 'events', 'gallery', 'team', 'reviews', 'footer'];
+      const sectionKeys = ['social_proof', 'services', 'events', 'gallery', 'team', 'reviews', 'footer'];
       for (const section of sectionKeys) {
         if (sectionBgImages[section]) {
           const formData = new FormData();
@@ -932,6 +932,7 @@ const AdminSettings = () => {
 
           <div className="space-y-8">
             {[
+              { key: 'social_proof', label: 'Stats/Social Proof Section' },
               { key: 'services', label: 'Services Section' },
               { key: 'events', label: 'Events Section' },
               { key: 'gallery', label: 'Gallery Section' },
