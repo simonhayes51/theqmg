@@ -125,7 +125,7 @@ const Home = () => {
       {/* Social Proof Section */}
       <ScrollReveal animation="fade-up">
         <section className="section" style={{
-          background: 'linear-gradient(135deg, rgba(0, 61, 165, 0.95) 0%, rgba(0, 61, 165, 0.85) 100%)'
+          background: settings.social_proof_bg_color || '#003DA5'
         }}>
           <div className="container-custom">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -159,8 +159,11 @@ const Home = () => {
       <ScrollReveal animation="fade-up">
         <section
           className="section"
-          style={settings.services_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})` } : {
-            background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
+          style={settings.services_bg_image ? {
+            backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})`,
+            backgroundColor: settings.services_bg_color || '#DC143C'
+          } : {
+            background: settings.services_bg_color || '#DC143C'
           }}
         >
           <div className="container-custom">
@@ -211,8 +214,11 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.events_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})` } : {
-              background: 'linear-gradient(135deg, #003DA5 0%, #DC143C 100%)'
+            style={settings.events_bg_image ? {
+              backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})`,
+              backgroundColor: settings.events_bg_color || '#003DA5'
+            } : {
+              background: settings.events_bg_color || '#003DA5'
             }}
           >
             <div className="container-custom">
@@ -262,8 +268,11 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.reviews_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})` } : {
-              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.9) 0%, rgba(0, 61, 165, 0.9) 100%)'
+            style={settings.reviews_bg_image ? {
+              backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})`,
+              backgroundColor: settings.reviews_bg_color || '#DC143C'
+            } : {
+              background: settings.reviews_bg_color || '#DC143C'
             }}
           >
             <div className="container-custom">
@@ -296,8 +305,11 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.gallery_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})` } : {
-              background: 'linear-gradient(135deg, #003DA5 0%, rgba(220, 20, 60, 0.95) 100%)'
+            style={settings.gallery_bg_image ? {
+              backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})`,
+              backgroundColor: settings.gallery_bg_color || '#003DA5'
+            } : {
+              background: settings.gallery_bg_color || '#003DA5'
             }}
           >
             <div className="container-custom">
@@ -346,8 +358,11 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.team_bg_image ? { backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})` } : {
-              background: 'linear-gradient(135deg, rgba(220, 20, 60, 0.95) 0%, rgba(0, 61, 165, 0.95) 100%)'
+            style={settings.team_bg_image ? {
+              backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})`,
+              backgroundColor: settings.team_bg_color || '#DC143C'
+            } : {
+              background: settings.team_bg_color || '#DC143C'
             }}
           >
             <div className="container-custom">
