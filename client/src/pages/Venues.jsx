@@ -157,6 +157,23 @@ const Venues = () => {
                 {filteredVenues.map((venue, index) => (
                   <ScrollReveal key={venue.id} animation="fade-up" delay={index * 100}>
                     <div className="service-card h-full flex flex-col">
+                      {/* Venue Logo */}
+                      {venue.image_url && (
+                        <div className="mb-4 flex justify-center">
+                          <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-brit-gold shadow-xl bg-white">
+                            <img
+                              src={`${import.meta.env.VITE_API_URL.replace('/api', '')}${venue.image_url}`}
+                              alt={`${venue.name} logo`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.parentElement.style.display = 'none';
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       {/* Venue Name */}
                       <h3 className="text-2xl font-black mb-4 text-center uppercase" style={{color: '#f0f0f0'}}>
                         {venue.name}
