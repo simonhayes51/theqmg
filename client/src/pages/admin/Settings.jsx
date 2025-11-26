@@ -36,6 +36,7 @@ const AdminSettings = () => {
 
     // About
     about_text: '',
+    about_image: '',
     tagline: '',
 
     // Hero Image
@@ -93,6 +94,8 @@ const AdminSettings = () => {
   const [heroImagePreview, setHeroImagePreview] = useState(null);
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [aboutImage, setAboutImage] = useState(null);
+  const [aboutImagePreview, setAboutImagePreview] = useState(null);
   const [sectionBgImages, setSectionBgImages] = useState({});
   const [sectionBgPreviews, setSectionBgPreviews] = useState({});
   const [loading, setLoading] = useState(true);
@@ -141,6 +144,11 @@ const AdminSettings = () => {
       // Set logo preview if it exists
       if (settingsObj.logo_url) {
         setLogoPreview(`${API_BASE_URL}${settingsObj.logo_url}`);
+      }
+
+      // Set about image preview if it exists
+      if (settingsObj.about_image) {
+        setAboutImagePreview(`${API_BASE_URL}${settingsObj.about_image}`);
       }
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -242,6 +250,26 @@ const AdminSettings = () => {
         }
       }
 
+      // Upload about image if one was selected
+      if (aboutImage) {
+        console.log('Uploading about image...');
+        const formData = new FormData();
+        formData.append('image', aboutImage);
+        formData.append('title', 'About Me Image');
+        formData.append('category', 'about');
+        formData.append('description', 'About Me section image');
+
+        const uploadRes = await galleryAPI.upload(formData);
+        console.log('About image upload response:', uploadRes.data);
+        if (uploadRes.data && uploadRes.data.image_url) {
+          settings.about_image = uploadRes.data.image_url;
+          console.log('About image URL set:', settings.about_image);
+        } else {
+          console.error('About image upload succeeded but no image_url in response');
+          throw new Error('About image upload failed - no image URL returned');
+        }
+      }
+
       // Upload section background images
       const sectionKeys = ['social_proof', 'services', 'events', 'gallery', 'team', 'reviews', 'footer'];
       for (const section of sectionKeys) {
@@ -268,6 +296,7 @@ const AdminSettings = () => {
       showMessage('✅ Settings saved successfully!', 'success');
       setHeroImage(null);
       setLogo(null);
+      setAboutImage(null);
       setSectionBgImages({});
 
       // Reload settings to get fresh data
@@ -1136,6 +1165,48 @@ Sunday: Closed"
               placeholder="Tell visitors about your business, your experience, what makes you unique..."
             ></textarea>
             <p className="text-xs text-gray-500 mt-1">This text may appear on your homepage or about page</p>
+          </div>
+
+          <div className="mt-6">
+            <label className="label">About Me Image (Optional)</label>
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setAboutImage(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => setAboutImagePreview(reader.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="input w-full"
+                />
+                <p className="text-xs text-gray-500 mt-1">Add a photo to accompany your about text (recommended: 800x600px or larger)</p>
+              </div>
+              {aboutImagePreview && (
+                <div className="relative">
+                  <img
+                    src={aboutImagePreview}
+                    alt="About preview"
+                    className="h-32 w-auto rounded-lg border-2 border-gray-200 object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAboutImage(null);
+                      setAboutImagePreview(null);
+                    }}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
