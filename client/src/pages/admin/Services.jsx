@@ -12,7 +12,8 @@ const AdminServices = () => {
     description: '',
     icon: '',
     features: [],
-    display_order: 0
+    display_order: 0,
+    is_active: true
   });
   const [featureInput, setFeatureInput] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -47,7 +48,8 @@ const AdminServices = () => {
       description: '',
       icon: '',
       features: [],
-      display_order: 0
+      display_order: 0,
+      is_active: true
     });
     setFeatureInput('');
     setShowModal(true);
@@ -60,7 +62,8 @@ const AdminServices = () => {
       description: service.description || '',
       icon: service.icon || '',
       features: Array.isArray(service.features) ? service.features : [],
-      display_order: service.display_order || 0
+      display_order: service.display_order || 0,
+      is_active: service.is_active !== false
     });
     setFeatureInput('');
     setShowModal(true);
@@ -74,7 +77,8 @@ const AdminServices = () => {
       description: '',
       icon: '',
       features: [],
-      display_order: 0
+      display_order: 0,
+      is_active: true
     });
     setFeatureInput('');
   };
@@ -125,7 +129,8 @@ const AdminServices = () => {
         description: formData.description,
         icon: formData.icon || null,
         features: formData.features.length > 0 ? formData.features : null,
-        display_order: parseInt(formData.display_order) || 0
+        display_order: parseInt(formData.display_order) || 0,
+        is_active: formData.is_active !== false
       };
 
       if (editingService) {
