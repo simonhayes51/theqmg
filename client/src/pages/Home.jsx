@@ -19,7 +19,14 @@ const Home = () => {
   const [galleryImages, setGalleryImages] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [heroImageUrl, setHeroImageUrl] = useState('');
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState({
+    social_proof_bg_color: '#003DA5',
+    services_bg_color: '#DC143C',
+    events_bg_color: '#003DA5',
+    reviews_bg_color: '#DC143C',
+    gallery_bg_color: '#003DA5',
+    team_bg_color: '#DC143C'
+  });
   const parallaxRef = useRef(null);
 
   useEffect(() => {
@@ -59,9 +66,9 @@ const Home = () => {
       setGalleryImages(galleryData.slice(0, 6));
       setTeamMembers(Array.isArray(teamRes.data) ? teamRes.data : []);
 
-      // Load settings
+      // Load settings and merge with defaults
       const settingsData = settingsRes.data || {};
-      setSettings(settingsData);
+      setSettings(prev => ({ ...prev, ...settingsData }));
 
       // Load hero image from settings
       if (settingsData.hero_image_url) {
