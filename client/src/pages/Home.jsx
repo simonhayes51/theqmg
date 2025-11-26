@@ -166,11 +166,12 @@ const Home = () => {
       <ScrollReveal animation="fade-up">
         <section
           className="section"
-          style={settings.services_bg_image ? {
-            backgroundImage: `url(${API_BASE_URL}${settings.services_bg_image})`,
-            backgroundColor: settings.services_bg_color || '#DC143C'
-          } : {
-            background: settings.services_bg_color || '#DC143C'
+          style={{
+            backgroundColor: settings.services_bg_color || '#DC143C',
+            backgroundImage: settings.services_bg_image ? `url(${API_BASE_URL}${settings.services_bg_image})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'overlay'
           }}
         >
           <div className="container-custom">
@@ -221,11 +222,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.events_bg_image ? {
-              backgroundImage: `url(${API_BASE_URL}${settings.events_bg_image})`,
-              backgroundColor: settings.events_bg_color || '#003DA5'
-            } : {
-              background: settings.events_bg_color || '#003DA5'
+            style={{
+              backgroundColor: settings.events_bg_color || '#003DA5',
+              backgroundImage: settings.events_bg_image ? `url(${API_BASE_URL}${settings.events_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -275,11 +277,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.reviews_bg_image ? {
-              backgroundImage: `url(${API_BASE_URL}${settings.reviews_bg_image})`,
-              backgroundColor: settings.reviews_bg_color || '#DC143C'
-            } : {
-              background: settings.reviews_bg_color || '#DC143C'
+            style={{
+              backgroundColor: settings.reviews_bg_color || 'rgba(220, 20, 60, 0.9)',
+              backgroundImage: settings.reviews_bg_image ? `url(${API_BASE_URL}${settings.reviews_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -312,11 +315,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.gallery_bg_image ? {
-              backgroundImage: `url(${API_BASE_URL}${settings.gallery_bg_image})`,
-              backgroundColor: settings.gallery_bg_color || '#003DA5'
-            } : {
-              background: settings.gallery_bg_color || '#003DA5'
+            style={{
+              backgroundColor: settings.gallery_bg_color || '#003DA5',
+              backgroundImage: settings.gallery_bg_image ? `url(${API_BASE_URL}${settings.gallery_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
@@ -365,11 +369,12 @@ const Home = () => {
         <ScrollReveal animation="fade-up">
           <section
             className="section"
-            style={settings.team_bg_image ? {
-              backgroundImage: `url(${API_BASE_URL}${settings.team_bg_image})`,
-              backgroundColor: settings.team_bg_color || '#DC143C'
-            } : {
-              background: settings.team_bg_color || '#DC143C'
+            style={{
+              backgroundColor: settings.team_bg_color || '#DC143C',
+              backgroundImage: settings.team_bg_image ? `url(${API_BASE_URL}${settings.team_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
             }}
           >
             <div className="container-custom">
