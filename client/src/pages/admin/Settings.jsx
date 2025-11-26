@@ -1118,21 +1118,21 @@ Sunday: Closed"
             <h2 className="text-2xl font-heading text-quiz-blue">Social Media Integration</h2>
           </div>
 
-          <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-lg">
-            <h3 className="font-semibold text-purple-900 mb-2">📸 Display Live Posts & Enable WhatsApp Chat</h3>
-            <p className="text-sm text-gray-700 mb-3">
+          <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg">
+            <h3 className="font-bold text-gray-900 mb-2">📸 Display Live Posts & Enable WhatsApp Chat</h3>
+            <p className="text-sm text-gray-900 mb-3 font-medium">
               Connect your Instagram and Facebook accounts to display real posts on your homepage. Enable WhatsApp for instant customer messaging.
             </p>
-            <p className="text-xs text-gray-600">
-              📖 Need help? Check <code className="bg-white px-2 py-1 rounded">SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
+            <p className="text-xs text-gray-800 font-medium">
+              📖 Need help? Check <code className="bg-white px-2 py-1 rounded text-gray-900">SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
             </p>
           </div>
 
           {/* Instagram Integration */}
-          <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200">
+          <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-300">
             <div className="flex items-center mb-4">
               <Instagram className="text-purple-600 mr-2" size={24} />
-              <h3 className="text-xl font-semibold text-purple-900">Instagram Feed</h3>
+              <h3 className="text-xl font-bold text-gray-900">Instagram Feed</h3>
             </div>
 
             <div className="space-y-4">
@@ -1145,9 +1145,9 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, instagram_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-purple-600"
                   />
-                  <span className="font-semibold">Enable Instagram Feed</span>
+                  <span className="font-semibold text-gray-900">Enable Instagram Feed</span>
                 </label>
-                <p className="text-xs text-gray-600 ml-6">Display your Instagram posts on the homepage</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium">Display your Instagram posts on the homepage</p>
               </div>
 
               <div>
@@ -1195,10 +1195,10 @@ Sunday: Closed"
           </div>
 
           {/* Facebook Integration */}
-          <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-200">
+          <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-300">
             <div className="flex items-center mb-4">
               <Facebook className="text-blue-600 mr-2" size={24} />
-              <h3 className="text-xl font-semibold text-blue-900">Facebook Feed</h3>
+              <h3 className="text-xl font-bold text-gray-900">Facebook Feed</h3>
             </div>
 
             <div className="space-y-4">
@@ -1211,9 +1211,9 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, facebook_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-blue-600"
                   />
-                  <span className="font-semibold">Enable Facebook Feed</span>
+                  <span className="font-semibold text-gray-900">Enable Facebook Feed</span>
                 </label>
-                <p className="text-xs text-gray-600 ml-6">Display your Facebook page posts on the homepage</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium">Display your Facebook page posts on the homepage</p>
               </div>
 
               <div>
@@ -1261,10 +1261,10 @@ Sunday: Closed"
           </div>
 
           {/* WhatsApp Integration */}
-          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-200">
+          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-300">
             <div className="flex items-center mb-4">
               <MessageCircle className="text-green-600 mr-2" size={24} />
-              <h3 className="text-xl font-semibold text-green-900">WhatsApp Chat Widget</h3>
+              <h3 className="text-xl font-bold text-gray-900">WhatsApp Chat Widget</h3>
             </div>
 
             <div className="space-y-4">
@@ -1277,9 +1277,9 @@ Sunday: Closed"
                     onChange={(e) => setSettings(prev => ({ ...prev, whatsapp_enabled: e.target.checked ? 'true' : 'false' }))}
                     className="w-4 h-4 text-green-600"
                   />
-                  <span className="font-semibold">Enable WhatsApp Chat Widget</span>
+                  <span className="font-semibold text-gray-900">Enable WhatsApp Chat Widget</span>
                 </label>
-                <p className="text-xs text-gray-600 ml-6">Show floating WhatsApp button on all pages</p>
+                <p className="text-xs text-gray-800 ml-6 font-medium">Show floating WhatsApp button on all pages</p>
               </div>
 
               <div>
