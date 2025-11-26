@@ -136,7 +136,7 @@ const Contact = () => {
           <div className="hero-overlay" />
           <div className="hero-content">
             <h1 className="hero-title">{settings.contact_page_title || 'Get In Touch'}</h1>
-            <p className="hero-subtitle">{settings.contact_page_subtitle || "Let's discuss how we can bring entertainment to your venue"}</p>
+            <p className="hero-subtitle">{settings.contact_page_subtitle || "Let's discuss how we can bring entertainment to your venue!"}</p>
           </div>
         </section>
       </ScrollReveal>
@@ -181,8 +181,8 @@ const Contact = () => {
                       <div>
                         <h3 className="font-semibold mb-1 text-gray-200">Location</h3>
                         <p className="text-gray-300">
-                          Serving venues across<br />
-                          North East England
+                          Covering all of The North East<br />
+                          of England and beyond!
                         </p>
                       </div>
                     </div>

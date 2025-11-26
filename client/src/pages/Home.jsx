@@ -140,22 +140,22 @@ const Home = () => {
                 <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-4">
                   <Award className="text-brit-gold" size={48} />
                 </div>
-                <h3 className="text-5xl font-black text-brit-gold mb-2">500+</h3>
-                <p className="text-xl text-gray-300">Events Hosted</p>
+                <h3 className="text-5xl font-black text-brit-gold mb-2">700+</h3>
+                <p className="text-xl text-gray-300">Events Hosted Annually</p>
               </div>
               <div className="p-8">
                 <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-4">
                   <Users className="text-brit-red" size={48} />
                 </div>
                 <h3 className="text-5xl font-black text-brit-red mb-2">50+</h3>
-                <p className="text-xl text-gray-300">Partner Venues</p>
+                <p className="text-xl text-gray-300">Hospitality Partner Venues</p>
               </div>
               <div className="p-8">
                 <div className="inline-flex items-center justify-center p-4 bg-brit-blue/20 rounded-full mb-4">
                   <TrendingUp className="text-brit-blue" size={48} />
                 </div>
-                <h3 className="text-5xl font-black text-brit-blue mb-2">10+</h3>
-                <p className="text-xl text-gray-300">Years Experience</p>
+                <h3 className="text-5xl font-black text-brit-blue mb-2">20+</h3>
+                <p className="text-xl text-gray-300">Years Event Management Experience</p>
               </div>
             </div>
           </div>
@@ -177,7 +177,7 @@ const Home = () => {
           <div className="container-custom">
             <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
             <p className="section-subtitle">
-              {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue'}
+              {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue!'}
             </p>
             {services.length === 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -440,9 +440,9 @@ const Home = () => {
             <div className="inline-flex items-center justify-center p-4 bg-white/20 rounded-full mb-6">
               <Zap className="text-white" size={48} />
             </div>
-            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase">Ready to Book?</h2>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase">Get In Touch Today To Book Your Event</h2>
             <p className="text-2xl md:text-3xl mb-12 max-w-3xl mx-auto text-brit-gold font-bold">
-              Get in touch today to discuss your quiz night, race night, or special event requirements.
+              Ready to book? Contact us to discuss your quiz night, race night, or special event requirements.
             </p>
             <Link to="/contact" className="btn btn-secondary text-xl hover:scale-105 transform transition-transform">
               Contact Us Now
