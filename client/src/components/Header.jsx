@@ -52,10 +52,10 @@ const Header = () => {
               <img
                 src={logoUrl}
                 alt="THE QUIZ MASTER GENERAL"
-                className="h-16 md:h-20 w-auto object-contain relative z-50 transition-all hover:scale-105"
+                className="h-32 md:h-40 w-auto object-contain relative z-50 transition-all hover:scale-105"
                 style={{
                   filter: 'drop-shadow(0 4px 12px rgba(220, 20, 60, 0.4))',
-                  marginBottom: '-1.5rem'
+                  marginBottom: '-50%'
                 }}
               />
             ) : (
