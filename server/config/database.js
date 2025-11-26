@@ -57,9 +57,13 @@ pool.on('error', (err) => {
   console.log('⚠️  Database connection will be retried automatically');
 });
 
-// Test initial connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
+// Test initial connection with timeout
+const testConnection = async () => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    console.log('✓ Database connection test successful');
+    console.log(`✓ Server time: ${result.rows[0].now}\n`);
+  } catch (err) {
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.error('❌ Failed to connect to database:');
     console.error(err.message);
@@ -69,10 +73,10 @@ pool.query('SELECT NOW()', (err, res) => {
     console.error('2. Database server is running and accessible');
     console.error('3. Database credentials are correct');
     console.error('4. Network/firewall allows connection\n');
-  } else {
-    console.log('✓ Database connection test successful');
-    console.log(`✓ Server time: ${res.rows[0].now}\n`);
   }
-});
+};
+
+// Run connection test asynchronously (non-blocking)
+testConnection();
 
 export default pool;
