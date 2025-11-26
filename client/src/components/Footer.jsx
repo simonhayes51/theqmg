@@ -142,7 +142,7 @@ const Footer = () => {
               {coverageArea && (
                 <li className="footer-link flex items-center gap-2">
                   <MapPin size={18} className="text-brit-gold" />
-                  <span>Serving {coverageArea}</span>
+                  <span>Covering {coverageArea}</span>
                 </li>
               )}
             </ul>

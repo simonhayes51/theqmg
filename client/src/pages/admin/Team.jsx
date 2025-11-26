@@ -70,7 +70,9 @@ const AdminTeam = () => {
       email: member.email || '',
       specialties: Array.isArray(member.specialties) ? member.specialties : [],
       image: null,
-      image_url: member.image_url || ''
+      image_url: member.image_url || '',
+      display_order: member.display_order || 0,
+      is_active: member.is_active !== false
     });
     setSpecialtyInput('');
     setImagePreview(member.image_url ? `${API_BASE_URL}${member.image_url}` : null);
@@ -151,6 +153,11 @@ const AdminTeam = () => {
       submitData.append('email', formData.email || '');
       // Always send specialties, even if empty array
       submitData.append('specialties', JSON.stringify(formData.specialties));
+      // Include display_order and is_active when editing
+      if (editingMember) {
+        submitData.append('display_order', formData.display_order || editingMember.display_order || 0);
+        submitData.append('is_active', formData.is_active !== false);
+      }
       if (formData.image) {
         submitData.append('image', formData.image);
       } else if (editingMember && formData.image_url) {

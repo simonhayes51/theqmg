@@ -203,7 +203,7 @@ const Services = () => {
             </div>
             <h2 className="text-5xl md:text-6xl font-black mb-6 text-white uppercase">Ready to Book?</h2>
             <p className="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-white">
-              Get in touch today to discuss how we can bring entertainment to your venue.
+              Get in touch today to discuss how we can bring entertainment to your venue!
             </p>
             <Link to="/contact" className="btn btn-secondary text-lg hover:scale-105 transform transition-transform">
               Contact Us Today
