@@ -139,7 +139,16 @@ const Home = () => {
       ),
       'about': settings.about_text && (
         <ScrollReveal animation="fade-up" key="about">
-          <section className="section bg-gradient-to-br from-gray-50 to-white py-20 md:py-32">
+          <section
+            className="section py-20 md:py-32"
+            style={{
+              backgroundColor: settings.about_bg_color || '#f9fafb',
+              backgroundImage: settings.about_bg_image ? `url(${API_BASE_URL}${settings.about_bg_image})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
             <div className="container-custom">
               <div className="max-w-7xl mx-auto">
                 {/* Header */}
@@ -442,8 +451,34 @@ const Home = () => {
           </section>
         </ScrollReveal>
       ),
-      'question_of_day': <QuestionOfTheDay key="question_of_day" />,
-      'social_media': <SocialMediaFeed key="social_media" />
+      'question_of_day': (
+        <div
+          key="question_of_day"
+          style={{
+            backgroundColor: settings.question_of_day_bg_color || '#1f2937',
+            backgroundImage: settings.question_of_day_bg_image ? `url(${API_BASE_URL}${settings.question_of_day_bg_image})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'overlay'
+          }}
+        >
+          <QuestionOfTheDay />
+        </div>
+      ),
+      'social_media': (
+        <div
+          key="social_media"
+          style={{
+            backgroundColor: settings.social_media_bg_color || '#ffffff',
+            backgroundImage: settings.social_media_bg_image ? `url(${API_BASE_URL}${settings.social_media_bg_image})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundBlendMode: 'overlay'
+          }}
+        >
+          <SocialMediaFeed />
+        </div>
+      )
     };
 
     return sections[sectionKey] || null;

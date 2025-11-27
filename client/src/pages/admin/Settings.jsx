@@ -74,11 +74,15 @@ const AdminSettings = () => {
     home_reviews_title: '',
 
     // Section Background Images
+    social_proof_bg_image: '',
+    about_bg_image: '',
     services_bg_image: '',
     events_bg_image: '',
     gallery_bg_image: '',
     team_bg_image: '',
     reviews_bg_image: '',
+    question_of_day_bg_image: '',
+    social_media_bg_image: '',
     footer_bg_image: '',
 
     // Section Background Colors
@@ -271,7 +275,7 @@ const AdminSettings = () => {
       }
 
       // Upload section background images
-      const sectionKeys = ['social_proof', 'services', 'events', 'gallery', 'team', 'reviews', 'footer'];
+      const sectionKeys = ['social_proof', 'about', 'services', 'events', 'gallery', 'team', 'reviews', 'question_of_day', 'social_media', 'footer'];
       for (const section of sectionKeys) {
         if (sectionBgImages[section]) {
           const formData = new FormData();
@@ -1065,11 +1069,14 @@ const AdminSettings = () => {
           <div className="space-y-8">
             {[
               { key: 'social_proof', label: 'Stats/Social Proof Section' },
+              { key: 'about', label: 'About Me Section' },
               { key: 'services', label: 'Services Section' },
               { key: 'events', label: 'Events Section' },
               { key: 'gallery', label: 'Gallery Section' },
               { key: 'team', label: 'Team Section' },
               { key: 'reviews', label: 'Reviews Section' },
+              { key: 'question_of_day', label: 'Question of the Day Section' },
+              { key: 'social_media', label: 'Social Media Feed Section' },
               { key: 'footer', label: 'Footer Section' }
             ].map(({ key, label }) => (
               <div key={key} className="border-2 border-gray-200 rounded-lg p-4">
