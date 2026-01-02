@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "init-db": "node init-database.js"
+    "init-db": "node init-database.js",
+    "reset-password": "node reset-admin-password.js"
   },
   "keywords": [],
   "author": "",
