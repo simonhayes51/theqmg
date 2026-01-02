@@ -593,36 +593,52 @@ footer {
 }
 
 .form-input, .input {
-  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all;
-  border-color: rgba(107, 114, 128, 0.5);  /* gray-500 with better visibility */
+  @apply w-full px-5 py-4 rounded-xl border-2 focus:outline-none transition-all;
+  background-color: #ffffff !important;  /* White background for maximum contrast */
+  color: #1f2937 !important;  /* Dark gray text */
+  border-color: #9ca3af;  /* Medium gray border */
+}
+
+.form-input::placeholder, .input::placeholder {
+  color: #6b7280 !important;  /* Medium gray placeholder - readable on white */
+  opacity: 1;
 }
 
 .form-input:focus, .input:focus {
   border-color: #003DA5;  /* quiz-blue for better visibility */
-  box-shadow: 0 0 30px rgba(0, 61, 165, 0.4);
-  background-color: #000000;  /* Darker on focus for better contrast */
+  box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.2);
+  background-color: #ffffff !important;
 }
 
 .form-textarea, .textarea {
-  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all resize-y;
+  @apply w-full px-5 py-4 rounded-xl border-2 focus:outline-none transition-all resize-y;
   min-height: 150px;
-  border-color: rgba(107, 114, 128, 0.5);  /* gray-500 with better visibility */
+  background-color: #ffffff !important;  /* White background for maximum contrast */
+  color: #1f2937 !important;  /* Dark gray text */
+  border-color: #9ca3af;  /* Medium gray border */
+}
+
+.form-textarea::placeholder, .textarea::placeholder {
+  color: #6b7280 !important;  /* Medium gray placeholder - readable on white */
+  opacity: 1;
 }
 
 .form-textarea:focus, .textarea:focus {
   border-color: #003DA5;  /* quiz-blue for better visibility */
-  box-shadow: 0 0 30px rgba(0, 61, 165, 0.4);
-  background-color: #000000;  /* Darker on focus for better contrast */
+  box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.2);
+  background-color: #ffffff !important;
 }
 
-.form-select {
-  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all;
-  border-color: rgba(220, 20, 60, 0.3);
+.form-select, select {
+  @apply w-full px-5 py-4 rounded-xl border-2 focus:outline-none transition-all;
+  background-color: #ffffff !important;  /* White background for maximum contrast */
+  color: #1f2937 !important;  /* Dark gray text */
+  border-color: #9ca3af;  /* Medium gray border */
 }
 
-.form-select:focus {
-  border-color: #DC143C;
-  box-shadow: 0 0 30px rgba(220, 20, 60, 0.3);
+.form-select:focus, select:focus {
+  border-color: #003DA5;
+  box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.2);
 }
 
 .label {
