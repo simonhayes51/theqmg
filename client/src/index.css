@@ -118,6 +118,18 @@ nav {
 }
 
 .hero-subtitle {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.hero-pattern {
+  display: none; /* Simplified - no pattern needed */
+}
+
+.hero-subtitle {
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: 600;
   line-height: 1.4;
@@ -505,4 +517,360 @@ nav {
 /* Footer */
 footer {
   @apply bg-gray-950 text-white py-20 px-6;
-  border-top: 3
+  border-top: 3px solid #DC143C;
+  box-shadow: 0 -10px 40px rgba(220, 20, 60, 0.2);
+}
+
+.footer-grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-16 max-w-7xl mx-auto;
+}
+
+.footer-section h3 {
+  @apply text-2xl font-black mb-6 uppercase;
+  color: #FFB700;
+  letter-spacing: 0.05em;
+}
+
+.footer-link {
+  @apply text-gray-400 transition-colors duration-200 block mb-3 text-lg;
+}
+
+.footer-link:hover {
+  color: #DC143C;
+}
+
+/* Hero Pattern - Keep for backward compatibility */
+.hero-pattern {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00247D 0%, #0f172a 50%, #003DA5 100%);
+}
+
+/* Admin Styles */
+.admin-container {
+  @apply min-h-screen bg-gray-950;
+}
+
+.admin-header {
+  @apply bg-gray-900 p-6 sticky top-0 z-50;
+  border-bottom: 3px solid #DC143C;
+}
+
+.admin-content {
+  @apply max-w-7xl mx-auto p-6;
+}
+
+.admin-card {
+  @apply bg-gray-900 rounded-2xl p-8 shadow-lg border border-gray-800;
+}
+
+.admin-table {
+  @apply w-full;
+}
+
+.admin-table thead {
+  @apply bg-gray-800;
+}
+
+.admin-table th {
+  @apply px-6 py-4 text-left text-sm font-bold text-gray-100 uppercase tracking-wider;
+}
+
+.admin-table td {
+  @apply px-6 py-4 text-sm text-gray-300 border-t border-gray-800;
+}
+
+/* Form Styles */
+.form-group {
+  @apply mb-8;
+}
+
+.form-label {
+  @apply block text-sm font-bold text-gray-100 mb-3 uppercase tracking-wide;
+}
+
+.form-input, .input {
+  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all;
+  border-color: rgba(107, 114, 128, 0.5);  /* gray-500 with better visibility */
+}
+
+.form-input:focus, .input:focus {
+  border-color: #003DA5;  /* quiz-blue for better visibility */
+  box-shadow: 0 0 30px rgba(0, 61, 165, 0.4);
+  background-color: #000000;  /* Darker on focus for better contrast */
+}
+
+.form-textarea, .textarea {
+  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all resize-y;
+  min-height: 150px;
+  border-color: rgba(107, 114, 128, 0.5);  /* gray-500 with better visibility */
+}
+
+.form-textarea:focus, .textarea:focus {
+  border-color: #003DA5;  /* quiz-blue for better visibility */
+  box-shadow: 0 0 30px rgba(0, 61, 165, 0.4);
+  background-color: #000000;  /* Darker on focus for better contrast */
+}
+
+.form-select {
+  @apply w-full px-5 py-4 rounded-xl border-2 bg-gray-900 text-white focus:outline-none transition-all;
+  border-color: rgba(220, 20, 60, 0.3);
+}
+
+.form-select:focus {
+  border-color: #DC143C;
+  box-shadow: 0 0 30px rgba(220, 20, 60, 0.3);
+}
+
+.label {
+  @apply block text-sm font-bold text-gray-100 mb-3 uppercase tracking-wide;
+}
+
+/* Modal */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  @apply bg-gray-900 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto;
+  animation: slideUp 0.3s ease-out;
+  border: 2px solid rgba(220, 20, 60, 0.3);
+  box-shadow:
+    0 0 60px rgba(220, 20, 60, 0.4),
+    0 20px 80px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Loading */
+.loading {
+  @apply inline-block w-8 h-8 border-4 border-gray-700 rounded-full;
+  border-top-color: #DC143C;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Utilities */
+.container-custom {
+  @apply max-w-7xl mx-auto px-6;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #DC143C 0%, #FFB700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.divider {
+  @apply h-px my-16;
+  background: linear-gradient(90deg, transparent, rgba(220, 20, 60, 0.6), transparent);
+  box-shadow: 0 0 20px rgba(220, 20, 60, 0.4);
+}
+
+/* Carousel Mobile Optimizations */
+@media (max-width: 1024px) {
+  /* Make carousel navigation more prominent on tablets and phones */
+  .relative button[aria-label*="section"] {
+    padding: 0.75rem;
+  }
+
+  .relative button[aria-label*="section"] svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section {
+    @apply py-12 px-4;
+    min-height: 80vh; /* Ensure sections take up viewport on mobile */
+  }
+
+  .hero-section, .hero-pattern {
+    min-height: 85vh;
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+    margin-bottom: 2rem;
+  }
+
+  .container-custom {
+    @apply px-4;
+  }
+
+  .card {
+    @apply p-6;
+  }
+
+  .service-card {
+    @apply p-6;
+  }
+
+  .grid-3,
+  .grid-2 {
+    @apply gap-6;
+    /* Stack vertically on mobile for better readability */
+    @apply grid-cols-1;
+  }
+
+  .btn {
+    @apply px-6 py-3 text-base;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    @apply mb-8;
+  }
+
+  .section-subtitle {
+    @apply text-base mb-8;
+  }
+
+  .footer-grid {
+    @apply gap-10;
+  }
+
+  /* Make cards stack on mobile */
+  .team-avatar {
+    @apply w-40 h-40 mb-6;
+  }
+
+  /* Review stars smaller on mobile */
+  .review-stars {
+    @apply text-2xl mb-4;
+  }
+
+  /* Gallery grid tighter on mobile */
+  .gallery-grid {
+    @apply gap-4 grid-cols-1;
+  }
+
+  /* Carousel controls optimization for mobile */
+  .relative button[aria-label*="section"] {
+    padding: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .relative button[aria-label*="section"] svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Move counter to top-left on mobile to avoid button overlap */
+  .absolute.top-8.right-8 {
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Adjust dots for mobile */
+  .absolute.bottom-8 {
+    bottom: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes scale-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  @apply absolute left-1/2 -translate-x-1/2 bg-brit-gold text-gray-900 px-6 py-3 rounded-b-lg font-bold uppercase tracking-wide;
+  top: -100px;
+  z-index: 9999;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Lazy load blur-up effect */
+.lazy-image {
+  filter: blur(20px);
+  transition: filter 0.3s;
+}
+
+.lazy-image.loaded {
+  filter: blur(0);
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus */
+*:focus-visible {
+  @apply outline-none ring-offset-2 ring-offset-gray-950;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.5);
+}
