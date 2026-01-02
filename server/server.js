@@ -176,7 +176,60 @@ app.get('/api/debug/uploads', (req, res) => {
 });
 
 // TEMPORARY: Password reset endpoint (REMOVE AFTER USE)
-// Call this via: https://your-site.com/api/emergency-reset-password?secret=TEMP_RESET_2026
+// GET version - just visit the URL in your browser: https://your-site.com/api/emergency-reset?key=TEMP_RESET_2026
+app.get('/api/emergency-reset', async (req, res) => {
+  try {
+    const { key, password: newPassword } = req.query;
+
+    // Check secret key
+    if (key !== 'TEMP_RESET_2026') {
+      return res.status(403).json({ error: 'Invalid secret key' });
+    }
+
+    const bcrypt = (await import('bcrypt')).default;
+    const password = newPassword || 'admin123';
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update admin password
+    const result = await pool.query(
+      `UPDATE users SET password_hash = $1, updated_at = NOW()
+       WHERE username = 'admin' OR role = 'admin'
+       RETURNING username, email`,
+      [hashedPassword]
+    );
+
+    if (result.rows.length === 0) {
+      // Create admin user if doesn't exist
+      await pool.query(
+        `INSERT INTO users (username, email, password_hash, role)
+         VALUES ('admin', 'admin@thequizmastergeneral.com', $1, 'admin')`,
+        [hashedPassword]
+      );
+
+      return res.json({
+        success: true,
+        message: 'Admin user created',
+        username: 'admin',
+        password: password,
+        warning: 'REMOVE THIS ENDPOINT AFTER USE!'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Password reset successfully',
+      username: result.rows[0].username,
+      email: result.rows[0].email,
+      password: password,
+      warning: 'REMOVE THIS ENDPOINT AFTER USE!'
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST version for programmatic access
 app.post('/api/emergency-reset-password', async (req, res) => {
   try {
     const { secret, newPassword } = req.body;
