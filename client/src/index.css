@@ -505,4 +505,6 @@ nav {
 /* Footer */
 footer {
   @apply bg-gray-950 text-white py-20 px-6;
-  border-top: 3
+  border-top: 3px solid #DC143C;
+  box-shadow: 0 -10px 40px rgba(220, 20, 60, 0.2);
+}
