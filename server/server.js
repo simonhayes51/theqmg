@@ -7,6 +7,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
+// Import database pool
+import pool from './config/database.js';
+
 // Import migration runner
 import runMigrations from './utils/runMigrations.js';
 
