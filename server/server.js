@@ -82,6 +82,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4173',
   'https://profound-abundance-production.up.railway.app',
+  'https://www.thequizmastergeneral.com',
+  'https://thequizmastergeneral.com',
   process.env.CLIENT_URL
 ].filter(Boolean);
 
