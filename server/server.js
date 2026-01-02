@@ -120,7 +120,7 @@ app.use('/uploads', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
-}, express.static(path.join(__dirname, '../uploads')));
+}, express.static(path.join(__dirname, 'uploads')));
 
 // Apply rate limiting
 app.use('/api/auth/login', authLimiter);  // Strict limit for login
@@ -150,7 +150,7 @@ app.get('/api/health', (req, res) => {
 // Diagnostic endpoint for uploads directory (helps debug Railway volume issues)
 app.get('/api/debug/uploads', (req, res) => {
   try {
-    const uploadsPath = path.join(__dirname, '../uploads');
+    const uploadsPath = path.join(__dirname, 'uploads');
     const imagesPath = path.join(uploadsPath, 'images');
 
     const diagnostics = {
@@ -307,7 +307,7 @@ app.use((err, req, res, next) => {
 });
 
 // Create uploads directory if it doesn't exist
-const uploadsDir = path.join(__dirname, '../uploads/images');
+const uploadsDir = path.join(__dirname, 'uploads/images');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
   console.log('✓ Created uploads directory:', uploadsDir);

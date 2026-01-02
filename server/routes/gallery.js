@@ -14,7 +14,7 @@ const router = express.Router();
 // Configure multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../uploads/images'));
+    cb(null, path.join(__dirname, '../uploads/images'));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -143,7 +143,7 @@ router.post('/', authenticateToken, isAdmin, upload.single('image'), async (req,
 
     // Delete the uploaded file if database insert failed
     if (req.file) {
-      const filePath = path.join(__dirname, '../../uploads/images', req.file.filename);
+      const filePath = path.join(__dirname, '../uploads/images', req.file.filename);
       fs.unlink(filePath, (unlinkErr) => {
         if (unlinkErr) console.error('Error deleting file after failed upload:', unlinkErr);
       });

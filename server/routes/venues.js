@@ -13,7 +13,7 @@ const router = express.Router();
 // Configure multer for venue logo uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../uploads/images'));
+    cb(null, path.join(__dirname, '../uploads/images'));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
