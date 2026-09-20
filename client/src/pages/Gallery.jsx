@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../utils/apiBase';
 import { galleryAPI } from '../services/api';
 import { X, Zap } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
 // Get API URL from environment
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const Gallery = () => {
   const [images, setImages] = useState([]);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { venuesAPI } from '../services/api';
+import { API_BASE_URL } from '../utils/apiBase';
 import { MapPin, Phone, Mail, Users, Search, Zap } from 'lucide-react';
 import VenueMap from '../components/VenueMap';
 import ScrollReveal from '../hooks/useScrollAnimation';
@@ -162,7 +163,7 @@ const Venues = () => {
                         <div className="mb-4 flex justify-center">
                           <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-brit-gold shadow-xl bg-white">
                             <img
-                              src={`${import.meta.env.VITE_API_URL.replace('/api', '')}${venue.image_url}`}
+                              src={`${API_BASE_URL}${venue.image_url}`}
                               alt={`${venue.name} logo`}
                               className="w-full h-full object-cover"
                               onError={(e) => {

@@ -8,9 +8,7 @@ import ItemCarousel from '../components/ItemCarousel';
 import FloatingCTA from '../components/FloatingCTA';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import ScrollReveal from '../hooks/useScrollAnimation';
-
-// Get API URL from environment
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+import { API_BASE_URL } from '../utils/apiBase';
 
 const Home = () => {
   const [services, setServices] = useState([]);

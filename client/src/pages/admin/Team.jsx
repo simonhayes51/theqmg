@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { teamAPI } from '../../services/api';
+import { API_BASE_URL } from '../../utils/apiBase';
 import { Plus, Edit, Trash2, Save, X, Image as ImageIcon, Mail, ArrowUp, ArrowDown } from 'lucide-react';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const AdminTeam = () => {
   const [team, setTeam] = useState([]);

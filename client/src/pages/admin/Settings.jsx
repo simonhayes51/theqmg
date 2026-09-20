@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { settingsAPI, galleryAPI } from '../../services/api';
+import { API_BASE_URL } from '../../utils/apiBase';
 import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles, MessageCircle, Key, Hash, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({

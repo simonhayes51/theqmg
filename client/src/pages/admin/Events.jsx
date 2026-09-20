@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { eventsAPI, venuesAPI, recurringEventsAPI } from '../../services/api';
+import { API_BASE_URL } from '../../utils/apiBase';
 import { Plus, Edit, Trash2, Calendar, MapPin, X, Save, Image as ImageIcon, Repeat } from 'lucide-react';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const AdminEvents = () => {
   const [events, setEvents] = useState([]);

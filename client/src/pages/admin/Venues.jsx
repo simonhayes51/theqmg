@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { venuesAPI } from '../../services/api';
+import { API_BASE_URL } from '../../utils/apiBase';
 import { Plus, Edit, Trash2, Save, X, MapPin, Phone, Mail, Upload, Image as ImageIcon } from 'lucide-react';
 
 const AdminVenues = () => {
@@ -84,7 +85,7 @@ const AdminVenues = () => {
       image: null,
       image_url: venue.image_url || null
     });
-    setImagePreview(venue.image_url ? `${import.meta.env.VITE_API_URL.replace('/api', '')}${venue.image_url}` : null);
+    setImagePreview(venue.image_url ? `${API_BASE_URL}${venue.image_url}` : null);
     setShowModal(true);
   };
 

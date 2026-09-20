@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
+import { API_BASE_URL } from '../utils/apiBase';
 import { useEffect, useState } from 'react';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, MapPin } from 'lucide-react';
 import { settingsAPI } from '../services/api';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
