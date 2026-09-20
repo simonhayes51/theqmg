@@ -26,15 +26,15 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-quiz-gray flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-quiz-gray flex items-center justify-center py-12 px-4 login-page">
       <div className="max-w-md w-full">
-        <div className="card">
+        <div className="login-card">
           <div className="text-center mb-8">
-            <div className="inline-block p-4 bg-quiz-blue rounded-full mb-4">
+            <div className="login-icon">
               <LogIn className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-heading text-quiz-blue">ADMIN LOGIN</h2>
-            <p className="text-gray-600 mt-2">Access the CMS dashboard</p>
+            <h2>Backstage Login</h2>
+            <p>Manage events, venues, gallery, and site copy.</p>
           </div>
 
           {error && (
@@ -80,18 +80,11 @@ const Login = () => {
               ) : (
                 <>
                   <LogIn size={20} />
-                  Login
+                  Log In
                 </>
               )}
             </button>
           </form>
-
-          <div className="mt-6 p-4 bg-gray-100 rounded text-sm">
-            <p className="font-semibold mb-2 text-gray-900">Default Credentials:</p>
-            <p className="text-gray-800">Username: admin</p>
-            <p className="text-gray-800">Password: admin123</p>
-            <p className="text-red-700 mt-2 font-medium">⚠️ Change these after first login!</p>
-          </div>
         </div>
       </div>
     </div>
