@@ -6,7 +6,35 @@ import pool from '../config/database.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Create migrations tracking table if it doesn't exist
+async function baseSchemaExists() {
+  const result = await pool.query(`
+    SELECT EXISTS (
+      SELECT FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+    );
+  `);
+
+  return result.rows[0].exists;
+}
+
+async function createBaseSchemaIfNeeded() {
+  if (await baseSchemaExists()) {
+    return;
+  }
+
+  const schemaPath = path.join(__dirname, '../schema.sql');
+
+  if (!fs.existsSync(schemaPath)) {
+    throw new Error(`Base schema file not found: ${schemaPath}`);
+  }
+
+  console.log('  -> Base schema missing, creating database tables');
+  const schema = fs.readFileSync(schemaPath, 'utf8');
+  await pool.query(schema);
+  console.log('  ✓ Base schema created');
+}
+
 async function createMigrationsTable() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -17,22 +45,17 @@ async function createMigrationsTable() {
   `);
 }
 
-// Get list of executed migrations
 async function getExecutedMigrations() {
   const result = await pool.query('SELECT filename FROM schema_migrations');
   return new Set(result.rows.map(row => row.filename));
 }
 
-// Run a single migration file
 async function runMigration(filename, filePath) {
   try {
-    console.log(`  → Running migration: ${filename}`);
+    console.log(`  -> Running migration: ${filename}`);
     const sql = fs.readFileSync(filePath, 'utf8');
 
-    // Execute the migration
     await pool.query(sql);
-
-    // Record that this migration was executed
     await pool.query(
       'INSERT INTO schema_migrations (filename) VALUES ($1)',
       [filename]
@@ -47,18 +70,14 @@ async function runMigration(filename, filePath) {
   }
 }
 
-// Run all pending migrations
 export async function runMigrations() {
   try {
     console.log('\n🔄 Checking for database migrations...');
 
-    // Create migrations tracking table
+    await createBaseSchemaIfNeeded();
     await createMigrationsTable();
 
-    // Get list of already executed migrations
     const executedMigrations = await getExecutedMigrations();
-
-    // Get all migration files
     const migrationsDir = path.join(__dirname, '../migrations');
 
     if (!fs.existsSync(migrationsDir)) {
@@ -68,9 +87,8 @@ export async function runMigrations() {
 
     const migrationFiles = fs.readdirSync(migrationsDir)
       .filter(file => file.endsWith('.sql'))
-      .sort(); // Run in alphabetical order
+      .sort();
 
-    // Filter out already executed migrations
     const pendingMigrations = migrationFiles.filter(
       file => !executedMigrations.has(file)
     );
@@ -82,7 +100,6 @@ export async function runMigrations() {
 
     console.log(`  📝 Found ${pendingMigrations.length} pending migration(s)\n`);
 
-    // Run each pending migration
     for (const file of pendingMigrations) {
       const filePath = path.join(migrationsDir, file);
       await runMigration(file, filePath);
@@ -92,7 +109,6 @@ export async function runMigrations() {
   } catch (error) {
     console.error('\n❌ Migration failed:', error.message);
     console.error('   Server will continue, but some features may not work correctly.\n');
-    // Don't throw - let the server start even if migrations fail
   }
 }
 
