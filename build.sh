@@ -3,12 +3,12 @@ set -e
 
 echo "Installing server dependencies..."
 cd server
-npm ci
+npm install
 cd ..
 
 echo "Installing client dependencies..."
 cd client
-npm ci
+npm install --include=dev
 
 echo "Building client..."
 npm run build
