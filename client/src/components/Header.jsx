@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { settingsAPI } from '../services/api';
 import { Menu, X, LogOut } from 'lucide-react';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
+import { API_BASE_URL } from '../utils/apiBase';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,7 +45,6 @@ const Header = () => {
     <header className="bg-gray-900/95 backdrop-blur-md text-white sticky top-0 z-50 border-b-4 border-brit-red shadow-[0_4px_20px_rgba(220,20,60,0.2)]">
       <div className="container-custom">
         <div className="flex items-center justify-between py-4">
-          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 relative">
             {logoUrl ? (
               <img
@@ -65,7 +63,6 @@ const Header = () => {
             )}
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
@@ -78,16 +75,10 @@ const Header = () => {
             ))}
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/admin"
-                  className="btn btn-secondary text-xs py-2"
-                >
+                <Link to="/admin" className="btn btn-secondary text-xs py-2">
                   ADMIN
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-outline text-xs py-2 flex items-center gap-2"
-                >
+                <button onClick={handleLogout} className="btn btn-outline text-xs py-2 flex items-center gap-2">
                   <LogOut size={16} />
                   LOGOUT
                 </button>
@@ -99,16 +90,11 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2"
-          >
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden p-2">
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="lg:hidden pb-4 space-y-3">
             {navLinks.map((link) => (
@@ -124,11 +110,7 @@ const Header = () => {
             <div className="flex flex-col gap-2 pt-2">
               {isAuthenticated ? (
                 <>
-                  <Link
-                    to="/admin"
-                    className="btn btn-secondary text-xs"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <Link to="/admin" className="btn btn-secondary text-xs" onClick={() => setIsMenuOpen(false)}>
                     ADMIN DASHBOARD
                   </Link>
                   <button
@@ -143,11 +125,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <Link
-                  to="/login"
-                  className="btn btn-outline text-xs"
-                  onClick={() => setIsMenuOpen(false)}
-                >
+                <Link to="/login" className="btn btn-outline text-xs" onClick={() => setIsMenuOpen(false)}>
                   ADMIN LOGIN
                 </Link>
               )}
