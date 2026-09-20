@@ -35,6 +35,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Coolify/Traefik sits in front of the container and sets X-Forwarded-* headers.
+// Express-rate-limit needs this so login/contact limits work correctly.
+app.set('trust proxy', 1);
+
 // Validate JWT_SECRET
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
   console.error('❌ CRITICAL: JWT_SECRET must be set and at least 32 characters long');
@@ -229,7 +233,7 @@ async function startServer() {
       console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
       console.log(`✓ Server running on port ${PORT}`);
       console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`✓ CORS enabled for: ${process.env.CLIENT_URL || 'http://localhost:5173'}`);
+      console.log(`✓ CORS enabled for configured domains, Railway, and sslip.io`);
       console.log(`✓ Uploads directory: ${uploadsDir}`);
       console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
     });
