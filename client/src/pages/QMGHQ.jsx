@@ -62,6 +62,15 @@ export default function QMGHQ() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      <div className="qr-app-topbar">
+        <Link to="/" className="font-black uppercase tracking-tight">
+          <span className="text-white">QMG</span><span className="text-brit-red">.</span>
+        </Link>
+        <div className="flex items-center gap-3 text-sm font-black uppercase">
+          <Link to="/quiz" className="text-brit-gold">Find a quiz</Link>
+          <Link to="/contact" className="text-gray-200">Book</Link>
+        </div>
+      </div>
       <section className="hq-hero">
         <div className="container-custom">
           <div className="max-w-3xl">

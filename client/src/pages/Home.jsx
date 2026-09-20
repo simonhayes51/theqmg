@@ -49,6 +49,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
+      <div className="qr-app-topbar">
+        <Link to="/" className="font-black uppercase tracking-tight">
+          <span className="text-white">QMG</span><span className="text-brit-red">.</span>
+        </Link>
+        <div className="flex items-center gap-3 text-sm font-black uppercase">
+          <Link to="/quiz" className="text-brit-gold">Find a quiz</Link>
+          <Link to="/hq" className="text-gray-200">QMGHQ</Link>
+          <Link to="/login" className="text-gray-400">Admin</Link>
+        </div>
+      </div>
       <section className="home-product-hero">
         <div className="container-custom">
           <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">

@@ -30,7 +30,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 
 function AppLayout() {
   const location = useLocation();
-  const bareRoutes = ['/quiz', '/quizzes', '/nearest-quiz', '/where-is-nearest-quiz'];
+  const bareRoutes = ['/', '/quiz', '/quizzes', '/nearest-quiz', '/where-is-nearest-quiz', '/hq', '/qmghq'];
   const isBarePage = bareRoutes.includes(location.pathname);
 
   return (
