@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../utils/apiBase';
-import { teamAPI } from '../services/api';
+import { settingsAPI, teamAPI } from '../services/api';
 import { Mail, Zap } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
@@ -11,6 +11,10 @@ const Team = () => {
   const [team, setTeam] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [settings, setSettings] = useState({
+    team_page_title: 'Meet The Team',
+    team_page_subtitle: 'The professionals who bring the fun to your venue',
+  });
 
   useEffect(() => {
     loadTeam();
@@ -20,8 +24,12 @@ const Team = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await teamAPI.getAll();
-      setTeam(Array.isArray(response.data) ? response.data : []);
+      const [teamResponse, settingsResponse] = await Promise.all([
+        teamAPI.getAll(),
+        settingsAPI.getAll(),
+      ]);
+      setTeam(Array.isArray(teamResponse.data) ? teamResponse.data : []);
+      setSettings((current) => ({ ...current, ...(settingsResponse.data || {}) }));
     } catch (error) {
       console.error('Error loading team:', error);
       setError('Failed to load team members. Please try again later.');
@@ -80,8 +88,8 @@ const Team = () => {
         }}>
           <div className="hero-overlay" />
           <div className="hero-content">
-            <h1 className="hero-title">Meet The Team</h1>
-            <p className="hero-subtitle">The professionals who bring the fun to your venue</p>
+            <h1 className="hero-title">{settings.team_page_title || 'Meet The Team'}</h1>
+            <p className="hero-subtitle">{settings.team_page_subtitle || 'The professionals who bring the fun to your venue'}</p>
           </div>
         </section>
       </ScrollReveal>

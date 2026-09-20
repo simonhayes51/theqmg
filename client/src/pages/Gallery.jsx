@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../utils/apiBase';
-import { galleryAPI } from '../services/api';
+import { galleryAPI, settingsAPI } from '../services/api';
 import { X, Zap } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
@@ -12,6 +12,10 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [settings, setSettings] = useState({
+    gallery_page_title: 'Gallery',
+    gallery_page_subtitle: 'Memories from our amazing events',
+  });
 
   useEffect(() => {
     loadImages();
@@ -21,8 +25,12 @@ const Gallery = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await galleryAPI.getAll();
-      setImages(Array.isArray(response.data) ? response.data : []);
+      const [galleryResponse, settingsResponse] = await Promise.all([
+        galleryAPI.getAll(),
+        settingsAPI.getAll(),
+      ]);
+      setImages(Array.isArray(galleryResponse.data) ? galleryResponse.data : []);
+      setSettings((current) => ({ ...current, ...(settingsResponse.data || {}) }));
     } catch (error) {
       console.error('Error loading gallery:', error);
       setError('Failed to load gallery images. Please try again later.');
@@ -113,8 +121,8 @@ const Gallery = () => {
         }}>
           <div className="hero-overlay" />
           <div className="hero-content">
-            <h1 className="hero-title">Gallery</h1>
-            <p className="hero-subtitle">Memories from our amazing events</p>
+            <h1 className="hero-title">{settings.gallery_page_title || 'Gallery'}</h1>
+            <p className="hero-subtitle">{settings.gallery_page_subtitle || 'Memories from our amazing events'}</p>
           </div>
         </section>
       </ScrollReveal>

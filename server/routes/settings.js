@@ -7,7 +7,13 @@ const router = express.Router();
 // Get all settings (public - for site display)
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM site_settings ORDER BY setting_key ASC');
+    const result = await pool.query(`
+      SELECT * FROM site_settings
+      WHERE setting_key NOT ILIKE '%token%'
+      AND setting_key NOT ILIKE '%secret%'
+      AND setting_key NOT ILIKE '%password%'
+      ORDER BY setting_key ASC
+    `);
 
     // Convert to key-value object for easier frontend use
     const settings = result.rows.reduce((acc, row) => {
@@ -68,9 +74,6 @@ router.put('/:key', authenticateToken, isAdmin, async (req, res) => {
 // Bulk update settings (admin only)
 router.post('/bulk-update', authenticateToken, isAdmin, async (req, res) => {
   try {
-    console.log('=== BULK UPDATE SETTINGS REQUEST ===');
-    console.log('Body:', JSON.stringify(req.body, null, 2));
-
     const { settings } = req.body; // Object with key-value pairs
 
     if (!settings || typeof settings !== 'object') {
@@ -84,11 +87,8 @@ router.post('/bulk-update', authenticateToken, isAdmin, async (req, res) => {
       return String(val);
     };
 
-    console.log('Settings to update:', Object.keys(settings));
-
     const promises = Object.entries(settings).map(([key, value]) => {
       const cleanedValue = cleanValue(value);
-      console.log(`Updating ${key}:`, cleanedValue);
       return pool.query(
         `INSERT INTO site_settings (setting_key, setting_value, setting_type)
          VALUES ($1, $2, 'text')
@@ -100,15 +100,9 @@ router.post('/bulk-update', authenticateToken, isAdmin, async (req, res) => {
 
     await Promise.all(promises);
 
-    console.log('Settings updated successfully');
     res.json({ message: 'Settings updated successfully' });
   } catch (error) {
-    console.error('=== BULK UPDATE SETTINGS ERROR ===');
-    console.error('Error:', error);
-    console.error('Message:', error.message);
-    console.error('Stack:', error.stack);
-    console.error('Detail:', error.detail);
-    console.error('Code:', error.code);
+    console.error('Bulk update settings error:', error.message);
     res.status(500).json({ message: 'Server error', error: error.message, detail: error.detail });
   }
 });

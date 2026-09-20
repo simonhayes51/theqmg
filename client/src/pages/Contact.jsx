@@ -50,6 +50,14 @@ const Contact = () => {
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   };
 
+  const businessPhone = settings.business_phone || settings.contact_phone || '';
+  const businessEmail = settings.business_email || settings.contact_email || 'info@thequizmastergeneral.com';
+  const locationLines = [
+    settings.business_address,
+    settings.business_city || settings.coverage_area || 'Covering the North East of England and beyond',
+    settings.business_postcode,
+  ].filter(Boolean);
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -156,9 +164,13 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold mb-1 text-gray-200">Phone</h3>
-                        <a href="tel:+441234567890" className="text-gray-300 hover:text-brit-gold transition-colors">
-                          +44 (0) 1234 567890
-                        </a>
+                        {businessPhone ? (
+                          <a href={`tel:${businessPhone.replace(/\s+/g, '')}`} className="text-gray-300 hover:text-brit-gold transition-colors">
+                            {businessPhone}
+                          </a>
+                        ) : (
+                          <span className="text-gray-300">Add a phone number in Site Editor</span>
+                        )}
                       </div>
                     </div>
 
@@ -168,8 +180,8 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold mb-1 text-gray-200">Email</h3>
-                        <a href="mailto:info@quizmastergeneral.co.uk" className="text-gray-300 hover:text-brit-gold break-all transition-colors">
-                          info@quizmastergeneral.co.uk
+                        <a href={`mailto:${businessEmail}`} className="text-gray-300 hover:text-brit-gold break-all transition-colors">
+                          {businessEmail}
                         </a>
                       </div>
                     </div>
@@ -181,8 +193,9 @@ const Contact = () => {
                       <div>
                         <h3 className="font-semibold mb-1 text-gray-200">Location</h3>
                         <p className="text-gray-300">
-                          Covering all of The North East<br />
-                          of England and beyond!
+                          {locationLines.map((line) => (
+                            <span key={line} className="block">{line}</span>
+                          ))}
                         </p>
                       </div>
                     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { API_BASE_URL } from '../utils/apiBase';
-import { eventsAPI } from '../services/api';
+import { eventsAPI, settingsAPI } from '../services/api';
 import { Calendar, MapPin, Clock, Users, Search, Filter, Zap, ChevronLeft, ChevronRight, Grid, List } from 'lucide-react';
 import ScrollReveal from '../hooks/useScrollAnimation';
 
@@ -17,6 +17,10 @@ const Events = () => {
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [settings, setSettings] = useState({
+    events_page_title: 'Our Events',
+    events_page_subtitle: 'Quiz nights, race nights, and special events across the North East',
+  });
 
   useEffect(() => {
     loadEvents();
@@ -26,8 +30,12 @@ const Events = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await eventsAPI.getAll();
-      setEvents(Array.isArray(response.data) ? response.data : []);
+      const [eventsResponse, settingsResponse] = await Promise.all([
+        eventsAPI.getAll(),
+        settingsAPI.getAll(),
+      ]);
+      setEvents(Array.isArray(eventsResponse.data) ? eventsResponse.data : []);
+      setSettings((current) => ({ ...current, ...(settingsResponse.data || {}) }));
     } catch (error) {
       console.error('Error loading events:', error);
       setError('Failed to load events. Please try again later.');
@@ -198,8 +206,8 @@ const Events = () => {
         }}>
           <div className="hero-overlay" />
           <div className="hero-content">
-            <h1 className="hero-title">Our Events</h1>
-            <p className="hero-subtitle">Quiz nights, race nights, and special events across the North East</p>
+            <h1 className="hero-title">{settings.events_page_title || 'Our Events'}</h1>
+            <p className="hero-subtitle">{settings.events_page_subtitle || 'Quiz nights, race nights, and special events across the North East'}</p>
           </div>
         </section>
       </ScrollReveal>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { venuesAPI } from '../services/api';
+import { settingsAPI, venuesAPI } from '../services/api';
 import { API_BASE_URL } from '../utils/apiBase';
 import { MapPin, Phone, Mail, Users, Search, Zap } from 'lucide-react';
 import VenueMap from '../components/VenueMap';
@@ -11,6 +11,10 @@ const Venues = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [settings, setSettings] = useState({
+    venues_page_title: 'Our Partner Venues',
+    venues_page_subtitle: 'Bringing entertainment to venues across the North East',
+  });
 
   useEffect(() => {
     loadVenues();
@@ -20,8 +24,12 @@ const Venues = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await venuesAPI.getAll();
-      setVenues(Array.isArray(response.data) ? response.data : []);
+      const [venuesResponse, settingsResponse] = await Promise.all([
+        venuesAPI.getAll(),
+        settingsAPI.getAll(),
+      ]);
+      setVenues(Array.isArray(venuesResponse.data) ? venuesResponse.data : []);
+      setSettings((current) => ({ ...current, ...(settingsResponse.data || {}) }));
     } catch (error) {
       console.error('Error loading venues:', error);
       setError('Failed to load venues. Please try again later.');
@@ -87,8 +95,8 @@ const Venues = () => {
         }}>
           <div className="hero-overlay" />
           <div className="hero-content">
-            <h1 className="hero-title">Our Partner Venues</h1>
-            <p className="hero-subtitle">Bringing entertainment to venues across the North East</p>
+            <h1 className="hero-title">{settings.venues_page_title || 'Our Partner Venues'}</h1>
+            <p className="hero-subtitle">{settings.venues_page_subtitle || 'Bringing entertainment to venues across the North East'}</p>
           </div>
         </section>
       </ScrollReveal>

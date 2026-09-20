@@ -1,114 +1,192 @@
-import { useEffect, useState } from 'react';
-import { settingsAPI, galleryAPI } from '../../services/api';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ArrowDown,
+  ArrowUp,
+  Building2,
+  Check,
+  Contact,
+  Eye,
+  Globe,
+  LayoutTemplate,
+  Paintbrush,
+  Save,
+  Share2,
+  Upload,
+} from 'lucide-react';
+import { galleryAPI, settingsAPI } from '../../services/api';
 import { API_BASE_URL } from '../../utils/apiBase';
-import { Save, Building2, Phone, Mail, Clock, Globe, Facebook, Twitter, Instagram, Linkedin, Upload, Image as ImageIcon, Sparkles, MessageCircle, Key, Hash, ArrowUp, ArrowDown, GripVertical } from 'lucide-react';
 
+const defaultSettings = {
+  business_name: 'The Quiz Master General',
+  tagline: "North East England's premier quiz and entertainment provider",
+  business_email: 'info@thequizmastergeneral.com',
+  business_phone: '',
+  business_address: '',
+  business_city: 'Newcastle, Durham, Sunderland & surrounding areas',
+  business_postcode: '',
+  business_hours: '',
+  hero_title: 'THE QUIZ MASTER GENERAL',
+  hero_subtitle: "North East England's Premier Quiz & Entertainment",
+  hero_button_1_text: 'Our Services',
+  hero_button_2_text: 'Book Now',
+  about_text: '',
+  home_services_title: 'What We Offer',
+  home_services_subtitle: 'Professional entertainment services that bring energy and excitement to your venue.',
+  home_events_title: 'Upcoming Events',
+  home_reviews_title: 'What Venues Say',
+  home_gallery_title: 'See Us in Action',
+  home_team_title: 'Meet the Team',
+  services_page_title: 'Our Services',
+  services_page_subtitle: 'Professional entertainment for your venue',
+  contact_page_title: 'Get In Touch',
+  contact_page_subtitle: "Let's discuss how we can bring entertainment to your venue.",
+  events_page_title: 'Our Events',
+  events_page_subtitle: 'Quiz nights, race nights, and special events across the North East',
+  venues_page_title: 'Our Partner Venues',
+  venues_page_subtitle: 'Bringing entertainment to venues across the North East',
+  gallery_page_title: 'Gallery',
+  gallery_page_subtitle: 'Memories from our amazing events',
+  team_page_title: 'Meet The Team',
+  team_page_subtitle: 'The professionals who bring the fun to your venue',
+  logo_url: '',
+  hero_image_url: '',
+  about_image: '',
+  social_proof_bg_color: '#003DA5',
+  services_bg_color: '#DC143C',
+  events_bg_color: '#003DA5',
+  reviews_bg_color: '#DC143C',
+  gallery_bg_color: '#003DA5',
+  team_bg_color: '#DC143C',
+  facebook_url: '',
+  twitter_url: '',
+  instagram_url: '',
+  linkedin_url: '',
+  instagram_enabled: 'false',
+  instagram_access_token: '',
+  instagram_user_id: '',
+  facebook_enabled: 'false',
+  facebook_access_token: '',
+  facebook_page_id: '',
+  whatsapp_enabled: 'false',
+  whatsapp_number: '',
+  whatsapp_default_message: "Hi, I'd like to know more about your quiz nights.",
+};
 
-const AdminSettings = () => {
-  const [settings, setSettings] = useState({
-    // Business Info
-    business_name: '',
-    business_email: '',
-    business_phone: '',
-    business_address: '',
-    business_city: '',
-    business_postcode: '',
+const defaultSectionOrder = ['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day'];
 
-    // Social Media Links
-    facebook_url: '',
-    twitter_url: '',
-    instagram_url: '',
-    linkedin_url: '',
+const tabs = [
+  { id: 'basics', label: 'Basics', icon: Building2 },
+  { id: 'homepage', label: 'Homepage', icon: LayoutTemplate },
+  { id: 'pages', label: 'Pages', icon: Globe },
+  { id: 'look', label: 'Look', icon: Paintbrush },
+  { id: 'contact', label: 'Contact', icon: Contact },
+  { id: 'social', label: 'Social', icon: Share2 },
+];
 
-    // Social Media API Integration
-    instagram_access_token: '',
-    instagram_user_id: '',
-    instagram_enabled: 'false',
-    facebook_access_token: '',
-    facebook_page_id: '',
-    facebook_enabled: 'false',
-    whatsapp_number: '',
-    whatsapp_enabled: 'false',
-    whatsapp_default_message: '',
+const sectionLabels = {
+  social_proof: 'Stats strip',
+  about: 'About section',
+  services: 'Services',
+  events: 'Upcoming events',
+  reviews: 'Reviews',
+  gallery: 'Gallery',
+  team: 'Team',
+  social_media: 'Social feed',
+  question_of_day: 'Question of the day',
+};
 
-    // Business Hours
-    business_hours: '',
+const backgroundSections = [
+  { key: 'social_proof', label: 'Stats strip' },
+  { key: 'about', label: 'About section' },
+  { key: 'services', label: 'Services section' },
+  { key: 'events', label: 'Events section' },
+  { key: 'reviews', label: 'Reviews section' },
+  { key: 'gallery', label: 'Gallery section' },
+  { key: 'team', label: 'Team section' },
+  { key: 'question_of_day', label: 'Question of the day' },
+  { key: 'social_media', label: 'Social feed' },
+  { key: 'footer', label: 'Footer' },
+];
 
-    // About
-    about_text: '',
-    about_image: '',
-    tagline: '',
+const colorFields = [
+  { key: 'social_proof_bg_color', label: 'Stats strip' },
+  { key: 'services_bg_color', label: 'Services' },
+  { key: 'events_bg_color', label: 'Events' },
+  { key: 'reviews_bg_color', label: 'Reviews' },
+  { key: 'gallery_bg_color', label: 'Gallery' },
+  { key: 'team_bg_color', label: 'Team' },
+];
 
-    // Hero Image
-    hero_image_url: '',
+const pageFields = [
+  ['services_page_title', 'services_page_subtitle', 'Services page'],
+  ['events_page_title', 'events_page_subtitle', 'Events page'],
+  ['venues_page_title', 'venues_page_subtitle', 'Venues page'],
+  ['gallery_page_title', 'gallery_page_subtitle', 'Gallery page'],
+  ['team_page_title', 'team_page_subtitle', 'Team page'],
+  ['contact_page_title', 'contact_page_subtitle', 'Contact page'],
+];
 
-    // Logo
-    logo_url: '',
+const textInputClass = 'input w-full';
 
-    // Hero Section Content
-    hero_title: '',
-    hero_subtitle: '',
-    hero_button_1_text: '',
-    hero_button_2_text: '',
+function Field({ label, help, children }) {
+  return (
+    <label className="block">
+      <span className="label">{label}</span>
+      {children}
+      {help && <span className="block mt-1 text-sm text-gray-300">{help}</span>}
+    </label>
+  );
+}
 
-    // Page Headers
-    services_page_title: '',
-    services_page_subtitle: '',
-    contact_page_title: '',
-    contact_page_subtitle: '',
-    events_page_title: '',
-    events_page_subtitle: '',
-    venues_page_title: '',
-    venues_page_subtitle: '',
-    gallery_page_title: '',
-    gallery_page_subtitle: '',
-    team_page_title: '',
-    team_page_subtitle: '',
+function Panel({ title, description, children }) {
+  return (
+    <section className="admin-editor-card">
+      <div className="mb-6">
+        <h2 className="text-2xl md:text-3xl font-black text-brit-gold uppercase">{title}</h2>
+        {description && <p className="text-gray-300 mt-2">{description}</p>}
+      </div>
+      {children}
+    </section>
+  );
+}
 
-    // Homepage Section Titles
-    home_services_title: '',
-    home_services_subtitle: '',
-    home_events_title: '',
-    home_gallery_title: '',
-    home_team_title: '',
-    home_reviews_title: '',
+function ImagePicker({ label, value, preview, onFile, onRemove, help }) {
+  const src = preview || (value ? `${API_BASE_URL}${value}` : '');
 
-    // Section Background Images
-    social_proof_bg_image: '',
-    about_bg_image: '',
-    services_bg_image: '',
-    events_bg_image: '',
-    gallery_bg_image: '',
-    team_bg_image: '',
-    reviews_bg_image: '',
-    question_of_day_bg_image: '',
-    social_media_bg_image: '',
-    footer_bg_image: '',
+  return (
+    <div>
+      <div className="label">{label}</div>
+      {src && (
+        <div className="relative mb-3 overflow-hidden rounded-lg border border-white/15 bg-gray-950">
+          <img src={src} alt={`${label} preview`} className="h-52 w-full object-cover" />
+          <button type="button" onClick={onRemove} className="absolute right-3 top-3 rounded bg-red-600 px-3 py-2 text-sm font-bold text-white">
+            Remove
+          </button>
+        </div>
+      )}
+      <label className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-white/20 p-5 text-center transition hover:border-brit-gold hover:bg-white/5">
+        <div>
+          <Upload className="mx-auto mb-2 text-brit-gold" size={28} />
+          <p className="font-bold text-white">Upload image</p>
+          {help && <p className="mt-1 text-sm text-gray-300">{help}</p>}
+        </div>
+        <input type="file" accept="image/*" onChange={onFile} className="hidden" />
+      </label>
+    </div>
+  );
+}
 
-    // Section Background Colors
-    social_proof_bg_color: '#003DA5',
-    services_bg_color: '#DC143C',
-    events_bg_color: '#003DA5',
-    reviews_bg_color: '#DC143C',
-    gallery_bg_color: '#003DA5',
-    team_bg_color: '#DC143C'
-  });
-
-  const [heroImage, setHeroImage] = useState(null);
-  const [heroImagePreview, setHeroImagePreview] = useState(null);
-  const [logo, setLogo] = useState(null);
-  const [logoPreview, setLogoPreview] = useState(null);
-  const [aboutImage, setAboutImage] = useState(null);
-  const [aboutImagePreview, setAboutImagePreview] = useState(null);
-  const [sectionBgImages, setSectionBgImages] = useState({});
-  const [sectionBgPreviews, setSectionBgPreviews] = useState({});
+export default function AdminSettings() {
+  const [activeTab, setActiveTab] = useState('basics');
+  const [settings, setSettings] = useState(defaultSettings);
+  const [sectionOrder, setSectionOrder] = useState(defaultSectionOrder);
+  const [uploads, setUploads] = useState({});
+  const [previews, setPreviews] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
 
-  // Section ordering - default order
-  const defaultSectionOrder = ['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day'];
-  const [sectionOrder, setSectionOrder] = useState(defaultSectionOrder);
+  const activeTabLabel = useMemo(() => tabs.find((tab) => tab.id === activeTab)?.label || 'Settings', [activeTab]);
 
   useEffect(() => {
     loadSettings();
@@ -118,45 +196,25 @@ const AdminSettings = () => {
     try {
       setLoading(true);
       const response = await settingsAPI.getAllAdmin();
+      const values = { ...defaultSettings };
 
-      // Convert array of settings to object
-      const settingsObj = {};
       if (Array.isArray(response.data)) {
-        response.data.forEach(setting => {
-          settingsObj[setting.setting_key] = setting.setting_value || '';
+        response.data.forEach((setting) => {
+          values[setting.setting_key] = setting.setting_value || '';
         });
       }
 
-      // Merge with default values
-      setSettings(prev => ({ ...prev, ...settingsObj }));
+      setSettings(values);
 
-      // Load section order
-      if (settingsObj.section_order) {
-        try {
-          const parsedOrder = JSON.parse(settingsObj.section_order);
-          setSectionOrder(Array.isArray(parsedOrder) ? parsedOrder : defaultSectionOrder);
-        } catch (e) {
-          setSectionOrder(defaultSectionOrder);
-        }
-      }
-
-      // Set hero image preview if it exists
-      if (settingsObj.hero_image_url) {
-        setHeroImagePreview(`${API_BASE_URL}${settingsObj.hero_image_url}`);
-      }
-
-      // Set logo preview if it exists
-      if (settingsObj.logo_url) {
-        setLogoPreview(`${API_BASE_URL}${settingsObj.logo_url}`);
-      }
-
-      // Set about image preview if it exists
-      if (settingsObj.about_image) {
-        setAboutImagePreview(`${API_BASE_URL}${settingsObj.about_image}`);
+      try {
+        const parsedOrder = JSON.parse(values.section_order || '[]');
+        setSectionOrder(Array.isArray(parsedOrder) && parsedOrder.length ? parsedOrder : defaultSectionOrder);
+      } catch {
+        setSectionOrder(defaultSectionOrder);
       }
     } catch (error) {
       console.error('Error loading settings:', error);
-      showMessage('Failed to load settings. Please refresh the page.', 'error');
+      showMessage('Could not load settings. Refresh and try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -167,1371 +225,289 @@ const AdminSettings = () => {
     setTimeout(() => setMessage(null), 5000);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSettings(prev => ({ ...prev, [name]: value }));
+  const setField = (key, value) => {
+    setSettings((current) => ({ ...current, [key]: value }));
   };
 
-  const handleHeroImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setHeroImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setHeroImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handleInput = (event) => {
+    setField(event.target.name, event.target.value);
+  };
+
+  const setFile = (key) => (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploads((current) => ({ ...current, [key]: file }));
+    const reader = new FileReader();
+    reader.onloadend = () => setPreviews((current) => ({ ...current, [key]: reader.result }));
+    reader.readAsDataURL(file);
+  };
+
+  const removeImage = (key) => {
+    setUploads((current) => ({ ...current, [key]: null }));
+    setPreviews((current) => ({ ...current, [key]: null }));
+    setField(key, '');
+  };
+
+  const moveSection = (index, direction) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= sectionOrder.length) return;
+    const nextOrder = [...sectionOrder];
+    [nextOrder[index], nextOrder[nextIndex]] = [nextOrder[nextIndex], nextOrder[index]];
+    setSectionOrder(nextOrder);
+  };
+
+  const uploadImage = async (key, title, category = 'settings') => {
+    const file = uploads[key];
+    if (!file) return settings[key] || '';
+
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('title', title);
+    formData.append('category', category);
+
+    const response = await galleryAPI.upload(formData);
+    if (!response.data?.image_url) {
+      throw new Error(`${title} upload failed`);
     }
+    return response.data.image_url;
   };
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setLogo(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSectionBgImageChange = (section) => (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSectionBgImages(prev => ({ ...prev, [section]: file }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSectionBgPreviews(prev => ({ ...prev, [section]: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
 
     try {
-      setSubmitting(true);
+      const nextSettings = { ...settings };
+      nextSettings.logo_url = await uploadImage('logo_url', 'Site logo', 'logo');
+      nextSettings.hero_image_url = await uploadImage('hero_image_url', 'Homepage hero image', 'hero');
+      nextSettings.about_image = await uploadImage('about_image', 'About image', 'about');
 
-      // Upload hero image first if one was selected
-      if (heroImage) {
-        console.log('Uploading hero image...');
-        const formData = new FormData();
-        formData.append('image', heroImage);
-        formData.append('title', 'Hero Image');
-        formData.append('category', 'hero');
-        formData.append('description', 'Site hero/banner image');
-
-        const uploadRes = await galleryAPI.upload(formData);
-        console.log('Hero image upload response:', uploadRes.data);
-        if (uploadRes.data && uploadRes.data.image_url) {
-          settings.hero_image_url = uploadRes.data.image_url;
-          console.log('Hero image URL set:', settings.hero_image_url);
-        } else {
-          console.error('Hero image upload succeeded but no image_url in response');
-          throw new Error('Hero image upload failed - no image URL returned');
-        }
+      for (const section of backgroundSections) {
+        const key = `${section.key}_bg_image`;
+        nextSettings[key] = await uploadImage(key, `${section.label} background`, 'background');
       }
 
-      // Upload logo if one was selected
-      if (logo) {
-        console.log('Uploading logo...');
-        const formData = new FormData();
-        formData.append('image', logo);
-        formData.append('title', 'Site Logo');
-        formData.append('category', 'logo');
-        formData.append('description', 'Site header logo');
+      nextSettings.section_order = JSON.stringify(sectionOrder);
+      await settingsAPI.bulkUpdate(nextSettings);
 
-        const uploadRes = await galleryAPI.upload(formData);
-        console.log('Logo upload response:', uploadRes.data);
-        if (uploadRes.data && uploadRes.data.image_url) {
-          settings.logo_url = uploadRes.data.image_url;
-          console.log('Logo URL set:', settings.logo_url);
-        } else {
-          console.error('Logo upload succeeded but no image_url in response');
-          throw new Error('Logo upload failed - no image URL returned');
-        }
-      }
-
-      // Upload about image if one was selected
-      if (aboutImage) {
-        console.log('Uploading about image...');
-        const formData = new FormData();
-        formData.append('image', aboutImage);
-        formData.append('title', 'About Me Image');
-        formData.append('category', 'about');
-        formData.append('description', 'About Me section image');
-
-        const uploadRes = await galleryAPI.upload(formData);
-        console.log('About image upload response:', uploadRes.data);
-        if (uploadRes.data && uploadRes.data.image_url) {
-          settings.about_image = uploadRes.data.image_url;
-          console.log('About image URL set:', settings.about_image);
-        } else {
-          console.error('About image upload succeeded but no image_url in response');
-          throw new Error('About image upload failed - no image URL returned');
-        }
-      }
-
-      // Upload section background images
-      const sectionKeys = ['social_proof', 'about', 'services', 'events', 'gallery', 'team', 'reviews', 'question_of_day', 'social_media', 'footer'];
-      for (const section of sectionKeys) {
-        if (sectionBgImages[section]) {
-          const formData = new FormData();
-          formData.append('image', sectionBgImages[section]);
-          formData.append('title', `${section} Background`);
-          formData.append('category', 'background');
-
-          const uploadRes = await galleryAPI.upload(formData);
-          if (uploadRes.data && uploadRes.data.image_url) {
-            settings[`${section}_bg_image`] = uploadRes.data.image_url;
-          }
-        }
-      }
-
-      // Save section order
-      settings.section_order = JSON.stringify(sectionOrder);
-
-      console.log('Saving settings to backend:', Object.keys(settings).length, 'settings');
-      const saveResponse = await settingsAPI.bulkUpdate(settings);
-      console.log('Settings save response:', saveResponse.data);
-
-      showMessage('✅ Settings saved successfully!', 'success');
-      setHeroImage(null);
-      setLogo(null);
-      setAboutImage(null);
-      setSectionBgImages({});
-
-      // Reload settings to get fresh data
-      await loadSettings();
+      setSettings(nextSettings);
+      setUploads({});
+      setPreviews({});
+      showMessage('Site editor saved.', 'success');
     } catch (error) {
       console.error('Error saving settings:', error);
-      console.error('Error response:', error.response?.data);
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to save settings';
-      showMessage(`❌ ${errorMessage}. Please try again.`, 'error');
+      showMessage(error.response?.data?.message || error.message || 'Could not save settings.', 'error');
     } finally {
       setSubmitting(false);
     }
   };
 
-  // Section ordering functions
-  const moveSectionUp = (index) => {
-    if (index === 0) return;
-    const newOrder = [...sectionOrder];
-    [newOrder[index - 1], newOrder[index]] = [newOrder[index], newOrder[index - 1]];
-    setSectionOrder(newOrder);
-  };
-
-  const moveSectionDown = (index) => {
-    if (index === sectionOrder.length - 1) return;
-    const newOrder = [...sectionOrder];
-    [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
-    setSectionOrder(newOrder);
-  };
-
-  const getSectionLabel = (key) => {
-    const labels = {
-      'social_proof': 'Stats/Social Proof Section',
-      'about': 'About Me Section',
-      'services': 'Services Section',
-      'events': 'Upcoming Events Section',
-      'reviews': 'Reviews Section',
-      'gallery': 'Photo Gallery Section',
-      'team': 'Meet the Team Section',
-      'social_media': 'Social Media Feed',
-      'question_of_day': 'Question of the Day'
-    };
-    return labels[key] || key;
-  };
-
   if (loading) {
     return (
       <div className="container-custom py-12">
-        <h1 className="text-4xl font-heading text-quiz-blue mb-8">Site Settings</h1>
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">⏳</div>
-          <p className="text-gray-600">Loading settings...</p>
+        <div className="admin-editor-card text-center">
+          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-brit-gold border-t-transparent" />
+          <p className="text-gray-200">Loading site editor...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container-custom py-6 md:py-12">
-      {/* Header */}
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-2xl md:text-4xl font-heading text-quiz-blue">Site Settings</h1>
-        <p className="text-sm md:text-base text-gray-800 mt-2 font-medium">Manage your business information and social media links</p>
+    <div className="container-custom py-8">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wide text-brit-gold">Owner CMS</p>
+          <h1 className="text-4xl font-black text-white">Site Editor</h1>
+          <p className="mt-2 max-w-2xl text-gray-300">Edit the website in plain sections. Save once when you are done.</p>
+        </div>
+        <a href="/" target="_blank" rel="noreferrer" className="btn btn-outline inline-flex items-center gap-2">
+          <Eye size={18} />
+          Preview Site
+        </a>
       </div>
 
-      {/* Success/Error Message */}
       {message && (
-        <div className={`mb-6 p-4 rounded border-2 ${
-          message.type === 'success' ? 'bg-green-50 border-green-500 text-green-800' : 'bg-red-50 border-red-500 text-red-800'
-        }`}>
+        <div className={`mb-5 rounded-lg border p-4 font-bold ${message.type === 'success' ? 'border-green-500 bg-green-950/60 text-green-100' : 'border-red-500 bg-red-950/60 text-red-100'}`}>
           {message.text}
         </div>
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Business Information */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Building2 className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Business Information</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <label className="label">Business Name</label>
-              <input
-                type="text"
-                name="business_name"
-                value={settings.business_name}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., The Quiz Master General"
-              />
-              <p className="text-xs text-gray-500 mt-1">Your business or company name</p>
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="label">Tagline</label>
-              <input
-                type="text"
-                name="tagline"
-                value={settings.tagline}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Newcastle's Premier Quiz Host"
-              />
-              <p className="text-xs text-gray-500 mt-1">A short tagline or slogan for your business</p>
-            </div>
-
-            <div>
-              <label className="label">
-                <Mail size={16} className="inline mr-1" />
-                Business Email
-              </label>
-              <input
-                type="email"
-                name="business_email"
-                value={settings.business_email}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., info@thequizmastergeneral.com"
-              />
-            </div>
-
-            <div>
-              <label className="label">
-                <Phone size={16} className="inline mr-1" />
-                Business Phone
-              </label>
-              <input
-                type="tel"
-                name="business_phone"
-                value={settings.business_phone}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., 0191 123 4567"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="label">Street Address</label>
-              <input
-                type="text"
-                name="business_address"
-                value={settings.business_address}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., 123 High Street"
-              />
-            </div>
-
-            <div>
-              <label className="label">City/Town</label>
-              <input
-                type="text"
-                name="business_city"
-                value={settings.business_city}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Newcastle"
-              />
-            </div>
-
-            <div>
-              <label className="label">Postcode</label>
-              <input
-                type="text"
-                name="business_postcode"
-                value={settings.business_postcode}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., NE1 1AA"
-              />
-            </div>
-          </div>
+        <div className="mb-6 grid grid-cols-2 gap-2 rounded-lg border border-white/10 bg-gray-900/70 p-2 md:grid-cols-6">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center justify-center gap-2 rounded-md px-3 py-3 text-sm font-black uppercase transition ${
+                  activeTab === tab.id ? 'bg-brit-gold text-gray-950' : 'text-gray-200 hover:bg-white/10'
+                }`}
+              >
+                <Icon size={16} />
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Hero Section Content */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Hero Section Content</h2>
-          </div>
+        <div className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-400">Editing: {activeTabLabel}</div>
 
-          <div className="space-y-4">
-            <div>
-              <label className="label">Hero Title</label>
-              <input
-                type="text"
-                name="hero_title"
-                value={settings.hero_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., THE QUIZ MASTER GENERAL"
-              />
-              <p className="text-xs text-gray-500 mt-1">Large title displayed on homepage hero</p>
+        {activeTab === 'basics' && (
+          <Panel title="Business Basics" description="The main business details used across the site.">
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label="Business name"><input name="business_name" value={settings.business_name} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Short tagline"><input name="tagline" value={settings.tagline} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Email"><input name="business_email" value={settings.business_email} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Phone"><input name="business_phone" value={settings.business_phone} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Address"><input name="business_address" value={settings.business_address} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Area covered"><input name="business_city" value={settings.business_city} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Postcode"><input name="business_postcode" value={settings.business_postcode} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Opening or contact hours"><textarea name="business_hours" value={settings.business_hours} onChange={handleInput} rows="4" className="textarea w-full" /></Field>
             </div>
+          </Panel>
+        )}
 
-            <div>
-              <label className="label">Hero Subtitle</label>
-              <input
-                type="text"
-                name="hero_subtitle"
-                value={settings.hero_subtitle}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., North East England's Premier Quiz & Entertainment"
-              />
-              <p className="text-xs text-gray-500 mt-1">Subtitle text below the hero title</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="label">Primary Button Text</label>
-                <input
-                  type="text"
-                  name="hero_button_1_text"
-                  value={settings.hero_button_1_text}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  placeholder="e.g., Our Services"
-                />
-              </div>
-
-              <div>
-                <label className="label">Secondary Button Text</label>
-                <input
-                  type="text"
-                  name="hero_button_2_text"
-                  value={settings.hero_button_2_text}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  placeholder="e.g., Book Now"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Homepage Section Titles */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Homepage Section Titles</h2>
-          </div>
-
+        {activeTab === 'homepage' && (
           <div className="space-y-6">
-            <div>
-              <label className="label">Services Section Title</label>
-              <input
-                type="text"
-                name="home_services_title"
-                value={settings.home_services_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., What We Offer"
-              />
-            </div>
+            <Panel title="Homepage Hero" description="The first thing visitors see. Keep it short and punchy.">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Main headline"><input name="hero_title" value={settings.hero_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Subtitle"><input name="hero_subtitle" value={settings.hero_subtitle} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Primary button"><input name="hero_button_1_text" value={settings.hero_button_1_text} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Secondary button"><input name="hero_button_2_text" value={settings.hero_button_2_text} onChange={handleInput} className={textInputClass} /></Field>
+              </div>
+            </Panel>
 
-            <div>
-              <label className="label">Services Section Subtitle</label>
-              <input
-                type="text"
-                name="home_services_subtitle"
-                value={settings.home_services_subtitle}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Professional entertainment services..."
-              />
-            </div>
+            <Panel title="Homepage Sections" description="Rename homepage blocks and choose their order.">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Services title"><input name="home_services_title" value={settings.home_services_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Services subtitle"><input name="home_services_subtitle" value={settings.home_services_subtitle} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Events title"><input name="home_events_title" value={settings.home_events_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Reviews title"><input name="home_reviews_title" value={settings.home_reviews_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Gallery title"><input name="home_gallery_title" value={settings.home_gallery_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Team title"><input name="home_team_title" value={settings.home_team_title} onChange={handleInput} className={textInputClass} /></Field>
+              </div>
 
-            <div>
-              <label className="label">Events Section Title</label>
-              <input
-                type="text"
-                name="home_events_title"
-                value={settings.home_events_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Upcoming Events"
-              />
-            </div>
-
-            <div>
-              <label className="label">Gallery Section Title</label>
-              <input
-                type="text"
-                name="home_gallery_title"
-                value={settings.home_gallery_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Gallery Highlights"
-              />
-            </div>
-
-            <div>
-              <label className="label">Team Section Title</label>
-              <input
-                type="text"
-                name="home_team_title"
-                value={settings.home_team_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., Meet The Team"
-              />
-            </div>
-
-            <div>
-              <label className="label">Reviews Section Title</label>
-              <input
-                type="text"
-                name="home_reviews_title"
-                value={settings.home_reviews_title}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="e.g., What Our Clients Say"
-              />
-            </div>
+              <div className="mt-8 space-y-3">
+                {sectionOrder.map((section, index) => (
+                  <div key={section} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brit-blue font-black text-white">{index + 1}</span>
+                    <span className="flex-1 font-bold text-white">{sectionLabels[section] || section}</span>
+                    <button type="button" onClick={() => moveSection(index, -1)} className="rounded bg-white/10 p-2 text-white disabled:opacity-30" disabled={index === 0}><ArrowUp size={18} /></button>
+                    <button type="button" onClick={() => moveSection(index, 1)} className="rounded bg-white/10 p-2 text-white disabled:opacity-30" disabled={index === sectionOrder.length - 1}><ArrowDown size={18} /></button>
+                  </div>
+                ))}
+              </div>
+            </Panel>
           </div>
-        </div>
+        )}
 
-        {/* Page Headers */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Page Headers</h2>
-          </div>
+        {activeTab === 'pages' && (
+          <Panel title="Page Headers" description="Change the title and intro text at the top of each public page.">
+            <div className="space-y-6">
+              {pageFields.map(([titleKey, subtitleKey, label]) => (
+                <div key={titleKey} className="rounded-lg border border-white/10 bg-white/5 p-4">
+                  <h3 className="mb-4 text-xl font-black text-brit-gold">{label}</h3>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field label="Title"><input name={titleKey} value={settings[titleKey]} onChange={handleInput} className={textInputClass} /></Field>
+                    <Field label="Subtitle"><input name={subtitleKey} value={settings[subtitleKey]} onChange={handleInput} className={textInputClass} /></Field>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        )}
 
+        {activeTab === 'look' && (
           <div className="space-y-6">
-            <div className="border-b border-gray-300 pb-4">
-              <h3 className="text-lg font-bold mb-4">Services Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="services_page_title"
-                    value={settings.services_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Our Services"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="services_page_subtitle"
-                    value={settings.services_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Professional entertainment for your venue"
-                  />
-                </div>
+            <Panel title="Images" description="Upload the main brand images.">
+              <div className="grid gap-6 lg:grid-cols-3">
+                <ImagePicker label="Logo" value={settings.logo_url} preview={previews.logo_url} onFile={setFile('logo_url')} onRemove={() => removeImage('logo_url')} help="Transparent PNG works best." />
+                <ImagePicker label="Homepage hero image" value={settings.hero_image_url} preview={previews.hero_image_url} onFile={setFile('hero_image_url')} onRemove={() => removeImage('hero_image_url')} help="Wide venue/event photo works best." />
+                <ImagePicker label="About image" value={settings.about_image} preview={previews.about_image} onFile={setFile('about_image')} onRemove={() => removeImage('about_image')} help="Photo of the host/team." />
+              </div>
+              <div className="mt-6">
+                <Field label="About text"><textarea name="about_text" value={settings.about_text} onChange={handleInput} rows="6" className="textarea w-full" /></Field>
+              </div>
+            </Panel>
+
+            <Panel title="Colours" description="Choose section colour accents.">
+              <div className="grid gap-4 md:grid-cols-3">
+                {colorFields.map((field) => (
+                  <Field key={field.key} label={field.label}>
+                    <input type="color" name={field.key} value={settings[field.key] || '#003DA5'} onChange={handleInput} className="h-12 w-full cursor-pointer rounded border border-white/20 bg-transparent" />
+                  </Field>
+                ))}
+              </div>
+            </Panel>
+
+            <Panel title="Optional Section Backgrounds" description="Use sparingly. Strong photos can lift the page; weak photos can make it look busy.">
+              <div className="grid gap-5 md:grid-cols-2">
+                {backgroundSections.map((section) => {
+                  const key = `${section.key}_bg_image`;
+                  return <ImagePicker key={key} label={section.label} value={settings[key]} preview={previews[key]} onFile={setFile(key)} onRemove={() => removeImage(key)} />;
+                })}
+              </div>
+            </Panel>
+          </div>
+        )}
+
+        {activeTab === 'contact' && (
+          <Panel title="Contact And WhatsApp" description="Make it easy for venues to get in touch.">
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label="WhatsApp number" help="Use UK format like 447700900000, no spaces."><input name="whatsapp_number" value={settings.whatsapp_number} onChange={handleInput} className={textInputClass} /></Field>
+              <Field label="Show WhatsApp button">
+                <select name="whatsapp_enabled" value={settings.whatsapp_enabled} onChange={handleInput} className={textInputClass}>
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </select>
+              </Field>
+              <div className="md:col-span-2">
+                <Field label="Default WhatsApp message"><textarea name="whatsapp_default_message" value={settings.whatsapp_default_message} onChange={handleInput} rows="3" className="textarea w-full" /></Field>
               </div>
             </div>
+          </Panel>
+        )}
 
-            <div className="border-b border-gray-300 pb-4">
-              <h3 className="text-lg font-bold mb-4">Contact Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="contact_page_title"
-                    value={settings.contact_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Get In Touch"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="contact_page_subtitle"
-                    value={settings.contact_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Let's discuss how we can bring entertainment to your venue"
-                  />
-                </div>
+        {activeTab === 'social' && (
+          <div className="space-y-6">
+            <Panel title="Social Links" description="Footer links. Leave blank to hide an icon.">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Facebook URL"><input name="facebook_url" value={settings.facebook_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Instagram URL"><input name="instagram_url" value={settings.instagram_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="X/Twitter URL"><input name="twitter_url" value={settings.twitter_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="LinkedIn URL"><input name="linkedin_url" value={settings.linkedin_url} onChange={handleInput} className={textInputClass} /></Field>
               </div>
-            </div>
+            </Panel>
 
-            <div className="border-b border-gray-300 pb-4">
-              <h3 className="text-lg font-bold mb-4">Events Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="events_page_title"
-                    value={settings.events_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Upcoming Events"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="events_page_subtitle"
-                    value={settings.events_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Join us for exciting quiz nights and entertainment"
-                  />
-                </div>
+            <Panel title="Live Social Feeds" description="Optional advanced setup. Most owners can ignore this.">
+              <div className="grid gap-5 md:grid-cols-2">
+                <Field label="Instagram feed"><select name="instagram_enabled" value={settings.instagram_enabled} onChange={handleInput} className={textInputClass}><option value="false">Off</option><option value="true">On</option></select></Field>
+                <Field label="Facebook feed"><select name="facebook_enabled" value={settings.facebook_enabled} onChange={handleInput} className={textInputClass}><option value="false">Off</option><option value="true">On</option></select></Field>
+                <Field label="Instagram access token"><input name="instagram_access_token" value={settings.instagram_access_token} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Instagram user ID"><input name="instagram_user_id" value={settings.instagram_user_id} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Facebook page access token"><input name="facebook_access_token" value={settings.facebook_access_token} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Facebook page ID"><input name="facebook_page_id" value={settings.facebook_page_id} onChange={handleInput} className={textInputClass} /></Field>
               </div>
-            </div>
-
-            <div className="border-b border-gray-300 pb-4">
-              <h3 className="text-lg font-bold mb-4">Venues Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="venues_page_title"
-                    value={settings.venues_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Our Venues"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="venues_page_subtitle"
-                    value={settings.venues_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Find your nearest quiz night location"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="border-b border-gray-300 pb-4">
-              <h3 className="text-lg font-bold mb-4">Gallery Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="gallery_page_title"
-                    value={settings.gallery_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Photo Gallery"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="gallery_page_subtitle"
-                    value={settings.gallery_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Moments from our events"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-bold mb-4">Team Page</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="label">Page Title</label>
-                  <input
-                    type="text"
-                    name="team_page_title"
-                    value={settings.team_page_title}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., Meet The Team"
-                  />
-                </div>
-                <div>
-                  <label className="label">Page Subtitle</label>
-                  <input
-                    type="text"
-                    name="team_page_subtitle"
-                    value={settings.team_page_subtitle}
-                    onChange={handleInputChange}
-                    className="input w-full"
-                    placeholder="e.g., The people who make it all happen"
-                  />
-                </div>
-              </div>
-            </div>
+            </Panel>
           </div>
-        </div>
+        )}
 
-        {/* Logo */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Site Logo</h2>
-          </div>
-
-          <div>
-            <label className="label">Header Logo</label>
-            <div className="space-y-3">
-              {/* Logo Preview */}
-              {logoPreview && (
-                <div className="relative w-full max-w-md border-2 border-gray-200 rounded overflow-hidden bg-gray-900 p-4">
-                  <img
-                    src={logoPreview}
-                    alt="Logo Preview"
-                    className="w-full h-auto object-contain max-h-32"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLogoPreview(null);
-                      setLogo(null);
-                      setSettings(prev => ({ ...prev, logo_url: '' }));
-                    }}
-                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
-                  >
-                    Remove Logo
-                  </button>
-                </div>
-              )}
-
-              {/* Upload Button */}
-              <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
-                <div className="text-center">
-                  <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-                  <p className="text-sm text-gray-900 font-medium">
-                    <span className="text-quiz-blue font-semibold">Click to upload</span> site logo
-                  </p>
-                  <p className="text-xs text-gray-800 mt-1 font-medium">PNG or SVG recommended (transparent background)</p>
-                </div>
-                <input
-                  type="file"
-                  onChange={handleLogoChange}
-                  accept="image/*"
-                  className="hidden"
-                />
-              </label>
-            </div>
-            <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-              <p className="text-sm text-gray-900 font-medium">
-                <strong className="text-brit-blue">💡 Tip:</strong> Upload a logo with a transparent background (PNG or SVG). The logo will appear in the header and overlap slightly into the page content for a modern look. Recommended height: 80-120px.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Hero Image */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Hero Image</h2>
-          </div>
-
-          <div>
-            <label className="label">Homepage Hero Background Image</label>
-            <div className="space-y-3">
-              {/* Image Preview */}
-              {heroImagePreview && (
-                <div className="relative w-full h-64 border-2 border-gray-200 rounded overflow-hidden">
-                  <img
-                    src={heroImagePreview}
-                    alt="Hero Preview"
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setHeroImagePreview(null);
-                      setHeroImage(null);
-                      setSettings(prev => ({ ...prev, hero_image_url: '' }));
-                    }}
-                    className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
-                  >
-                    Remove Image
-                  </button>
-                </div>
-              )}
-
-              {/* Upload Button */}
-              <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
-                <div className="text-center">
-                  <Upload className="mx-auto mb-2 text-gray-400" size={32} />
-                  <p className="text-sm text-gray-900 font-medium">
-                    <span className="text-quiz-blue font-semibold">Click to upload</span> hero image
-                  </p>
-                  <p className="text-xs text-gray-800 mt-1 font-medium">PNG, JPG, GIF or WebP (recommended: 1920x1080px)</p>
-                </div>
-                <input
-                  type="file"
-                  onChange={handleHeroImageChange}
-                  accept="image/*"
-                  className="hidden"
-                />
-              </label>
-            </div>
-            <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-              <p className="text-sm text-gray-900 font-medium">
-                <strong className="text-brit-blue">💡 Tip:</strong> Upload a vibrant, eye-catching image for your homepage hero section. For best results, use an image that's at least 1920px wide.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Section Background Colors */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Colors</h2>
-          </div>
-          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Customize the background colors for each homepage section</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="label font-bold">Social Proof Section Color</label>
-              <input
-                type="color"
-                name="social_proof_bg_color"
-                value={settings.social_proof_bg_color || '#003DA5'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">Stats section (500+ Events, etc.)</p>
-            </div>
-
-            <div>
-              <label className="label font-bold">Services Section Color</label>
-              <input
-                type="color"
-                name="services_bg_color"
-                value={settings.services_bg_color || '#DC143C'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">"What We Offer" section</p>
-            </div>
-
-            <div>
-              <label className="label font-bold">Events Section Color</label>
-              <input
-                type="color"
-                name="events_bg_color"
-                value={settings.events_bg_color || '#003DA5'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">"Upcoming Events" section</p>
-            </div>
-
-            <div>
-              <label className="label font-bold">Reviews Section Color</label>
-              <input
-                type="color"
-                name="reviews_bg_color"
-                value={settings.reviews_bg_color || '#DC143C'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">Testimonials section</p>
-            </div>
-
-            <div>
-              <label className="label font-bold">Gallery Section Color</label>
-              <input
-                type="color"
-                name="gallery_bg_color"
-                value={settings.gallery_bg_color || '#003DA5'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">"See Us in Action" photo gallery</p>
-            </div>
-
-            <div>
-              <label className="label font-bold">Team Section Color</label>
-              <input
-                type="color"
-                name="team_bg_color"
-                value={settings.team_bg_color || '#DC143C'}
-                onChange={handleInputChange}
-                className="w-full h-12 rounded border-2 border-gray-300 cursor-pointer"
-              />
-              <p className="text-xs text-gray-500 mt-1">"Meet the Team" section</p>
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-            <p className="text-sm text-gray-900 font-medium">
-              <strong className="text-brit-blue">💡 Tip:</strong> If you upload a background image for a section, the color will be used as an overlay. Without an image, the solid color will be displayed.
-            </p>
-          </div>
-        </div>
-
-        {/* Section Ordering */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <GripVertical className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Homepage Section Order</h2>
-          </div>
-          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Control the order in which sections appear on your homepage. Hero section is always first, and CTA is always last.</p>
-
-          <div className="space-y-3">
-            {sectionOrder.map((sectionKey, index) => (
-              <div key={sectionKey} className="flex items-center gap-3 p-4 bg-gray-50 border-2 border-gray-200 rounded-lg hover:border-brit-blue/50 transition-colors">
-                <div className="flex flex-col gap-1">
-                  <button
-                    type="button"
-                    onClick={() => moveSectionUp(index)}
-                    disabled={index === 0}
-                    className={`p-1 rounded transition-colors ${
-                      index === 0
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-gray-600 hover:text-brit-blue hover:bg-white'
-                    }`}
-                    title="Move up"
-                  >
-                    <ArrowUp size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => moveSectionDown(index)}
-                    disabled={index === sectionOrder.length - 1}
-                    className={`p-1 rounded transition-colors ${
-                      index === sectionOrder.length - 1
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-gray-600 hover:text-brit-blue hover:bg-white'
-                    }`}
-                    title="Move down"
-                  >
-                    <ArrowDown size={20} />
-                  </button>
-                </div>
-                <div className="flex items-center gap-3 flex-1">
-                  <span className="flex items-center justify-center w-8 h-8 bg-brit-blue text-white rounded-full font-bold text-sm">
-                    {index + 1}
-                  </span>
-                  <span className="font-semibold text-gray-900">{getSectionLabel(sectionKey)}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-            <p className="text-sm text-gray-900 font-medium">
-              <strong className="text-brit-blue">💡 Tip:</strong> Click the arrow buttons to reorder sections. The order will be saved when you click "Save All Settings" at the bottom of the page.
-            </p>
-          </div>
-        </div>
-
-        {/* Section Background Images */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <ImageIcon className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Section Background Images (Optional)</h2>
-          </div>
-          <p className="text-sm md:text-base text-gray-900 mb-6 font-medium">Upload background images for each section on your homepage (colors will be used as overlay)</p>
-
-          <div className="space-y-8">
-            {[
-              { key: 'social_proof', label: 'Stats/Social Proof Section' },
-              { key: 'about', label: 'About Me Section' },
-              { key: 'services', label: 'Services Section' },
-              { key: 'events', label: 'Events Section' },
-              { key: 'gallery', label: 'Gallery Section' },
-              { key: 'team', label: 'Team Section' },
-              { key: 'reviews', label: 'Reviews Section' },
-              { key: 'question_of_day', label: 'Question of the Day Section' },
-              { key: 'social_media', label: 'Social Media Feed Section' },
-              { key: 'footer', label: 'Footer Section' }
-            ].map(({ key, label }) => (
-              <div key={key} className="border-2 border-gray-200 rounded-lg p-4">
-                <label className="label font-bold">{label}</label>
-
-                {/* Image Preview */}
-                {(sectionBgPreviews[key] || settings[`${key}_bg_image`]) && (
-                  <div className="relative w-full h-48 border-2 border-gray-200 rounded overflow-hidden mb-3">
-                    <img
-                      src={sectionBgPreviews[key] || `${API_BASE_URL}${settings[`${key}_bg_image`]}`}
-                      alt={`${label} Preview`}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSectionBgPreviews(prev => ({ ...prev, [key]: null }));
-                        setSectionBgImages(prev => ({ ...prev, [key]: null }));
-                        setSettings(prev => ({ ...prev, [`${key}_bg_image`]: '' }));
-                      }}
-                      className="absolute top-2 right-2 bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 text-sm"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-
-                {/* Upload Button */}
-                <label className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-quiz-blue hover:bg-blue-50 transition-colors">
-                  <div className="text-center">
-                    <Upload className="mx-auto mb-2 text-gray-400" size={24} />
-                    <p className="text-sm text-gray-900 font-medium">
-                      <span className="text-quiz-blue font-semibold">Upload</span> {label.toLowerCase()} background
-                    </p>
-                  </div>
-                  <input
-                    type="file"
-                    onChange={handleSectionBgImageChange(key)}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                </label>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-            <p className="text-sm text-gray-900 font-medium">
-              <strong className="text-brit-blue">💡 Tip:</strong> Use high-quality images (1920px wide recommended) that complement your content. Images will be used as full-width section backgrounds.
-            </p>
-          </div>
-        </div>
-
-        {/* Business Hours */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Clock className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Business Hours</h2>
-          </div>
-
-          <div>
-            <label className="label">Operating Hours</label>
-            <textarea
-              name="business_hours"
-              value={settings.business_hours}
-              onChange={handleInputChange}
-              rows="4"
-              className="textarea w-full"
-              placeholder="e.g.,
-Monday - Friday: 9am - 5pm
-Saturday: 10am - 4pm
-Sunday: Closed"
-            ></textarea>
-            <p className="text-xs text-gray-500 mt-1">Your availability or office hours (one per line)</p>
-          </div>
-        </div>
-
-        {/* About Section */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">About Your Business</h2>
-          </div>
-
-          <div>
-            <label className="label">About Text</label>
-            <textarea
-              name="about_text"
-              value={settings.about_text}
-              onChange={handleInputChange}
-              rows="6"
-              className="textarea w-full"
-              placeholder="Tell visitors about your business, your experience, what makes you unique..."
-            ></textarea>
-            <p className="text-xs text-gray-500 mt-1">This text may appear on your homepage or about page</p>
-          </div>
-
-          <div className="mt-6">
-            <label className="label">About Me Image (Optional)</label>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setAboutImage(file);
-                      const reader = new FileReader();
-                      reader.onloadend = () => setAboutImagePreview(reader.result);
-                      reader.readAsDataURL(file);
-                    }
-                  }}
-                  className="input w-full"
-                />
-                <p className="text-xs text-gray-500 mt-1">Add a photo to accompany your about text (recommended: 800x600px or larger)</p>
-              </div>
-              {aboutImagePreview && (
-                <div className="relative">
-                  <img
-                    src={aboutImagePreview}
-                    alt="About preview"
-                    className="h-32 w-auto rounded-lg border-2 border-gray-200 object-cover"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAboutImage(null);
-                      setAboutImagePreview(null);
-                    }}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
-                  >
-                    ×
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Social Media */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Globe className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Social Media Links</h2>
-          </div>
-
-          <div className="space-y-4">
-            <div>
-              <label className="label">
-                <Facebook size={16} className="inline mr-1" />
-                Facebook Page URL
-              </label>
-              <input
-                type="url"
-                name="facebook_url"
-                value={settings.facebook_url}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="https://facebook.com/yourpage"
-              />
-            </div>
-
-            <div>
-              <label className="label">
-                <Twitter size={16} className="inline mr-1" />
-                Twitter/X Profile URL
-              </label>
-              <input
-                type="url"
-                name="twitter_url"
-                value={settings.twitter_url}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="https://twitter.com/yourprofile"
-              />
-            </div>
-
-            <div>
-              <label className="label">
-                <Instagram size={16} className="inline mr-1" />
-                Instagram Profile URL
-              </label>
-              <input
-                type="url"
-                name="instagram_url"
-                value={settings.instagram_url}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="https://instagram.com/yourprofile"
-              />
-            </div>
-
-            <div>
-              <label className="label">
-                <Linkedin size={16} className="inline mr-1" />
-                LinkedIn Profile URL
-              </label>
-              <input
-                type="url"
-                name="linkedin_url"
-                value={settings.linkedin_url}
-                onChange={handleInputChange}
-                className="input w-full"
-                placeholder="https://linkedin.com/in/yourprofile"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 bg-brit-blue/10 border-2 border-brit-blue/30 rounded">
-            <p className="text-sm text-gray-900 font-medium">
-              <strong className="text-brit-blue">💡 Tip:</strong> Social media links will appear in your website footer and contact sections. Leave blank to hide any social media icons you don't use.
-            </p>
-          </div>
-        </div>
-
-        {/* Social Media API Integration */}
-        <div className="card mb-4 md:mb-6">
-          <div className="flex items-center mb-4 md:mb-6">
-            <Sparkles className="text-quiz-blue mr-2 md:mr-3 flex-shrink-0" size={24} />
-            <h2 className="text-lg md:text-2xl font-heading text-quiz-blue">Social Media Integration</h2>
-          </div>
-
-          <div className="mb-8 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg">
-            <h3 className="font-bold text-gray-900 mb-2" style={{ color: '#000000' }}>📸 Display Live Posts & Enable WhatsApp Chat</h3>
-            <p className="text-sm text-gray-900 mb-3 font-medium" style={{ color: '#000000' }}>
-              Connect your Instagram and Facebook accounts to display real posts on your homepage. Enable WhatsApp for instant customer messaging.
-            </p>
-            <p className="text-xs text-gray-800 font-medium" style={{ color: '#000000' }}>
-              📖 Need help? Check <code className="bg-white px-2 py-1 rounded text-gray-900" style={{ color: '#000000' }}>SOCIAL_MEDIA_SETUP.md</code> for step-by-step setup instructions.
-            </p>
-          </div>
-
-          {/* Instagram Integration */}
-          <div className="mb-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-300">
-            <div className="flex items-center mb-4">
-              <Instagram className="text-purple-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>Instagram Feed</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    name="instagram_enabled"
-                    checked={settings.instagram_enabled === 'true'}
-                    onChange={(e) => setSettings(prev => ({ ...prev, instagram_enabled: e.target.checked ? 'true' : 'false' }))}
-                    className="w-4 h-4 text-purple-600"
-                  />
-                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable Instagram Feed</span>
-                </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Display your Instagram posts on the homepage</p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <Key size={16} className="text-purple-600" />
-                  Instagram Access Token
-                </label>
-                <input
-                  type="text"
-                  name="instagram_access_token"
-                  value={settings.instagram_access_token}
-                  onChange={handleInputChange}
-                  className="input w-full font-mono text-sm"
-                  placeholder="IGQVJxxxxxxxxxxxxxxxxxxxxxxxxx..."
-                  disabled={settings.instagram_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Get from Facebook Developer Console → Instagram Basic Display API
-                </p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <Hash size={16} className="text-purple-600" />
-                  Instagram User ID
-                </label>
-                <input
-                  type="text"
-                  name="instagram_user_id"
-                  value={settings.instagram_user_id}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  placeholder="17841400000000000"
-                  disabled={settings.instagram_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Your numeric Instagram user ID
-                </p>
-              </div>
-
-              <div className="p-3 bg-purple-50 rounded text-xs font-medium text-gray-900 border border-purple-300" style={{ color: '#000000' }}>
-                <strong className="text-purple-700" style={{ color: '#6b21a8' }}>⏰ Note:</strong> Access tokens expire after 60 days. You'll need to refresh them periodically.
-              </div>
-            </div>
-          </div>
-
-          {/* Facebook Integration */}
-          <div className="mb-8 p-6 bg-blue-50 rounded-lg border-2 border-blue-300">
-            <div className="flex items-center mb-4">
-              <Facebook className="text-blue-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>Facebook Feed</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    name="facebook_enabled"
-                    checked={settings.facebook_enabled === 'true'}
-                    onChange={(e) => setSettings(prev => ({ ...prev, facebook_enabled: e.target.checked ? 'true' : 'false' }))}
-                    className="w-4 h-4 text-blue-600"
-                  />
-                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable Facebook Feed</span>
-                </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Display your Facebook page posts on the homepage</p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <Key size={16} className="text-blue-600" />
-                  Facebook Page Access Token
-                </label>
-                <input
-                  type="text"
-                  name="facebook_access_token"
-                  value={settings.facebook_access_token}
-                  onChange={handleInputChange}
-                  className="input w-full font-mono text-sm"
-                  placeholder="EAAxxxxxxxxxxxxxxxxxxxxxxxxx..."
-                  disabled={settings.facebook_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Get from Facebook Graph API Explorer → Your Page
-                </p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <Hash size={16} className="text-blue-600" />
-                  Facebook Page ID
-                </label>
-                <input
-                  type="text"
-                  name="facebook_page_id"
-                  value={settings.facebook_page_id}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  placeholder="123456789012345"
-                  disabled={settings.facebook_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Your Facebook Page ID (found in Page Settings)
-                </p>
-              </div>
-
-              <div className="p-3 bg-blue-50 rounded text-xs font-medium text-gray-900 border border-blue-300" style={{ color: '#000000' }}>
-                <strong className="text-brit-blue" style={{ color: '#003DA5' }}>💡 Tip:</strong> Use a Page Access Token (not User Token) for best results.
-              </div>
-            </div>
-          </div>
-
-          {/* WhatsApp Integration */}
-          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-300">
-            <div className="flex items-center mb-4">
-              <MessageCircle className="text-green-600 mr-2" size={24} />
-              <h3 className="text-xl font-bold text-gray-900" style={{ color: '#000000' }}>WhatsApp Chat Widget</h3>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    name="whatsapp_enabled"
-                    checked={settings.whatsapp_enabled === 'true'}
-                    onChange={(e) => setSettings(prev => ({ ...prev, whatsapp_enabled: e.target.checked ? 'true' : 'false' }))}
-                    className="w-4 h-4 text-green-600"
-                  />
-                  <span className="font-semibold text-gray-900" style={{ color: '#000000' }}>Enable WhatsApp Chat Widget</span>
-                </label>
-                <p className="text-xs text-gray-800 ml-6 font-medium" style={{ color: '#000000' }}>Show floating WhatsApp button on all pages</p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <Phone size={16} className="text-green-600" />
-                  WhatsApp Business Number
-                </label>
-                <input
-                  type="text"
-                  name="whatsapp_number"
-                  value={settings.whatsapp_number}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  placeholder="447123456789 (UK: 44 + number without leading 0)"
-                  disabled={settings.whatsapp_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Include country code, no spaces or symbols (e.g., 447xxxxxxxxx for UK)
-                </p>
-              </div>
-
-              <div>
-                <label className="label flex items-center gap-2 text-gray-900 font-semibold" style={{ color: '#000000' }}>
-                  <MessageCircle size={16} className="text-green-600" />
-                  Default Chat Message
-                </label>
-                <textarea
-                  name="whatsapp_default_message"
-                  value={settings.whatsapp_default_message}
-                  onChange={handleInputChange}
-                  className="input w-full"
-                  rows="2"
-                  placeholder="Hi! I'd like to know more about your quiz nights."
-                  disabled={settings.whatsapp_enabled !== 'true'}
-                />
-                <p className="text-xs text-gray-800 mt-1 font-medium" style={{ color: '#000000' }}>
-                  Pre-filled message when customers click to chat
-                </p>
-              </div>
-
-              <div className="p-3 bg-green-50 rounded text-xs font-medium text-gray-900 border border-green-400" style={{ color: '#000000' }}>
-                <strong className="text-green-700" style={{ color: '#15803d' }}>✅ Easy Setup:</strong> No API keys needed! Just enter your WhatsApp number and enable.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={submitting}
-            className="btn btn-primary flex items-center px-8"
-          >
-            {submitting ? (
-              <>
-                <span className="animate-spin mr-2">⏳</span>
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save size={20} className="mr-2" />
-                Save All Settings
-              </>
-            )}
+        <div className="sticky bottom-4 mt-8 flex justify-end">
+          <button type="submit" disabled={submitting} className="btn btn-primary inline-flex items-center gap-2 px-8">
+            {submitting ? <><span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />Saving</> : <><Save size={20} />Save Site</>}
           </button>
         </div>
       </form>
+
+      <div className="mt-6 rounded-lg border border-green-500/30 bg-green-950/30 p-4 text-green-100">
+        <div className="flex items-center gap-2 font-bold"><Check size={18} />Tip for the owner</div>
+        <p className="mt-1 text-sm">Add venues, services, reviews and photos from their own dashboard pages. Use this Site Editor for wording, branding, contact details and layout.</p>
+      </div>
     </div>
   );
-};
-
-export default AdminSettings;
+}
