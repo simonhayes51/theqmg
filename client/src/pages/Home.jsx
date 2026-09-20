@@ -1,557 +1,152 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { servicesAPI, reviewsAPI, eventsAPI, galleryAPI, teamAPI, settingsAPI } from '../services/api';
-import { Calendar, MapPin, Star, ArrowRight, Users, Camera, Award, TrendingUp, Zap, User } from 'lucide-react';
-import QuestionOfTheDay from '../components/QuestionOfTheDay';
-import SocialMediaFeed from '../components/SocialMediaFeed';
-import ItemCarousel from '../components/ItemCarousel';
-import FloatingCTA from '../components/FloatingCTA';
-import LoadingSkeleton from '../components/LoadingSkeleton';
-import ScrollReveal from '../hooks/useScrollAnimation';
-import { API_BASE_URL } from '../utils/apiBase';
+import { ArrowRight, Beer, CalendarDays, MapPin, Search, Sparkles } from 'lucide-react';
+import { eventsAPI, settingsAPI } from '../services/api';
 
-const Home = () => {
-  const [services, setServices] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [upcomingEvents, setUpcomingEvents] = useState([]);
-  const [galleryImages, setGalleryImages] = useState([]);
-  const [teamMembers, setTeamMembers] = useState([]);
-  const [heroImageUrl, setHeroImageUrl] = useState('');
-  const [settings, setSettings] = useState({
-    social_proof_bg_color: '#003DA5',
-    services_bg_color: '#DC143C',
-    events_bg_color: '#003DA5',
-    reviews_bg_color: '#DC143C',
-    gallery_bg_color: '#003DA5',
-    team_bg_color: '#DC143C'
+const defaults = {
+  hero_title: 'Find your next quiz night',
+  hero_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
+  qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
+};
+
+function formatDate(value) {
+  if (!value) return 'Date TBC';
+  return new Date(value).toLocaleDateString('en-GB', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
   });
-  const [sectionOrder, setSectionOrder] = useState(['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day']);
-  const parallaxRef = useRef(null);
+}
+
+function formatTime(value) {
+  if (!value) return 'Time TBC';
+  return value.slice(0, 5);
+}
+
+export default function Home() {
+  const [settings, setSettings] = useState(defaults);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadData();
+    loadHome();
   }, []);
 
-  // REAL PARALLAX EFFECT
-  useEffect(() => {
-    const handleScroll = () => {
-      if (parallaxRef.current) {
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * 0.5; // Parallax speed
-        parallaxRef.current.style.transform = `translate3d(0, ${rate}px, 0)`;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const loadData = async () => {
+  const loadHome = async () => {
     try {
-      const [servicesRes, reviewsRes, eventsRes, galleryRes, teamRes, settingsRes] = await Promise.all([
-        servicesAPI.getAll(),
-        reviewsAPI.getAll(),
-        eventsAPI.getAll({ upcoming: true, limit: 3 }),
-        galleryAPI.getAll(),
-        teamAPI.getAll(),
+      const [settingsResponse, eventsResponse] = await Promise.all([
         settingsAPI.getAll(),
+        eventsAPI.getAll({ upcoming: true, limit: 3 }),
       ]);
-
-      setServices(Array.isArray(servicesRes.data) ? servicesRes.data : []);
-      const reviewsData = Array.isArray(reviewsRes.data) ? reviewsRes.data : [];
-      setReviews(reviewsData.filter(r => r.is_featured).slice(0, 3));
-      setUpcomingEvents(Array.isArray(eventsRes.data) ? eventsRes.data : []);
-      const galleryData = Array.isArray(galleryRes.data) ? galleryRes.data : [];
-      setGalleryImages(galleryData.slice(0, 6));
-      setTeamMembers(Array.isArray(teamRes.data) ? teamRes.data : []);
-
-      // Load settings and merge with defaults
-      const settingsData = settingsRes.data || {};
-      setSettings(prev => ({ ...prev, ...settingsData }));
-
-      // Load section order
-      if (settingsData.section_order) {
-        try {
-          const parsedOrder = JSON.parse(settingsData.section_order);
-          if (Array.isArray(parsedOrder)) {
-            setSectionOrder(parsedOrder);
-          }
-        } catch (e) {
-          console.error('Error parsing section order:', e);
-        }
-      }
-
-      // Load hero image from settings
-      if (settingsData.hero_image_url) {
-        setHeroImageUrl(settingsData.hero_image_url);
-      }
+      setSettings({ ...defaults, ...(settingsResponse.data || {}) });
+      setEvents(Array.isArray(eventsResponse.data) ? eventsResponse.data : []);
     } catch (error) {
-      console.error('Error loading data:', error);
-      setServices([]);
-      setReviews([]);
-      setUpcomingEvents([]);
-      setGalleryImages([]);
-      setTeamMembers([]);
+      console.error('Error loading homepage:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Render section based on key
-  const renderSection = (sectionKey) => {
-    const sections = {
-      'social_proof': (
-        <ScrollReveal animation="fade-up" key="social_proof">
-          <section className="section" style={{
-            backgroundColor: settings.social_proof_bg_color || '#003DA5',
-            backgroundImage: settings.social_proof_bg_image ? `url(${API_BASE_URL}${settings.social_proof_bg_image})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundBlendMode: 'overlay'
-          }}>
-            <div className="container-custom">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <div className="p-8">
-                  <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-4">
-                    <Award className="text-brit-gold" size={48} />
-                  </div>
-                  <h3 className="text-5xl font-black text-brit-gold mb-2">700+</h3>
-                  <p className="text-xl text-gray-300">Events Hosted Annually</p>
-                </div>
-                <div className="p-8">
-                  <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-4">
-                    <Users className="text-brit-red" size={48} />
-                  </div>
-                  <h3 className="text-5xl font-black text-brit-red mb-2">50+</h3>
-                  <p className="text-xl text-gray-300">Hospitality Partner Venues</p>
-                </div>
-                <div className="p-8">
-                  <div className="inline-flex items-center justify-center p-4 bg-brit-blue/20 rounded-full mb-4">
-                    <TrendingUp className="text-brit-blue" size={48} />
-                  </div>
-                  <h3 className="text-5xl font-black text-brit-blue mb-2">20+</h3>
-                  <p className="text-xl text-gray-300">Years Event Management Experience</p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'about': settings.about_text && (
-        <ScrollReveal animation="fade-up" key="about">
-          <section
-            className="section py-20 md:py-32"
-            style={{
-              backgroundColor: settings.about_bg_color || '#f9fafb',
-              backgroundImage: settings.about_bg_image ? `url(${API_BASE_URL}${settings.about_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-16">
-                  <div className="inline-flex items-center justify-center p-5 bg-brit-navy/10 rounded-full mb-8">
-                    <User className="text-brit-navy" size={56} />
-                  </div>
-                  <h2 className="text-5xl md:text-7xl font-black text-brit-navy uppercase mb-4 tracking-tight">About Me</h2>
-                  <div className="w-32 h-2 bg-brit-gold mx-auto rounded-full"></div>
-                </div>
-
-                {/* Content */}
-                <div className={`flex flex-col ${settings.about_image ? 'lg:flex-row' : ''} gap-12 lg:gap-16 items-start`}>
-                  {settings.about_image && (
-                    <div className="w-full lg:w-2/5 xl:w-1/2">
-                      <div className="relative">
-                        <div className="absolute -inset-4 bg-gradient-to-br from-brit-navy to-brit-red rounded-3xl opacity-20 blur-xl"></div>
-                        <img
-                          src={`${API_BASE_URL}${settings.about_image}`}
-                          alt="About Me"
-                          className="relative rounded-3xl shadow-2xl w-full h-auto object-cover border-4 border-white"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  <div className={`${settings.about_image ? 'w-full lg:w-3/5 xl:w-1/2' : 'max-w-5xl mx-auto'}`}>
-                    <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border-t-4 border-brit-gold">
-                      <div className="prose prose-xl max-w-none">
-                        <div className="text-xl md:text-2xl text-gray-800 leading-relaxed space-y-6 whitespace-pre-line font-light">
-                          {settings.about_text}
-                        </div>
-                      </div>
-
-                      {/* Decorative Elements */}
-                      <div className="mt-10 pt-8 border-t-2 border-gray-100 flex items-center justify-center gap-4">
-                        <div className="w-12 h-1 bg-brit-navy rounded"></div>
-                        <Award className="text-brit-gold" size={32} />
-                        <div className="w-12 h-1 bg-brit-red rounded"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'services': (
-        <ScrollReveal animation="fade-up" key="services">
-          <section
-            className="section"
-            style={{
-              backgroundColor: settings.services_bg_color || '#DC143C',
-              backgroundImage: settings.services_bg_image ? `url(${API_BASE_URL}${settings.services_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <h2 className="section-title">{settings.home_services_title || 'What We Offer'}</h2>
-              <p className="section-subtitle">
-                {settings.home_services_subtitle || 'Professional entertainment services that bring energy and excitement to your venue!'}
-              </p>
-              {services.length === 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[...Array(3)].map((_, i) => (
-                    <LoadingSkeleton key={i} type="service" />
-                  ))}
-                </div>
-              ) : (
-                <ItemCarousel>
-                  {services.map((service, idx) => (
-                    <ScrollReveal key={service.id} animation="fade-up" delay={idx * 100}>
-                      <div className="service-card h-full">
-                        <div className="service-icon">{service.icon}</div>
-                        <h3 className="text-3xl font-black mb-4 uppercase">{service.title}</h3>
-                        <p className="mb-6 text-lg">{service.description}</p>
-                        {service.features && service.features.length > 0 && (
-                          <ul className="space-y-3 text-left">
-                            {service.features.map((feature, idx) => (
-                              <li key={idx} className="flex items-start">
-                                <span className="text-brit-gold mr-3 text-xl">✓</span>
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                    </ScrollReveal>
-                  ))}
-                </ItemCarousel>
-              )}
-              <div className="text-center mt-16">
-                <Link to="/services" className="btn btn-primary">
-                  Learn More About Our Services
-                </Link>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'events': upcomingEvents.length > 0 && (
-        <ScrollReveal animation="fade-up" key="events">
-          <section
-            className="section"
-            style={{
-              backgroundColor: settings.events_bg_color || '#003DA5',
-              backgroundImage: settings.events_bg_image ? `url(${API_BASE_URL}${settings.events_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <h2 className="section-title">{settings.home_events_title || 'Upcoming Events'}</h2>
-              <ItemCarousel>
-                {upcomingEvents.map((event, idx) => (
-                  <ScrollReveal key={event.id} animation="fade-up" delay={idx * 100}>
-                    <div className="card h-full">
-                      {event.image_url && (
-                        <div className="w-full h-64 -mt-8 -mx-8 mb-6 overflow-hidden rounded-t-3xl">
-                          <img
-                            src={`${API_BASE_URL}${event.image_url}`}
-                            alt={event.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      )}
-                      <h3 className="text-2xl font-black mb-4 text-brit-gold uppercase">{event.title}</h3>
-                      <div className="flex items-center text-gray-300 mb-3">
-                        <Calendar size={18} className="mr-3 text-brit-gold" />
-                        <span className="text-lg">{new Date(event.event_date).toLocaleDateString()}</span>
-                      </div>
-                      {event.venue_name && (
-                        <div className="flex items-center text-gray-300 mb-6">
-                          <MapPin size={18} className="mr-3 text-brit-gold" />
-                          <span className="text-lg">{event.venue_name}</span>
-                        </div>
-                      )}
-                      <p className="text-lg leading-relaxed">{event.description}</p>
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </ItemCarousel>
-              <div className="text-center mt-16">
-                <Link to="/events" className="btn btn-secondary">
-                  View All Events
-                </Link>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'reviews': reviews.length > 0 && (
-        <ScrollReveal animation="fade-up" key="reviews">
-          <section
-            className="section"
-            style={{
-              backgroundColor: settings.reviews_bg_color || 'rgba(220, 20, 60, 0.9)',
-              backgroundImage: settings.reviews_bg_image ? `url(${API_BASE_URL}${settings.reviews_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <h2 className="section-title">{settings.home_reviews_title || 'What Venues Say'}</h2>
-              <ItemCarousel>
-                {reviews.map((review, idx) => (
-                  <ScrollReveal key={review.id} animation="fade-up" delay={idx * 100}>
-                    <div className="review-card h-full">
-                      <div className="review-stars">
-                        {[...Array(review.rating || 5)].map((_, i) => (
-                          <Star key={i} size={24} fill="currentColor" />
-                        ))}
-                      </div>
-                      <p className="review-text">"{review.review_text}"</p>
-                      <div>
-                        <p className="review-author">{review.author_name}</p>
-                        <p className="text-gray-300 text-base">{review.venue_name}</p>
-                      </div>
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </ItemCarousel>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'gallery': galleryImages.length > 0 && (
-        <ScrollReveal animation="fade-up" key="gallery">
-          <section
-            className="section"
-            style={{
-              backgroundColor: settings.gallery_bg_color || '#003DA5',
-              backgroundImage: settings.gallery_bg_image ? `url(${API_BASE_URL}${settings.gallery_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-red/20 rounded-full mb-6">
-                  <Camera className="text-brit-red" size={40} />
-                </div>
-                <h2 className="section-title">{settings.home_gallery_title || 'See Us in Action'}</h2>
-              </div>
-              <ItemCarousel>
-                {galleryImages.map((image, idx) => (
-                  <ScrollReveal key={image.id} animation="scale-up" delay={idx * 100}>
-                    <div className="gallery-item">
-                      <img
-                        src={`${API_BASE_URL}${image.image_url}`}
-                        alt={image.title || 'Event photo'}
-                        loading="lazy"
-                      />
-                      {image.title && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-                          <div className="p-6 text-white">
-                            <p className="font-black text-xl uppercase">{image.title}</p>
-                            {image.category && (
-                              <p className="text-brit-gold mt-1">{image.category}</p>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </ItemCarousel>
-              <div className="text-center mt-16">
-                <Link to="/gallery" className="btn btn-primary inline-flex items-center">
-                  View Full Gallery
-                  <ArrowRight size={24} className="ml-3" />
-                </Link>
-              </div>
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'team': teamMembers.length > 0 && (
-        <ScrollReveal animation="fade-up" key="team">
-          <section
-            className="section"
-            style={{
-              backgroundColor: settings.team_bg_color || '#DC143C',
-              backgroundImage: settings.team_bg_image ? `url(${API_BASE_URL}${settings.team_bg_image})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundBlendMode: 'overlay'
-            }}
-          >
-            <div className="container-custom">
-              <div className="text-center mb-16">
-                <div className="inline-flex items-center justify-center p-4 bg-brit-gold/20 rounded-full mb-6">
-                  <Users className="text-brit-gold" size={40} />
-                </div>
-                <h2 className="section-title">{settings.home_team_title || 'Meet the Team'}</h2>
-              </div>
-              <ItemCarousel>
-                {teamMembers.map((member, idx) => (
-                  <ScrollReveal key={member.id} animation="fade-up" delay={idx * 100}>
-                    <div className="team-card">
-                      {member.image_url ? (
-                        <div className="team-avatar">
-                          <img
-                            src={`${API_BASE_URL}${member.image_url}`}
-                            alt={member.name}
-                            loading="lazy"
-                          />
-                        </div>
-                      ) : (
-                        <div className="team-avatar flex items-center justify-center bg-gray-800">
-                          <Users size={80} className="text-brit-red" />
-                        </div>
-                      )}
-                      <h3 className="text-3xl font-black mb-2 text-white uppercase">
-                        {member.name}
-                      </h3>
-                      <p className="text-brit-gold font-bold text-xl mb-4 uppercase tracking-wide">{member.role}</p>
-                      {member.bio && (
-                        <p className="text-gray-300 text-lg leading-relaxed">{member.bio}</p>
-                      )}
-                    </div>
-                  </ScrollReveal>
-                ))}
-              </ItemCarousel>
-              {teamMembers.length > 3 && (
-                <div className="text-center mt-16">
-                  <Link to="/team" className="btn btn-secondary inline-flex items-center">
-                    Meet the Full Team
-                    <ArrowRight size={24} className="ml-3" />
-                  </Link>
-                </div>
-              )}
-            </div>
-          </section>
-        </ScrollReveal>
-      ),
-      'question_of_day': (
-        <div
-          key="question_of_day"
-          style={{
-            backgroundColor: settings.question_of_day_bg_color || '#1f2937',
-            backgroundImage: settings.question_of_day_bg_image ? `url(${API_BASE_URL}${settings.question_of_day_bg_image})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundBlendMode: 'overlay'
-          }}
-        >
-          <QuestionOfTheDay />
-        </div>
-      ),
-      'social_media': (
-        <div
-          key="social_media"
-          style={{
-            backgroundColor: settings.social_media_bg_color || '#ffffff',
-            backgroundImage: settings.social_media_bg_image ? `url(${API_BASE_URL}${settings.social_media_bg_image})` : undefined,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundBlendMode: 'overlay'
-          }}
-        >
-          <SocialMediaFeed />
-        </div>
-      )
-    };
-
-    return sections[sectionKey] || null;
-  };
-
   return (
-    <div>
-      {/* Skip to Content Link for Accessibility */}
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
+    <div className="min-h-screen bg-gray-950 text-white">
+      <section className="home-product-hero">
+        <div className="container-custom">
+          <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div>
+              <p className="mb-4 inline-flex rounded-full border border-brit-gold/60 bg-brit-gold/10 px-4 py-2 text-sm font-black uppercase tracking-wide text-brit-gold">
+                QMG / QMGHQ
+              </p>
+              <h1 className="max-w-4xl text-5xl font-black uppercase leading-none md:text-7xl">
+                {settings.hero_title || defaults.hero_title}
+              </h1>
+              <p className="mt-5 max-w-2xl text-xl leading-relaxed text-gray-200 md:text-2xl">
+                {settings.hero_subtitle || defaults.hero_subtitle}
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link to="/quiz" className="btn btn-primary inline-flex items-center justify-center gap-2 py-4 text-base">
+                  <Search size={20} />
+                  Find a Quiz
+                </Link>
+                <Link to="/hq" className="btn btn-outline inline-flex items-center justify-center gap-2 py-4 text-base">
+                  <Beer size={20} />
+                  QMGHQ
+                </Link>
+              </div>
+            </div>
 
-      {/* Floating CTA Button */}
-      <FloatingCTA />
-    <div id="main-content">
-      {/* PARALLAX HERO SECTION */}
-      <section className="hero-section">
-        {/* Parallax Background Image */}
-        {heroImageUrl && (
-          <div
-            ref={parallaxRef}
-            className="hero-parallax-bg"
-            style={{
-              backgroundImage: `url(${API_BASE_URL}${heroImageUrl})`,
-            }}
-          />
-        )}
-
-        {/* Dark Overlay */}
-        <div className="hero-overlay" />
-
-        {/* Hero Content */}
-        <div className="hero-content">
-          <h1 className="hero-title">
-            {settings.hero_title || 'THE QUIZ MASTER GENERAL'}
-          </h1>
-          <p className="hero-subtitle">
-            {settings.hero_subtitle || "North East England's Premier Quiz & Entertainment"}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-8">
-            <Link to="/services" className="btn btn-primary">
-              {settings.hero_button_1_text || 'Our Services'}
-            </Link>
-            <Link to="/contact" className="btn btn-secondary">
-              {settings.hero_button_2_text || 'Book Now'}
-            </Link>
+            <div className="home-scan-card">
+              <div className="mb-5 flex items-center gap-3">
+                <div className="rounded-full bg-brit-gold p-3 text-gray-950">
+                  <Sparkles size={28} />
+                </div>
+                <div>
+                  <p className="text-sm font-black uppercase tracking-wide text-brit-gold">Beer mat QR</p>
+                  <h2 className="text-3xl font-black uppercase">Where's nearest quiz?</h2>
+                </div>
+              </div>
+              <p className="text-lg text-gray-200">
+                This is the useful bit: a fast mobile page for venues, punters and QR scans.
+              </p>
+              <Link to="/quiz" className="mt-6 flex items-center justify-between rounded-lg border border-white/10 bg-white/10 p-4 font-black uppercase text-white transition hover:border-brit-gold hover:bg-brit-gold hover:text-gray-950">
+                Open quiz finder
+                <ArrowRight />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Dynamic Sections Based on Section Order */}
-      {sectionOrder.map(key => renderSection(key))}
+      <section className="section bg-gray-950">
+        <div className="container-custom">
+          <div className="grid gap-5 md:grid-cols-2">
+            <Link to="/quiz" className="home-choice-card home-choice-card-qmg">
+              <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMG</p>
+              <h2 className="mt-2 text-4xl font-black uppercase">Quiz nights and events</h2>
+              <p className="mt-4 text-lg text-gray-200">Find upcoming quiz nights, partner venues and booking details.</p>
+              <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Find a quiz <ArrowRight size={18} /></span>
+            </Link>
 
-      {/* CTA Section */}
-      <ScrollReveal animation="scale-up">
-        <section className="section" style={{
-          background: 'linear-gradient(135deg, #DC143C 0%, #003DA5 100%)'
-        }}>
-          <div className="container-custom text-center">
-            <div className="inline-flex items-center justify-center p-4 bg-white/20 rounded-full mb-6">
-              <Zap className="text-white" size={48} />
-            </div>
-            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase">Get In Touch Today To Book Your Event</h2>
-            <p className="text-2xl md:text-3xl mb-12 max-w-3xl mx-auto text-brit-gold font-bold">
-              Ready to book? Contact us to discuss your quiz night, race night, or special event requirements.
-            </p>
-            <Link to="/contact" className="btn btn-secondary text-xl hover:scale-105 transform transition-transform">
-              Contact Us Now
+            <Link to="/hq" className="home-choice-card home-choice-card-hq">
+              <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMGHQ</p>
+              <h2 className="mt-2 text-4xl font-black uppercase">Pub / bar side</h2>
+              <p className="mt-4 text-lg text-gray-200">{settings.qmghq_subtitle || defaults.qmghq_subtitle}</p>
+              <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Visit HQ <ArrowRight size={18} /></span>
             </Link>
           </div>
-        </section>
-      </ScrollReveal>
-    </div>
+
+          <div className="mt-12">
+            <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-sm font-black uppercase tracking-wide text-brit-gold">Next up</p>
+                <h2 className="text-4xl font-black uppercase">Upcoming quiz nights</h2>
+              </div>
+              <Link to="/quiz" className="text-brit-gold hover:text-white">See all</Link>
+            </div>
+
+            {loading ? (
+              <div className="grid gap-4 md:grid-cols-3">
+                {[1, 2, 3].map((item) => <div key={item} className="h-40 animate-pulse rounded-lg bg-gray-800" />)}
+              </div>
+            ) : events.length > 0 ? (
+              <div className="grid gap-4 md:grid-cols-3">
+                {events.map((event) => (
+                  <article key={event.id} className="home-event-card">
+                    <p className="flex items-center gap-2 text-brit-gold"><CalendarDays size={18} />{formatDate(event.event_date)}</p>
+                    <h3 className="mt-3 text-2xl font-black uppercase">{event.title}</h3>
+                    <p className="mt-2 flex items-start gap-2 text-gray-300"><MapPin className="mt-1 shrink-0 text-brit-red" size={18} />{event.venue_name || 'Venue TBC'}{event.venue_city ? `, ${event.venue_city}` : ''}</p>
+                    <p className="mt-3 text-sm font-bold uppercase tracking-wide text-gray-400">{formatTime(event.event_time)}</p>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-lg border border-white/10 bg-gray-900 p-8 text-center">
+                <h3 className="text-2xl font-black uppercase text-brit-gold">No events listed yet</h3>
+                <p className="mt-2 text-gray-300">Add venues and events in admin, then the homepage and QR page fill themselves.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
     </div>
   );
-};
-
-export default Home;
+}

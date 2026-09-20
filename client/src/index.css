@@ -1187,6 +1187,76 @@ footer {
   text-transform: uppercase;
 }
 
+.home-product-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5rem, 10vw, 9rem) 0;
+  background:
+    linear-gradient(135deg, rgba(7, 11, 18, 0.92), rgba(0, 61, 165, 0.78)),
+    radial-gradient(circle at 82% 18%, rgba(255, 183, 0, 0.32), transparent 24rem),
+    radial-gradient(circle at 12% 82%, rgba(220, 20, 60, 0.42), transparent 24rem),
+    #070b12;
+}
+
+.home-product-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(45deg, #fff 25%, transparent 25%),
+    linear-gradient(-45deg, #fff 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #fff 75%),
+    linear-gradient(-45deg, transparent 75%, #fff 75%);
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-size: 20px 20px;
+}
+
+.home-product-hero > * {
+  position: relative;
+}
+
+.home-scan-card,
+.home-choice-card,
+.home-event-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(17, 24, 39, 0.88);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.home-scan-card {
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.home-choice-card {
+  display: block;
+  min-height: 19rem;
+  padding: clamp(1.5rem, 4vw, 2rem);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.home-choice-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 183, 0, 0.7);
+}
+
+.home-choice-card-qmg {
+  background:
+    linear-gradient(135deg, rgba(0, 61, 165, 0.5), rgba(17, 24, 39, 0.92)),
+    rgba(17, 24, 39, 0.88);
+}
+
+.home-choice-card-hq {
+  background:
+    linear-gradient(135deg, rgba(220, 20, 60, 0.5), rgba(17, 24, 39, 0.92)),
+    rgba(17, 24, 39, 0.88);
+}
+
+.home-event-card {
+  padding: 1.25rem;
+}
+
 @media (max-width: 640px) {
   .quiz-listing-card {
     align-items: stretch;
