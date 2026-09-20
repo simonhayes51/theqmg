@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
@@ -28,49 +28,61 @@ import AdminRecurringEvents from './pages/admin/RecurringEvents';
 import AdminQuestions from './pages/admin/Questions';
 import ProtectedRoute from './components/ProtectedRoute';
 
+function AppLayout() {
+  const location = useLocation();
+  const bareRoutes = ['/quiz', '/quizzes', '/nearest-quiz', '/where-is-nearest-quiz'];
+  const isBarePage = bareRoutes.includes(location.pathname);
+
+  return (
+    <>
+      <ScrollToTop />
+      <div className="flex flex-col min-h-screen">
+        {!isBarePage && <Header />}
+        <main className="flex-grow">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/quiz" element={<QuizFinder />} />
+            <Route path="/quizzes" element={<QuizFinder />} />
+            <Route path="/nearest-quiz" element={<QuizFinder />} />
+            <Route path="/where-is-nearest-quiz" element={<QuizFinder />} />
+            <Route path="/hq" element={<QMGHQ />} />
+            <Route path="/qmghq" element={<QMGHQ />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/venues" element={<Venues />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/team/:id" element={<TeamMember />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+
+            {/* Admin Routes */}
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/events" element={<ProtectedRoute><AdminEvents /></ProtectedRoute>} />
+            <Route path="/admin/recurring-events" element={<ProtectedRoute><AdminRecurringEvents /></ProtectedRoute>} />
+            <Route path="/admin/venues" element={<ProtectedRoute><AdminVenues /></ProtectedRoute>} />
+            <Route path="/admin/services" element={<ProtectedRoute><AdminServices /></ProtectedRoute>} />
+            <Route path="/admin/reviews" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />
+            <Route path="/admin/team" element={<ProtectedRoute><AdminTeam /></ProtectedRoute>} />
+            <Route path="/admin/gallery" element={<ProtectedRoute><AdminGallery /></ProtectedRoute>} />
+            <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+            <Route path="/admin/contact" element={<ProtectedRoute><AdminContact /></ProtectedRoute>} />
+            <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestions /></ProtectedRoute>} />
+          </Routes>
+        </main>
+        {!isBarePage && <Footer />}
+        {!isBarePage && <WhatsAppWidget />}
+      </div>
+    </>
+  );
+}
+
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <ScrollToTop />
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="flex-grow">
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/quiz" element={<QuizFinder />} />
-              <Route path="/quizzes" element={<QuizFinder />} />
-              <Route path="/nearest-quiz" element={<QuizFinder />} />
-              <Route path="/where-is-nearest-quiz" element={<QuizFinder />} />
-              <Route path="/hq" element={<QMGHQ />} />
-              <Route path="/qmghq" element={<QMGHQ />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/venues" element={<Venues />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/team" element={<Team />} />
-              <Route path="/team/:id" element={<TeamMember />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-
-              {/* Admin Routes */}
-              <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-              <Route path="/admin/events" element={<ProtectedRoute><AdminEvents /></ProtectedRoute>} />
-              <Route path="/admin/recurring-events" element={<ProtectedRoute><AdminRecurringEvents /></ProtectedRoute>} />
-              <Route path="/admin/venues" element={<ProtectedRoute><AdminVenues /></ProtectedRoute>} />
-              <Route path="/admin/services" element={<ProtectedRoute><AdminServices /></ProtectedRoute>} />
-              <Route path="/admin/reviews" element={<ProtectedRoute><AdminReviews /></ProtectedRoute>} />
-              <Route path="/admin/team" element={<ProtectedRoute><AdminTeam /></ProtectedRoute>} />
-              <Route path="/admin/gallery" element={<ProtectedRoute><AdminGallery /></ProtectedRoute>} />
-              <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
-              <Route path="/admin/contact" element={<ProtectedRoute><AdminContact /></ProtectedRoute>} />
-              <Route path="/admin/questions" element={<ProtectedRoute><AdminQuestions /></ProtectedRoute>} />
-            </Routes>
-          </main>
-          <Footer />
-          <WhatsAppWidget />
-        </div>
+        <AppLayout />
       </Router>
     </AuthProvider>
   );

@@ -25,6 +25,8 @@ const defaultSettings = {
   business_city: 'Newcastle, Durham, Sunderland & surrounding areas',
   business_postcode: '',
   business_hours: '',
+  landing_title: 'Find your next quiz night',
+  landing_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
   hero_title: 'THE QUIZ MASTER GENERAL',
   hero_subtitle: "North East England's Premier Quiz & Entertainment",
   hero_button_1_text: 'Our Services',
@@ -385,8 +387,8 @@ export default function AdminSettings() {
           <div className="space-y-6">
             <Panel title="Homepage Hero" description="The first thing visitors see. Keep it short and punchy.">
               <div className="grid gap-5 md:grid-cols-2">
-                <Field label="Main headline"><input name="hero_title" value={settings.hero_title} onChange={handleInput} className={textInputClass} /></Field>
-                <Field label="Subtitle"><input name="hero_subtitle" value={settings.hero_subtitle} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Landing headline"><input name="landing_title" value={settings.landing_title} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Landing subtitle"><input name="landing_subtitle" value={settings.landing_subtitle} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="Primary button"><input name="hero_button_1_text" value={settings.hero_button_1_text} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="Secondary button"><input name="hero_button_2_text" value={settings.hero_button_2_text} onChange={handleInput} className={textInputClass} /></Field>
               </div>

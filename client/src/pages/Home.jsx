@@ -4,8 +4,8 @@ import { ArrowRight, Beer, CalendarDays, MapPin, Search, Sparkles } from 'lucide
 import { eventsAPI, settingsAPI } from '../services/api';
 
 const defaults = {
-  hero_title: 'Find your next quiz night',
-  hero_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
+  landing_title: 'Find your next quiz night',
+  landing_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
   qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
 };
 
@@ -57,10 +57,10 @@ export default function Home() {
                 QMG / QMGHQ
               </p>
               <h1 className="max-w-4xl text-5xl font-black uppercase leading-none md:text-7xl">
-                {settings.hero_title || defaults.hero_title}
+                {settings.landing_title || defaults.landing_title}
               </h1>
               <p className="mt-5 max-w-2xl text-xl leading-relaxed text-gray-200 md:text-2xl">
-                {settings.hero_subtitle || defaults.hero_subtitle}
+                {settings.landing_subtitle || defaults.landing_subtitle}
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link to="/quiz" className="btn btn-primary inline-flex items-center justify-center gap-2 py-4 text-base">

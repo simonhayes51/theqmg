@@ -141,21 +141,25 @@ export default function QuizFinder() {
   const featured = quizEvents[0];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <section className="qr-hero">
-        <div className="container-custom">
-          <div className="max-w-4xl">
-            <p className="mb-4 inline-flex rounded-full border border-brit-gold/60 bg-brit-gold/10 px-4 py-2 text-sm font-black uppercase tracking-wide text-brit-gold">
-              QMG quiz finder
-            </p>
-            <h1 className="text-5xl font-black uppercase leading-none md:text-7xl">{settings.quiz_finder_title}</h1>
-            <p className="mt-5 max-w-2xl text-xl text-gray-200 md:text-2xl">{settings.quiz_finder_subtitle}</p>
-          </div>
+    <div className="min-h-screen bg-[#060912] text-white">
+      <div className="qr-app-topbar">
+        <Link to="/" className="font-black uppercase tracking-tight">
+          <span className="text-white">QMG</span><span className="text-brit-red">.</span>
+        </Link>
+        <div className="flex items-center gap-3 text-sm font-black uppercase">
+          <Link to="/hq" className="text-brit-gold">QMGHQ</Link>
+          <Link to="/contact" className="text-gray-200">Book</Link>
         </div>
-      </section>
+      </div>
 
-      <section className="sticky top-20 z-30 border-y border-white/10 bg-gray-950/95 py-4 backdrop-blur">
-        <div className="container-custom">
+      <section className="qr-app-hero">
+        <div className="mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-12">
+          <p className="mb-3 inline-flex rounded-full bg-brit-gold px-3 py-1 text-xs font-black uppercase tracking-wide text-gray-950">
+            Beer mat scan
+          </p>
+          <h1 className="max-w-4xl text-4xl font-black uppercase leading-none md:text-7xl">{settings.quiz_finder_title}</h1>
+          <p className="mt-4 max-w-2xl text-lg text-gray-200 md:text-2xl">{settings.quiz_finder_subtitle}</p>
+
           <div className="grid gap-3 md:grid-cols-[1fr_auto]">
             <label className="relative block">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={22} />
@@ -180,8 +184,8 @@ export default function QuizFinder() {
         </div>
       </section>
 
-      <section className="section bg-gray-950">
-        <div className="container-custom">
+      <section className="bg-[#060912] px-4 pb-10 md:px-6">
+        <div className="mx-auto max-w-5xl">
           {loading ? (
             <div className="grid gap-4 md:grid-cols-2">
               {[1, 2, 3, 4].map((item) => <div key={item} className="h-56 animate-pulse rounded-lg bg-gray-800" />)}
@@ -194,7 +198,7 @@ export default function QuizFinder() {
               <Link to="/contact" className="btn btn-primary mt-6 inline-flex">Ask about a quiz night</Link>
             </div>
           ) : (
-            <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr]">
+            <div className="grid gap-5 lg:grid-cols-[0.82fr_1.18fr]">
               {featured && (
                 <article className="rounded-lg border border-brit-gold/50 bg-gradient-to-br from-brit-blue/40 to-brit-red/30 p-6 shadow-2xl">
                   <p className="text-sm font-black uppercase tracking-wide text-brit-gold">Best match</p>

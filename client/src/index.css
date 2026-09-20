@@ -1143,6 +1143,26 @@ footer {
     #070b12;
 }
 
+.qr-app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(6, 9, 18, 0.92);
+  padding: 0.9rem 1rem;
+  backdrop-filter: blur(12px);
+}
+
+.qr-app-hero {
+  background:
+    radial-gradient(circle at 82% 16%, rgba(255, 183, 0, 0.22), transparent 18rem),
+    linear-gradient(135deg, rgba(220, 20, 60, 0.72), rgba(0, 61, 165, 0.72)),
+    #060912;
+}
+
 .qr-hero::after,
 .hq-hero::after {
   content: "";
