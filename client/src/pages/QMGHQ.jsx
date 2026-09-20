@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Beer, CalendarDays, Clock, MapPin, Music, Utensils } from 'lucide-react';
+import { Beer, CalendarDays, Clock, ExternalLink, MapPin, Music, Ticket, Utensils } from 'lucide-react';
 import { eventsAPI, settingsAPI, venuesAPI } from '../services/api';
 
 const fallbackSettings = {
@@ -9,6 +9,7 @@ const fallbackSettings = {
   qmghq_intro: 'A proper local base for QMG: quizzes, bar nights, events and private bookings.',
   qmghq_address: '',
   qmghq_hours: '',
+  fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
 };
 
 function formatDate(value) {
@@ -68,6 +69,7 @@ export default function QMGHQ() {
         </Link>
         <div className="flex items-center gap-3 text-sm font-black uppercase">
           <Link to="/quiz" className="text-brit-gold">Find a quiz</Link>
+          <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="text-gray-200">Tickets</a>
           <Link to="/contact" className="text-gray-200">Book</Link>
         </div>
       </div>
@@ -81,6 +83,10 @@ export default function QMGHQ() {
             <p className="mt-5 text-2xl text-gray-100">{settings.qmghq_subtitle}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/quiz" className="btn btn-primary">Find a quiz</Link>
+              <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="btn btn-secondary inline-flex items-center gap-2">
+                <Ticket size={18} />
+                Tickets
+              </a>
               <Link to="/contact" className="btn btn-outline">Enquire / book</Link>
             </div>
           </div>
@@ -97,6 +103,7 @@ export default function QMGHQ() {
                 <div className="hq-feature"><Beer className="text-brit-gold" /><span>Bar nights</span></div>
                 <div className="hq-feature"><Music className="text-brit-gold" /><span>Events</span></div>
                 <div className="hq-feature"><Utensils className="text-brit-gold" /><span>Private hire</span></div>
+                <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="hq-feature"><ExternalLink className="text-brit-gold" /><span>Fatsoma tickets</span></a>
               </div>
             </div>
 

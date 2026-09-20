@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Clock, Compass, LocateFixed, MapPin, Search, X } from 'lucide-react';
+import { CalendarDays, Clock, Compass, ExternalLink, LocateFixed, MapPin, Search, Ticket, X } from 'lucide-react';
 import { eventsAPI, settingsAPI } from '../services/api';
 
 const fallbackSettings = {
   quiz_finder_title: 'Where is the nearest quiz?',
   quiz_finder_subtitle: 'Scan, search and find your next QMG quiz night.',
   quiz_finder_intro: 'Search by venue, town or postcode. Tap directions when you find the one.',
+  fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
 };
 
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -148,6 +149,7 @@ export default function QuizFinder() {
         </Link>
         <div className="flex items-center gap-3 text-sm font-black uppercase">
           <Link to="/hq" className="text-brit-gold">QMGHQ</Link>
+          <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="text-gray-200">Tickets</a>
           <Link to="/contact" className="text-gray-200">Book</Link>
         </div>
       </div>
@@ -160,7 +162,15 @@ export default function QuizFinder() {
           <h1 className="max-w-4xl text-4xl font-black uppercase leading-none md:text-7xl">{settings.quiz_finder_title}</h1>
           <p className="mt-4 max-w-2xl text-lg text-gray-200 md:text-2xl">{settings.quiz_finder_subtitle}</p>
 
-          <div className="grid gap-3 md:grid-cols-[1fr_auto]">
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="btn btn-secondary inline-flex items-center gap-2">
+              <Ticket size={18} />
+              Ticketed events
+            </a>
+            <Link to="/contact" className="btn btn-outline">Book QMG</Link>
+          </div>
+
+          <div className="mt-8 grid gap-3 md:grid-cols-[1fr_auto]">
             <label className="relative block">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={22} />
               <input
@@ -212,7 +222,9 @@ export default function QuizFinder() {
                   </div>
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
                     <a href={mapsLink(featured)} target="_blank" rel="noreferrer" className="btn btn-primary text-center">Directions</a>
-                    <Link to="/contact" className="btn btn-outline text-center">Book a quiz</Link>
+                    <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="btn btn-outline inline-flex items-center justify-center gap-2 text-center">
+                      Tickets <ExternalLink size={16} />
+                    </a>
                   </div>
                 </article>
               )}
@@ -230,7 +242,10 @@ export default function QuizFinder() {
                       <p className="mt-1 text-gray-300">{event.venue_name || 'Venue TBC'}{event.venue_city ? `, ${event.venue_city}` : ''}</p>
                       <p className="mt-2 text-sm text-gray-400">{formatTime(event.event_time)}</p>
                     </div>
-                    <a href={mapsLink(event)} target="_blank" rel="noreferrer" className="btn btn-outline shrink-0 text-center">Map</a>
+                    <div className="flex shrink-0 gap-2">
+                      <a href={mapsLink(event)} target="_blank" rel="noreferrer" className="btn btn-outline text-center">Map</a>
+                      <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="btn btn-secondary text-center">Tickets</a>
+                    </div>
                   </article>
                 ))}
               </div>

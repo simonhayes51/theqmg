@@ -10,5 +10,6 @@ INSERT INTO site_settings (setting_key, setting_value, setting_type, description
 ('qmghq_subtitle', 'The home of quiz nights, drinks and good craic.', 'text', 'QMGHQ page intro'),
 ('qmghq_intro', 'A proper local base for QMG: quizzes, bar nights, events and private bookings.', 'text', 'QMGHQ about copy'),
 ('qmghq_address', '', 'text', 'QMGHQ address'),
-('qmghq_hours', '', 'text', 'QMGHQ opening hours')
+('qmghq_hours', '', 'text', 'QMGHQ opening hours'),
+('fatsoma_events_url', 'https://www.fatsoma.com/p/the-qmg-/events', 'text', 'Fatsoma ticketed events page')
 ON CONFLICT (setting_key) DO NOTHING;

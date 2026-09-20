@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Beer, CalendarDays, MapPin, Search, Sparkles } from 'lucide-react';
+import { ArrowRight, Beer, CalendarDays, ExternalLink, MapPin, Search, Sparkles, Ticket } from 'lucide-react';
 import { eventsAPI, settingsAPI } from '../services/api';
 
 const defaults = {
   landing_title: 'Find your next quiz night',
   landing_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
   qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
+  fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
 };
 
 function formatDate(value) {
@@ -55,6 +56,7 @@ export default function Home() {
         </Link>
         <div className="flex items-center gap-3 text-sm font-black uppercase">
           <Link to="/quiz" className="text-brit-gold">Find a quiz</Link>
+          <a href={settings.fatsoma_events_url || defaults.fatsoma_events_url} target="_blank" rel="noreferrer" className="text-gray-200">Tickets</a>
           <Link to="/hq" className="text-gray-200">QMGHQ</Link>
           <Link to="/login" className="text-gray-400">Admin</Link>
         </div>
@@ -77,6 +79,10 @@ export default function Home() {
                   <Search size={20} />
                   Find a Quiz
                 </Link>
+                <a href={settings.fatsoma_events_url || defaults.fatsoma_events_url} target="_blank" rel="noreferrer" className="btn btn-secondary inline-flex items-center justify-center gap-2 py-4 text-base">
+                  <Ticket size={20} />
+                  Tickets
+                </a>
                 <Link to="/hq" className="btn btn-outline inline-flex items-center justify-center gap-2 py-4 text-base">
                   <Beer size={20} />
                   QMGHQ
@@ -95,12 +101,18 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-lg text-gray-200">
-                This is the useful bit: a fast mobile page for venues, punters and QR scans.
+                Fast, mobile-first quiz listings for the beer mats. Tickets and special events stay handled by Fatsoma.
               </p>
-              <Link to="/quiz" className="mt-6 flex items-center justify-between rounded-lg border border-white/10 bg-white/10 p-4 font-black uppercase text-white transition hover:border-brit-gold hover:bg-brit-gold hover:text-gray-950">
-                Open quiz finder
-                <ArrowRight />
-              </Link>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <Link to="/quiz" className="home-action-row">
+                  Quiz finder
+                  <ArrowRight />
+                </Link>
+                <a href={settings.fatsoma_events_url || defaults.fatsoma_events_url} target="_blank" rel="noreferrer" className="home-action-row">
+                  Fatsoma
+                  <ExternalLink />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -112,16 +124,24 @@ export default function Home() {
             <Link to="/quiz" className="home-choice-card home-choice-card-qmg">
               <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMG</p>
               <h2 className="mt-2 text-4xl font-black uppercase">Quiz nights and events</h2>
-              <p className="mt-4 text-lg text-gray-200">Find upcoming quiz nights, partner venues and booking details.</p>
+              <p className="mt-4 text-lg text-gray-200">The scan-and-search page for regular quiz nights, venues and directions.</p>
               <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Find a quiz <ArrowRight size={18} /></span>
             </Link>
 
-            <Link to="/hq" className="home-choice-card home-choice-card-hq">
-              <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMGHQ</p>
-              <h2 className="mt-2 text-4xl font-black uppercase">Pub / bar side</h2>
-              <p className="mt-4 text-lg text-gray-200">{settings.qmghq_subtitle || defaults.qmghq_subtitle}</p>
-              <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Visit HQ <ArrowRight size={18} /></span>
-            </Link>
+            <div className="grid gap-5">
+              <Link to="/hq" className="home-choice-card home-choice-card-hq">
+                <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMGHQ</p>
+                <h2 className="mt-2 text-4xl font-black uppercase">Pub / bar side</h2>
+                <p className="mt-4 text-lg text-gray-200">{settings.qmghq_subtitle || defaults.qmghq_subtitle}</p>
+                <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Visit HQ <ArrowRight size={18} /></span>
+              </Link>
+              <a href={settings.fatsoma_events_url || defaults.fatsoma_events_url} target="_blank" rel="noreferrer" className="home-choice-card home-choice-card-ticket">
+                <p className="text-sm font-black uppercase tracking-wide text-brit-gold">Tickets</p>
+                <h2 className="mt-2 text-3xl font-black uppercase">Live on Fatsoma</h2>
+                <p className="mt-3 text-gray-200">Use the platform people already trust for ticketed nights, specials and checkout.</p>
+                <span className="mt-5 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Open Fatsoma <ExternalLink size={18} /></span>
+              </a>
+            </div>
           </div>
 
           <div className="mt-12">

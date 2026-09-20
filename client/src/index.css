@@ -1132,17 +1132,6 @@ footer {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
 }
 
-.qr-hero,
-.hq-hero {
-  position: relative;
-  overflow: hidden;
-  padding: clamp(5rem, 10vw, 9rem) 0;
-  background:
-    linear-gradient(135deg, rgba(220, 20, 60, 0.84), rgba(0, 61, 165, 0.82)),
-    radial-gradient(circle at 80% 20%, rgba(255, 183, 0, 0.34), transparent 22rem),
-    #070b12;
-}
-
 .qr-app-topbar {
   position: sticky;
   top: 0;
@@ -1150,35 +1139,64 @@ footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(6, 9, 18, 0.92);
-  padding: 0.9rem 1rem;
-  backdrop-filter: blur(12px);
+  gap: 1rem;
+  border-bottom: 1px solid rgba(255, 183, 0, 0.24);
+  background:
+    linear-gradient(90deg, rgba(220, 20, 60, 0.14), transparent 22rem),
+    rgba(5, 9, 18, 0.96);
+  padding: 0.85rem clamp(1rem, 4vw, 2.5rem);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+}
+
+.qr-app-topbar a {
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.qr-app-topbar a:hover {
+  color: #ffb700;
 }
 
 .qr-app-hero {
+  position: relative;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 82% 16%, rgba(255, 183, 0, 0.22), transparent 18rem),
-    linear-gradient(135deg, rgba(220, 20, 60, 0.72), rgba(0, 61, 165, 0.72)),
+    linear-gradient(115deg, rgba(0, 61, 165, 0.58), transparent 46%),
+    linear-gradient(245deg, rgba(220, 20, 60, 0.48), transparent 46%),
+    linear-gradient(180deg, #09111f, #060912 78%),
     #060912;
+  border-bottom: 1px solid rgba(255, 183, 0, 0.2);
 }
 
-.qr-hero::after,
-.hq-hero::after {
+.qr-app-hero::before,
+.home-product-hero::before,
+.hq-hero::before {
   content: "";
   position: absolute;
-  inset: auto -8rem -8rem auto;
-  width: 22rem;
-  height: 22rem;
-  border: 3rem solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 82%);
 }
 
 .hq-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5.5rem, 10vw, 8.5rem) 0;
   background:
-    linear-gradient(135deg, rgba(7, 11, 18, 0.82), rgba(220, 20, 60, 0.72)),
-    radial-gradient(circle at 15% 20%, rgba(255, 183, 0, 0.32), transparent 24rem),
+    linear-gradient(126deg, rgba(7, 11, 18, 0.94) 0%, rgba(7, 11, 18, 0.78) 46%, rgba(220, 20, 60, 0.72) 46%, rgba(0, 61, 165, 0.74) 100%),
     #070b12;
+  border-bottom: 5px solid #ffb700;
+}
+
+.qr-app-hero > *,
+.home-product-hero > *,
+.hq-hero > * {
+  position: relative;
 }
 
 .quiz-listing-card {
@@ -1186,11 +1204,23 @@ footer {
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  background: rgba(17, 24, 39, 0.88);
-  padding: 1.25rem;
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-left: 5px solid #dc143c;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(220, 20, 60, 0.1), transparent 16rem),
+    #101827;
+  padding: 1.2rem;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.quiz-listing-card:hover {
+  transform: translateY(-2px);
+  border-left-color: #ffb700;
+  background:
+    linear-gradient(90deg, rgba(255, 183, 0, 0.1), transparent 16rem),
+    #111c2d;
 }
 
 .hq-feature {
@@ -1200,87 +1230,134 @@ footer {
   justify-content: center;
   gap: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  border-top: 4px solid #ffb700;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
   padding: 1rem;
   font-weight: 900;
   text-transform: uppercase;
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+a.hq-feature:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 183, 0, 0.1);
 }
 
 .home-product-hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(5rem, 10vw, 9rem) 0;
+  padding: clamp(5.25rem, 9vw, 8.5rem) 0;
   background:
-    linear-gradient(135deg, rgba(7, 11, 18, 0.92), rgba(0, 61, 165, 0.78)),
-    radial-gradient(circle at 82% 18%, rgba(255, 183, 0, 0.32), transparent 24rem),
-    radial-gradient(circle at 12% 82%, rgba(220, 20, 60, 0.42), transparent 24rem),
+    linear-gradient(122deg, rgba(7, 11, 18, 0.98) 0%, rgba(7, 11, 18, 0.9) 45%, rgba(0, 61, 165, 0.76) 45%, rgba(220, 20, 60, 0.68) 100%),
     #070b12;
-}
-
-.home-product-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.12;
-  background-image:
-    linear-gradient(45deg, #fff 25%, transparent 25%),
-    linear-gradient(-45deg, #fff 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #fff 75%),
-    linear-gradient(-45deg, transparent 75%, #fff 75%);
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
-  background-size: 20px 20px;
-}
-
-.home-product-hero > * {
-  position: relative;
+  border-bottom: 5px solid #ffb700;
 }
 
 .home-scan-card,
 .home-choice-card,
 .home-event-card {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  background: rgba(17, 24, 39, 0.88);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(14, 22, 36, 0.94);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.3);
 }
 
 .home-scan-card {
+  border-top: 6px solid #ffb700;
   padding: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.home-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(0, 61, 165, 0.28), transparent),
+    rgba(255, 255, 255, 0.045);
+  padding: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.home-action-row:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 183, 0, 0.72);
+  background:
+    linear-gradient(90deg, rgba(255, 183, 0, 0.18), transparent),
+    rgba(255, 255, 255, 0.065);
 }
 
 .home-choice-card {
   display: block;
-  min-height: 19rem;
+  min-height: 17rem;
   padding: clamp(1.5rem, 4vw, 2rem);
-  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
 .home-choice-card:hover {
   transform: translateY(-4px);
   border-color: rgba(255, 183, 0, 0.7);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.36);
 }
 
 .home-choice-card-qmg {
   background:
-    linear-gradient(135deg, rgba(0, 61, 165, 0.5), rgba(17, 24, 39, 0.92)),
-    rgba(17, 24, 39, 0.88);
+    linear-gradient(135deg, rgba(0, 61, 165, 0.5), rgba(17, 24, 39, 0.95) 58%),
+    #101827;
 }
 
 .home-choice-card-hq {
   background:
-    linear-gradient(135deg, rgba(220, 20, 60, 0.5), rgba(17, 24, 39, 0.92)),
-    rgba(17, 24, 39, 0.88);
+    linear-gradient(135deg, rgba(220, 20, 60, 0.5), rgba(17, 24, 39, 0.95) 58%),
+    #101827;
+}
+
+.home-choice-card-ticket {
+  min-height: 13rem;
+  background:
+    linear-gradient(135deg, rgba(255, 183, 0, 0.2), rgba(17, 24, 39, 0.95) 58%),
+    #101827;
 }
 
 .home-event-card {
+  border-top: 4px solid #003da5;
   padding: 1.25rem;
+}
+
+.home-event-card:nth-child(2n) {
+  border-top-color: #dc143c;
+}
+
+.home-event-card:nth-child(3n) {
+  border-top-color: #ffb700;
+}
+
+@media (max-width: 760px) {
+  .qr-app-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .qr-app-topbar > div {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 640px) {
   .quiz-listing-card {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .quiz-listing-card .btn {
+    flex: 1;
   }
 }
 

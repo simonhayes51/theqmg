@@ -80,6 +80,7 @@ const defaultSettings = {
   whatsapp_enabled: 'false',
   whatsapp_number: '',
   whatsapp_default_message: "Hi, I'd like to know more about your quiz nights.",
+  fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
 };
 
 const defaultSectionOrder = ['social_proof', 'about', 'services', 'events', 'reviews', 'gallery', 'team', 'social_media', 'question_of_day'];
@@ -507,6 +508,7 @@ export default function AdminSettings() {
                 <Field label="Instagram URL"><input name="instagram_url" value={settings.instagram_url} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="X/Twitter URL"><input name="twitter_url" value={settings.twitter_url} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="LinkedIn URL"><input name="linkedin_url" value={settings.linkedin_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="Fatsoma events URL"><input name="fatsoma_events_url" value={settings.fatsoma_events_url} onChange={handleInput} className={textInputClass} /></Field>
               </div>
             </Panel>
 
