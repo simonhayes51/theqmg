@@ -42,8 +42,16 @@ const defaultSettings = {
   contact_page_subtitle: "Let's discuss how we can bring entertainment to your venue.",
   events_page_title: 'Our Events',
   events_page_subtitle: 'Quiz nights, race nights, and special events across the North East',
+  quiz_finder_title: 'Where is the nearest quiz?',
+  quiz_finder_subtitle: 'Scan, search and find your next QMG quiz night.',
+  quiz_finder_intro: 'Search by venue, town or postcode. Tap directions when you find the one.',
   venues_page_title: 'Our Partner Venues',
   venues_page_subtitle: 'Bringing entertainment to venues across the North East',
+  qmghq_title: 'QMGHQ',
+  qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
+  qmghq_intro: 'A proper local base for QMG: quizzes, bar nights, events and private bookings.',
+  qmghq_address: '',
+  qmghq_hours: '',
   gallery_page_title: 'Gallery',
   gallery_page_subtitle: 'Memories from our amazing events',
   team_page_title: 'Meet The Team',
@@ -119,7 +127,9 @@ const colorFields = [
 
 const pageFields = [
   ['services_page_title', 'services_page_subtitle', 'Services page'],
+  ['quiz_finder_title', 'quiz_finder_subtitle', 'Find a quiz QR page'],
   ['events_page_title', 'events_page_subtitle', 'Events page'],
+  ['qmghq_title', 'qmghq_subtitle', 'QMGHQ page'],
   ['venues_page_title', 'venues_page_subtitle', 'Venues page'],
   ['gallery_page_title', 'gallery_page_subtitle', 'Gallery page'],
   ['team_page_title', 'team_page_subtitle', 'Team page'],
@@ -418,6 +428,20 @@ export default function AdminSettings() {
                   </div>
                 </div>
               ))}
+              <div className="rounded-lg border border-brit-gold/30 bg-brit-gold/10 p-4">
+                <h3 className="mb-4 text-xl font-black text-brit-gold">Beer mat QR page</h3>
+                <Field label="Helper text under search"><textarea name="quiz_finder_intro" value={settings.quiz_finder_intro} onChange={handleInput} rows="3" className="textarea w-full" /></Field>
+              </div>
+              <div className="rounded-lg border border-brit-gold/30 bg-brit-gold/10 p-4">
+                <h3 className="mb-4 text-xl font-black text-brit-gold">QMGHQ pub/bar page</h3>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Address"><input name="qmghq_address" value={settings.qmghq_address} onChange={handleInput} className={textInputClass} /></Field>
+                  <Field label="Opening hours"><input name="qmghq_hours" value={settings.qmghq_hours} onChange={handleInput} className={textInputClass} /></Field>
+                  <div className="md:col-span-2">
+                    <Field label="About QMGHQ"><textarea name="qmghq_intro" value={settings.qmghq_intro} onChange={handleInput} rows="4" className="textarea w-full" /></Field>
+                  </div>
+                </div>
+              </div>
             </div>
           </Panel>
         )}

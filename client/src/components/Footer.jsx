@@ -105,6 +105,8 @@ const Footer = () => {
             <h3 className="footer-section h3">Quick Links</h3>
             <ul className="space-y-3">
               <li><Link to="/events" className="footer-link">Events</Link></li>
+              <li><Link to="/quiz" className="footer-link">Find a Quiz</Link></li>
+              <li><Link to="/hq" className="footer-link">QMGHQ</Link></li>
               <li><Link to="/venues" className="footer-link">Venues</Link></li>
               <li><Link to="/services" className="footer-link">Services</Link></li>
               <li><Link to="/gallery" className="footer-link">Gallery</Link></li>

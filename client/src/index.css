@@ -1132,6 +1132,68 @@ footer {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
 }
 
+.qr-hero,
+.hq-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(5rem, 10vw, 9rem) 0;
+  background:
+    linear-gradient(135deg, rgba(220, 20, 60, 0.84), rgba(0, 61, 165, 0.82)),
+    radial-gradient(circle at 80% 20%, rgba(255, 183, 0, 0.34), transparent 22rem),
+    #070b12;
+}
+
+.qr-hero::after,
+.hq-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -8rem -8rem auto;
+  width: 22rem;
+  height: 22rem;
+  border: 3rem solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.hq-hero {
+  background:
+    linear-gradient(135deg, rgba(7, 11, 18, 0.82), rgba(220, 20, 60, 0.72)),
+    radial-gradient(circle at 15% 20%, rgba(255, 183, 0, 0.32), transparent 24rem),
+    #070b12;
+}
+
+.quiz-listing-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(17, 24, 39, 0.88);
+  padding: 1.25rem;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.24);
+}
+
+.hq-feature {
+  display: flex;
+  min-height: 7rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .quiz-listing-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 .input,
 .form-input,
 .form-textarea,

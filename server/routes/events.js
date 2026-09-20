@@ -42,7 +42,16 @@ router.get('/', async (req, res) => {
     const { upcoming, past, limit } = req.query;
 
     let query = `
-      SELECT e.*, v.name as venue_name, v.city as venue_city
+      SELECT e.*,
+             v.name as venue_name,
+             v.address as venue_address,
+             v.city as venue_city,
+             v.postcode as venue_postcode,
+             v.phone as venue_phone,
+             v.email as venue_email,
+             v.website as venue_website,
+             v.latitude as venue_latitude,
+             v.longitude as venue_longitude
       FROM events e
       LEFT JOIN venues v ON e.venue_id = v.id
     `;
@@ -60,7 +69,9 @@ router.get('/', async (req, res) => {
       query += ' WHERE ' + conditions.join(' AND ');
     }
 
-    query += ' ORDER BY e.event_date DESC';
+    query += upcoming === 'true'
+      ? ' ORDER BY e.event_date ASC, e.event_time ASC NULLS LAST'
+      : ' ORDER BY e.event_date DESC, e.event_time ASC NULLS LAST';
 
     if (limit) {
       params.push(parseInt(limit));

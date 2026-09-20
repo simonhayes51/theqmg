@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import WhatsAppWidget from './components/WhatsAppWidget';
 import Home from './pages/Home';
+import QuizFinder from './pages/QuizFinder';
+import QMGHQ from './pages/QMGHQ';
 import Events from './pages/Events';
 import Venues from './pages/Venues';
 import Services from './pages/Services';
@@ -37,6 +39,12 @@ function App() {
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
+              <Route path="/quiz" element={<QuizFinder />} />
+              <Route path="/quizzes" element={<QuizFinder />} />
+              <Route path="/nearest-quiz" element={<QuizFinder />} />
+              <Route path="/where-is-nearest-quiz" element={<QuizFinder />} />
+              <Route path="/hq" element={<QMGHQ />} />
+              <Route path="/qmghq" element={<QMGHQ />} />
               <Route path="/events" element={<Events />} />
               <Route path="/venues" element={<Venues />} />
               <Route path="/services" element={<Services />} />

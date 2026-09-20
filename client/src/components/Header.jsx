@@ -32,12 +32,11 @@ const Header = () => {
   };
 
   const navLinks = [
-    { to: '/', label: 'Home' },
+    { to: '/quiz', label: 'Find a Quiz' },
+    { to: '/hq', label: 'QMGHQ' },
+    { to: '/services', label: 'Services' },
     { to: '/events', label: 'Events' },
     { to: '/venues', label: 'Venues' },
-    { to: '/services', label: 'Services' },
-    { to: '/team', label: 'The Team' },
-    { to: '/gallery', label: 'Gallery' },
     { to: '/contact', label: 'Contact' },
   ];
 
