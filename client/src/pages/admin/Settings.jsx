@@ -19,14 +19,14 @@ import { API_BASE_URL } from '../../utils/apiBase';
 const defaultSettings = {
   business_name: 'The Quiz Master General',
   tagline: "North East England's premier quiz and entertainment provider",
-  business_email: 'info@thequizmastergeneral.com',
-  business_phone: '',
+  business_email: 'thequizmastergeneral@hotmail.com',
+  business_phone: '07772 562121',
   business_address: '',
   business_city: 'Newcastle, Durham, Sunderland & surrounding areas',
   business_postcode: '',
   business_hours: '',
   landing_title: 'Find your next quiz night',
-  landing_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
+  landing_subtitle: 'The Quizmaster General runs weekly pub quizzes across the North East, with QMGHQ in Tynemouth for themed nights, drinks, games and ticketed events.',
   hero_title: 'THE QUIZ MASTER GENERAL',
   hero_subtitle: "North East England's Premier Quiz & Entertainment",
   hero_button_1_text: 'Our Services',
@@ -45,14 +45,14 @@ const defaultSettings = {
   events_page_title: 'Our Events',
   events_page_subtitle: 'Quiz nights, race nights, and special events across the North East',
   quiz_finder_title: 'Where is the nearest quiz?',
-  quiz_finder_subtitle: 'Scan, search and find your next QMG quiz night.',
-  quiz_finder_intro: 'Search by venue, town or postcode. Tap directions when you find the one.',
+  quiz_finder_subtitle: 'Weekly Quizmaster General nights across Tyne and Wear and the wider North East.',
+  quiz_finder_intro: 'Search by venue, town or postcode. Use your location to sort by nearest first.',
   venues_page_title: 'Our Partner Venues',
   venues_page_subtitle: 'Bringing entertainment to venues across the North East',
   qmghq_title: 'QMGHQ',
-  qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
-  qmghq_intro: 'A proper local base for QMG: quizzes, bar nights, events and private bookings.',
-  qmghq_address: '',
+  qmghq_subtitle: 'Land of Green Ginger, Tynemouth. The home of themed quizzes, Super Sundays, drinks and private events.',
+  qmghq_intro: 'QMG Headquarters is the venue side of The Quizmaster General: themed quiz nights, games and trivia, poker, family events, food pop-ups and bar nights from the Land of Green Ginger.',
+  qmghq_address: 'Land of Green Ginger, Tynemouth',
   qmghq_hours: '',
   gallery_page_title: 'Gallery',
   gallery_page_subtitle: 'Memories from our amazing events',
@@ -68,8 +68,9 @@ const defaultSettings = {
   gallery_bg_color: '#003DA5',
   team_bg_color: '#DC143C',
   facebook_url: '',
+  qmghq_facebook_url: '',
   twitter_url: '',
-  instagram_url: '',
+  instagram_url: 'https://www.instagram.com/the_quizmastergeneral',
   linkedin_url: '',
   instagram_enabled: 'false',
   instagram_access_token: '',
@@ -504,7 +505,8 @@ export default function AdminSettings() {
           <div className="space-y-6">
             <Panel title="Social Links" description="Footer links. Leave blank to hide an icon.">
               <div className="grid gap-5 md:grid-cols-2">
-                <Field label="Facebook URL"><input name="facebook_url" value={settings.facebook_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="The Quizmaster General Facebook URL"><input name="facebook_url" value={settings.facebook_url} onChange={handleInput} className={textInputClass} /></Field>
+                <Field label="QMGHQ Facebook URL"><input name="qmghq_facebook_url" value={settings.qmghq_facebook_url} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="Instagram URL"><input name="instagram_url" value={settings.instagram_url} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="X/Twitter URL"><input name="twitter_url" value={settings.twitter_url} onChange={handleInput} className={textInputClass} /></Field>
                 <Field label="LinkedIn URL"><input name="linkedin_url" value={settings.linkedin_url} onChange={handleInput} className={textInputClass} /></Field>

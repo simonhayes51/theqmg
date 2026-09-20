@@ -146,12 +146,13 @@ INSERT INTO site_settings (setting_key, setting_value, setting_type, description
 ('site_tagline', 'North East England''s Premier Quiz & Entertainment Provider', 'text', 'Site tagline'),
 ('hero_title', 'The Quiz Master General', 'text', 'Homepage hero title'),
 ('hero_subtitle', 'Bringing Fun, Laughter, and Competition to Venues Across the North East', 'text', 'Homepage hero subtitle'),
-('contact_email', 'info@thequizmastergeneral.com', 'text', 'Main contact email'),
-('contact_phone', '', 'text', 'Main contact phone'),
+('contact_email', 'thequizmastergeneral@hotmail.com', 'text', 'Main contact email'),
+('contact_phone', '07772 562121', 'text', 'Main contact phone'),
 ('coverage_area', 'Newcastle, Gateshead, Durham, Sunderland & surrounding areas', 'text', 'Service coverage area'),
 ('facebook_url', '', 'text', 'Facebook page URL'),
+('qmghq_facebook_url', '', 'text', 'QMGHQ Facebook page URL'),
 ('twitter_url', '', 'text', 'Twitter/X URL'),
-('instagram_url', '', 'text', 'Instagram URL')
+('instagram_url', 'https://www.instagram.com/the_quizmastergeneral', 'text', 'Instagram URL')
 ON CONFLICT (setting_key) DO NOTHING;
 
 -- Insert sample services

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Beer, CalendarDays, ExternalLink, MapPin, Search, Sparkles, Ticket } from 'lucide-react';
+import { ArrowRight, Beer, CalendarDays, ExternalLink, MapPin, MessageCircle, Search, Sparkles, Ticket } from 'lucide-react';
 import { eventsAPI, settingsAPI } from '../services/api';
 
 const defaults = {
   landing_title: 'Find your next quiz night',
-  landing_subtitle: 'QMG runs quiz nights, events and QMGHQ. Scan in, find the nearest quiz, or book one for your venue.',
-  qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
+  landing_subtitle: 'The Quizmaster General runs weekly pub quizzes across the North East, with QMGHQ in Tynemouth for themed nights, drinks, games and ticketed events.',
+  qmghq_subtitle: 'Land of Green Ginger, Tynemouth. The home of themed quizzes, Super Sundays, drinks and private events.',
   fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
+  facebook_url: '',
+  qmghq_facebook_url: '',
 };
 
 function formatDate(value) {
@@ -83,6 +85,12 @@ export default function Home() {
                   <Ticket size={20} />
                   Tickets
                 </a>
+                {settings.facebook_url && (
+                  <a href={settings.facebook_url} target="_blank" rel="noreferrer" className="btn btn-outline inline-flex items-center justify-center gap-2 py-4 text-base">
+                    <MessageCircle size={20} />
+                    Facebook
+                  </a>
+                )}
                 <Link to="/hq" className="btn btn-outline inline-flex items-center justify-center gap-2 py-4 text-base">
                   <Beer size={20} />
                   QMGHQ
@@ -101,7 +109,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-lg text-gray-200">
-                Fast, mobile-first quiz listings for the beer mats. Tickets and special events stay handled by Fatsoma.
+                Fast, mobile-first listings for the beer mats. Regular pub quizzes live here; ticketed specials stay handled by Fatsoma.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Link to="/quiz" className="home-action-row">
@@ -121,17 +129,17 @@ export default function Home() {
       <section className="section bg-gray-950">
         <div className="container-custom">
           <div className="grid gap-5 md:grid-cols-2">
-            <Link to="/quiz" className="home-choice-card home-choice-card-qmg">
-              <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMG</p>
-              <h2 className="mt-2 text-4xl font-black uppercase">Quiz nights and events</h2>
-              <p className="mt-4 text-lg text-gray-200">The scan-and-search page for regular quiz nights, venues and directions.</p>
+              <Link to="/quiz" className="home-choice-card home-choice-card-qmg">
+                <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMG</p>
+              <h2 className="mt-2 text-4xl font-black uppercase">Pub quizzes across the North East</h2>
+              <p className="mt-4 text-lg text-gray-200">Weekly venues, towns, directions and the quickest answer to “where’s nearest quiz?”</p>
               <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Find a quiz <ArrowRight size={18} /></span>
             </Link>
 
             <div className="grid gap-5">
               <Link to="/hq" className="home-choice-card home-choice-card-hq">
                 <p className="text-sm font-black uppercase tracking-wide text-brit-gold">QMGHQ</p>
-                <h2 className="mt-2 text-4xl font-black uppercase">Pub / bar side</h2>
+                <h2 className="mt-2 text-4xl font-black uppercase">Tynemouth HQ</h2>
                 <p className="mt-4 text-lg text-gray-200">{settings.qmghq_subtitle || defaults.qmghq_subtitle}</p>
                 <span className="mt-6 inline-flex items-center gap-2 font-black uppercase text-brit-gold">Visit HQ <ArrowRight size={18} /></span>
               </Link>

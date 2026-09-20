@@ -5,9 +5,10 @@ import { eventsAPI, settingsAPI } from '../services/api';
 
 const fallbackSettings = {
   quiz_finder_title: 'Where is the nearest quiz?',
-  quiz_finder_subtitle: 'Scan, search and find your next QMG quiz night.',
-  quiz_finder_intro: 'Search by venue, town or postcode. Tap directions when you find the one.',
+  quiz_finder_subtitle: 'Weekly Quizmaster General nights across Tyne and Wear and the wider North East.',
+  quiz_finder_intro: 'Search by venue, town or postcode. Use your location to sort by nearest first.',
   fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
+  facebook_url: '',
 };
 
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -167,6 +168,11 @@ export default function QuizFinder() {
               <Ticket size={18} />
               Ticketed events
             </a>
+            {settings.facebook_url && (
+              <a href={settings.facebook_url} target="_blank" rel="noreferrer" className="btn btn-outline inline-flex items-center gap-2">
+                Facebook <ExternalLink size={16} />
+              </a>
+            )}
             <Link to="/contact" className="btn btn-outline">Book QMG</Link>
           </div>
 

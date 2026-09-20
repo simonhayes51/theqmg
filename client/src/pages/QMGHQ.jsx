@@ -5,11 +5,12 @@ import { eventsAPI, settingsAPI, venuesAPI } from '../services/api';
 
 const fallbackSettings = {
   qmghq_title: 'QMGHQ',
-  qmghq_subtitle: 'The home of quiz nights, drinks and good craic.',
-  qmghq_intro: 'A proper local base for QMG: quizzes, bar nights, events and private bookings.',
-  qmghq_address: '',
+  qmghq_subtitle: 'Land of Green Ginger, Tynemouth. The home of themed quizzes, Super Sundays, drinks and private events.',
+  qmghq_intro: 'QMG Headquarters is the venue side of The Quizmaster General: themed quiz nights, games and trivia, poker, family events, food pop-ups and bar nights from the Land of Green Ginger.',
+  qmghq_address: 'Land of Green Ginger, Tynemouth',
   qmghq_hours: '',
   fatsoma_events_url: 'https://www.fatsoma.com/p/the-qmg-/events',
+  qmghq_facebook_url: '',
 };
 
 function formatDate(value) {
@@ -87,6 +88,11 @@ export default function QMGHQ() {
                 <Ticket size={18} />
                 Tickets
               </a>
+              {settings.qmghq_facebook_url && (
+                <a href={settings.qmghq_facebook_url} target="_blank" rel="noreferrer" className="btn btn-outline inline-flex items-center gap-2">
+                  Facebook <ExternalLink size={16} />
+                </a>
+              )}
               <Link to="/contact" className="btn btn-outline">Enquire / book</Link>
             </div>
           </div>
@@ -100,9 +106,9 @@ export default function QMGHQ() {
               <h2 className="text-4xl font-black uppercase text-brit-gold">What is QMGHQ?</h2>
               <p className="mt-4 text-xl leading-relaxed text-gray-200">{settings.qmghq_intro}</p>
               <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                <div className="hq-feature"><Beer className="text-brit-gold" /><span>Bar nights</span></div>
-                <div className="hq-feature"><Music className="text-brit-gold" /><span>Events</span></div>
-                <div className="hq-feature"><Utensils className="text-brit-gold" /><span>Private hire</span></div>
+                <div className="hq-feature"><Beer className="text-brit-gold" /><span>Super Sundays</span></div>
+                <div className="hq-feature"><Music className="text-brit-gold" /><span>Themed quizzes</span></div>
+                <div className="hq-feature"><Utensils className="text-brit-gold" /><span>Food pop-ups</span></div>
                 <a href={settings.fatsoma_events_url || fallbackSettings.fatsoma_events_url} target="_blank" rel="noreferrer" className="hq-feature"><ExternalLink className="text-brit-gold" /><span>Fatsoma tickets</span></a>
               </div>
             </div>
